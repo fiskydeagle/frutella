@@ -2,6 +2,7 @@
 import { useAuthUser } from "~/composables/useAuthUser";
 import { UserRole } from "~/types";
 
+const i18n = useI18n();
 const { user, authToken } = useAuthUser();
 const route = useRoute();
 
@@ -9,17 +10,17 @@ const links = computed(() => {
   const links: any = [
     [
       {
-        label: "Home",
+        label: i18n.t("components.left-navigation.home"),
         icon: "ph:house-line-duotone",
         to: { name: "index" },
       },
       {
-        label: "Incoming",
+        label: i18n.t("components.left-navigation.incoming"),
         icon: "ph:chart-line-up-duotone",
         to: { name: "incoming" },
       },
       {
-        label: "Orders",
+        label: i18n.t("components.left-navigation.orders"),
         icon: "ph:shopping-cart-duotone",
         to: { name: "orders" },
       },
@@ -29,14 +30,14 @@ const links = computed(() => {
   if (user.value && authToken.value) {
     const userLinks = [
       {
-        label: "Profile",
+        label: i18n.t("components.left-navigation.profile"),
         avatar: {
           src: `https://www.gravatar.com/avatar/${user.value?.id}?s=100&d=identicon`,
         },
         to: { name: "profile" },
       },
       {
-        label: "Logout",
+        label: i18n.t("components.left-navigation.logout"),
         icon: "ph:sign-out-duotone",
         to: { name: "logout" },
       },
@@ -44,7 +45,7 @@ const links = computed(() => {
 
     if (user.value?.role === UserRole.ADMIN) {
       userLinks.unshift({
-        label: "Users",
+        label: i18n.t("components.left-navigation.users"),
         icon: "ph:users-three-duotone",
         to: { name: "users" },
       });
@@ -76,7 +77,7 @@ watch(
   () => route.path,
   () => {
     isOpen.value = false;
-  },
+  }
 );
 </script>
 <template>
@@ -108,7 +109,11 @@ watch(
         >
           <template #header>
             <div class="flex items-center justify-between">
-              <h3 class="text-xl px-2"><strong>Navigation</strong></h3>
+              <h3 class="text-xl px-2">
+                <strong>{{
+                  i18n.t("components.left-navigation.navigation")
+                }}</strong>
+              </h3>
               <UButton
                 color="gray"
                 variant="ghost"

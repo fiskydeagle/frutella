@@ -22,7 +22,6 @@ export default {
         file: "en.yaml",
       },
     ],
-    langDir: "locales",
   },
 
   postcss: {

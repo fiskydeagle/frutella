@@ -1,0 +1,12 @@
+pages:
+  incoming:
+    title: "Incoming"
+components:
+  left-navigation:
+    home: "Home"
+    incoming: "Incoming"
+    orders: "Orders"
+    profile: "Profile"
+    logout: "Log out"
+    users: "Users"
+    navigation: "Navigation"

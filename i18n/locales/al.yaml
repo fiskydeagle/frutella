@@ -1,0 +1,12 @@
+pages:
+  incoming:
+    title: "Te Hyrat"
+components:
+  left-navigation:
+    home: "Ballina"
+    incoming: "Te Hyrat"
+    orders: "Porosite"
+    profile: "Profili"
+    logout: "Ckyqu"
+    users: "Perdoruesit"
+    navigation: "Navigimi"
