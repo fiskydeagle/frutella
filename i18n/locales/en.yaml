@@ -1,6 +1,40 @@
 pages:
   incoming:
     title: "Incoming"
+  index:
+    home: "Home"
+  login:
+    login: "Login"
+    email: "Email"
+    password: "Password"
+    no-account: "Don't have an account yet?"
+    create-account: "Create free account"
+  orders:
+    orders: "orders"
+  profile:
+    profile: "Profile"
+  register:
+    register: "Register"
+    first-name: "First Name"
+    last-name: "Last Name"
+    email: "Email"
+    password: "Password"
+  users:
+    users: "Users"
+    add-users: "Add Users"
+    id: "Id"
+    name: "Name"
+    email: "Email"
+    role: "Role"
+    created-at: "Created At"
+    updated-at: "Updated At"
+    created-by: "Created By"
+    updated-by: "Updated By"
+    update: "Update"
+    deactivate: "Deactivate"
+    restore: "Restore"
+    delete: "Delete"
+    add-user: "Add User"
 components:
   left-navigation:
     home: "Home"
@@ -10,3 +44,26 @@ components:
     logout: "Log out"
     users: "Users"
     navigation: "Navigation"
+  user:
+    add:
+      first-name: "First Name"
+      last-name: "Last Name"
+      email: "Email"
+      role: "Role"
+      password: "Password"
+      add-user: "Add User"
+      cancel: "Cancel"
+      add: "Add"
+      admin: "Admin"
+      employee: "Employee"
+      customer: "Customer"
+    update:
+      first-name: "First Name"
+      last-name: "Last Name"
+      role: "Role"
+      update-user: "Update User"
+      cancel: "Cancel"
+      update: "Update"
+validations:
+  invalid-name-password: "Invalid username or password."
+  something-wrong: "Something went wrong, please try again."
