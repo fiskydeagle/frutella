@@ -3,6 +3,8 @@ import { type InferType, object, string } from "yup";
 import { type User, UserRole } from "~/types";
 import type { FormSubmitEvent } from "#ui/types";
 
+const i18n = useI18n();
+
 type Props = {
   user: User;
   isModalOpen: boolean;
@@ -54,7 +56,7 @@ watch(
         role: props.user.role,
       });
     }
-  },
+  }
 );
 </script>
 
@@ -77,7 +79,9 @@ watch(
           <div
             class="flex justify-between items-center text-lg font-normal leading-6"
           >
-            <h6 class="text-xl">Update User</h6>
+            <h6 class="text-xl">
+              {{ i18n.t("components.user.update.update-user") }}
+            </h6>
             <UButton
               color="gray"
               variant="ghost"
@@ -129,7 +133,7 @@ watch(
               variant="ghost"
               @click="isOpen = false"
             >
-              Cancel
+              {{ i18n.t("components.user.update.update-cancel") }}
             </UButton>
 
             <UButton
@@ -138,7 +142,7 @@ watch(
               type="submit"
               :loading="loading"
             >
-              Update
+              {{ i18n.t("components.user.update.update") }}
             </UButton>
           </div>
         </template>

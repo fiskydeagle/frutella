@@ -3,6 +3,8 @@ import { object, string, type InferType } from "yup";
 import type { FormSubmitEvent } from "#ui/types";
 import { useAuthUser } from "~/composables/useAuthUser";
 
+const i18n = useI18n();
+
 useHead(() => {
   return {
     title: "Frutella - Register",
@@ -45,23 +47,39 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
       <UCard>
         <template #header>
-          <h1 class="text-xl">Register</h1>
+          <h1 class="text-xl">{{ i18n.t("pages.register.register") }}</h1>
         </template>
 
         <div class="flex flex-col gap-4">
-          <UFormGroup size="lg" label="First Name" name="firstName">
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('pages.register.first-name')"
+            name="firstName"
+          >
             <UInput v-model="state.firstName" />
           </UFormGroup>
 
-          <UFormGroup size="lg" label="Last Name" name="lastName">
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('pages.register.last-name')"
+            name="lastName"
+          >
             <UInput v-model="state.lastName" />
           </UFormGroup>
 
-          <UFormGroup size="lg" label="Email" name="email">
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('pages.register.email')"
+            name="email"
+          >
             <UInput v-model="state.email" />
           </UFormGroup>
 
-          <UFormGroup size="lg" label="Password" name="password">
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('pages.register.password')"
+            name="password"
+          >
             <UInput v-model="state.password" type="password" />
           </UFormGroup>
         </div>
@@ -69,7 +87,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
         <template #footer>
           <div class="flex flex-col gap-2 justify-end text-center">
             <UButton class="justify-center" size="xl" type="submit">
-              Register
+              {{ i18n.t("pages.register.register") }}
             </UButton>
           </div>
         </template>

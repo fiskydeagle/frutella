@@ -1,12 +1,70 @@
 pages:
   incoming:
-    title: "Te Hyrat"
+    title: "Të Hyrat"
+  index:
+    home: "Ballina"
+  login:
+    login: "Hyrje"
+    email: "Email"
+    password: "Fjalëkalimi"
+    no-account: "Nuk keni ende një llogari?"
+    create-account: "Krijo llogari falas"
+  orders:
+    orders: "Porositë"
+  profile:
+    profile: "Profili"
+  register:
+    register: "Regjistrohu"
+    first-name: "Emri"
+    last-name: "Mbiemri"
+    email: "Email"
+    password: "Fjalëkalimi"
+  users:
+    users: "Përdoruesit"
+    add-users: "Shto Përdorues"
+    id: "ID"
+    name: "Emri"
+    email: "Email"
+    role: "Roli"
+    created-at: "Krijuar Më"
+    updated-at: "Përditësuar Më"
+    created-by: "Krijuar Nga"
+    updated-by: "Përditësuar Nga"
+    update: "Përditëso"
+    deactivate: "Çaktivizo"
+    restore: "Rikthe"
+    delete: "Fshij"
+    add-user: "Shto Përdorues"
+
 components:
   left-navigation:
     home: "Ballina"
-    incoming: "Te Hyrat"
-    orders: "Porosite"
+    incoming: "Të Hyrat"
+    orders: "Porositë"
     profile: "Profili"
     logout: "Ckyqu"
-    users: "Perdoruesit"
+    users: "Përdoruesit"
     navigation: "Navigimi"
+  user:
+    add:
+      first-name: "Emri"
+      last-name: "Mbiemri"
+      email: "Email"
+      role: "Roli"
+      password: "Fjalëkalimi"
+      add-user: "Shto Përdorues"
+      cancel: "Anulo"
+      add: "Shto"
+      admin: "Admin"
+      employee: "Puntor"
+      customer: "Klient"
+    update:
+      first-name: "Emri"
+      last-name: "Mbiemri"
+      role: "Roli"
+      update-user: "Përditëso Përdorues"
+      cancel: "Anulo"
+      update: "Përditëso"
+validations:
+  invalid-name-password: "Emri i përdoruesit ose fjalëkalimi është gabim."
+  something-wrong: "Diçka shkoi keq, ju lutemi provoni përsëri."

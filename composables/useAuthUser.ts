@@ -3,6 +3,7 @@ import type { User } from "~/types";
 export const useAuthUser = () => {
   const toast = useToast();
   const router = useRouter();
+  const i18n = useI18n();
 
   const authToken = useCookie<string | undefined>("authToken");
   const user = useCookie<User | undefined>("user");
@@ -37,7 +38,7 @@ export const useAuthUser = () => {
       });
     } catch (error: any) {
       toast.add({
-        title: error.statusMessage,
+        title: i18n.t(error.statusMessage),
         description: error.data.data ? error.data.data.join(", ") : undefined,
         color: "red",
         icon: "i-lucide-alert-triangle",
@@ -71,7 +72,7 @@ export const useAuthUser = () => {
       });
     } catch (error: any) {
       toast.add({
-        title: error.statusMessage,
+        title: i18n.t(error.statusMessage),
         description: error.data.data ? error.data.data.join(", ") : undefined,
         color: "red",
         icon: "i-lucide-alert-triangle",

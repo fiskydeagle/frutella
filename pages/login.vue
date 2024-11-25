@@ -3,6 +3,8 @@ import { object, string, type InferType } from "yup";
 import type { FormSubmitEvent } from "#ui/types";
 import { useAuthUser } from "~/composables/useAuthUser";
 
+const i18n = useI18n();
+
 useHead(() => {
   return {
     title: "Frutella - Login",
@@ -41,15 +43,23 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
       <UCard>
         <template #header>
-          <h1 class="text-xl">Login</h1>
+          <h1 class="text-xl">{{ i18n.t("pages.login.login") }}</h1>
         </template>
 
         <div class="flex flex-col gap-4">
-          <UFormGroup size="lg" label="Email" name="email">
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('pages.login.email')"
+            name="email"
+          >
             <UInput v-model="state.email" />
           </UFormGroup>
 
-          <UFormGroup size="lg" label="Password" name="password">
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('pages.login.password')"
+            name="password"
+          >
             <UInput v-model="state.password" type="password" />
           </UFormGroup>
         </div>
@@ -57,15 +67,14 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
         <template #footer>
           <div class="flex flex-col gap-2 justify-end text-center">
             <UButton class="justify-center" size="xl" type="submit">
-              Login
+              {{ i18n.t("pages.login.login") }}
             </UButton>
-            <p>Don't have an account yet?</p>
+            <p>{{ i18n.t("pages.login.no-account") }}</p>
             <ULink
               to="/register"
               active-class="text-primary"
               inactive-class="text-primary hover:text-primary-600"
-            >
-              Create free account
+              >{{ i18n.t("pages.login.create-account") }}
             </ULink>
           </div>
         </template>

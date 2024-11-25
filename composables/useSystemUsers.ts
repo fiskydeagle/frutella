@@ -3,6 +3,7 @@ import { UserRole } from "~/types";
 
 export const useSystemUsers = () => {
   const toast = useToast();
+  const i18n = useI18n();
 
   const users = ref<User[]>();
 
@@ -36,7 +37,7 @@ export const useSystemUsers = () => {
       await getUsers();
     } catch (error: any) {
       toast.add({
-        title: error.statusMessage,
+        title: i18n.t(error.statusMessage),
         description: error.data.data ? error.data.data.join(", ") : undefined,
         color: "red",
         icon: "i-lucide-alert-triangle",
@@ -67,7 +68,7 @@ export const useSystemUsers = () => {
       await getUsers();
     } catch (error: any) {
       toast.add({
-        title: error.statusMessage,
+        title: i18n.t(error.statusMessage),
         description: error.data.data ? error.data.data.join(", ") : undefined,
         color: "red",
         icon: "i-lucide-alert-triangle",
@@ -96,7 +97,7 @@ export const useSystemUsers = () => {
       await getUsers();
     } catch (error: any) {
       toast.add({
-        title: error.statusMessage,
+        title: i18n.t(error.statusMessage),
         description: error.data.data ? error.data.data.join(", ") : undefined,
         color: "red",
         icon: "i-lucide-alert-triangle",
@@ -125,7 +126,7 @@ export const useSystemUsers = () => {
       await getUsers();
     } catch (error: any) {
       toast.add({
-        title: error.statusMessage,
+        title: i18n.t(error.statusMessage),
         description: error.data.data ? error.data.data.join(", ") : undefined,
         color: "red",
         icon: "i-lucide-alert-triangle",
@@ -154,7 +155,7 @@ export const useSystemUsers = () => {
       await getUsers();
     } catch (error: any) {
       toast.add({
-        title: error.statusMessage,
+        title: i18n.t(error.statusMessage),
         description: error.data.data ? error.data.data.join(", ") : undefined,
         color: "red",
         icon: "i-lucide-alert-triangle",
