@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const i18n = useI18n();
+
 useHead(() => {
   return {
     title: "Frutella - Orders",
@@ -18,6 +20,6 @@ definePageMeta({
 
 <template>
   <div>
-    <h1 class="text-3xl text-center">Orders</h1>
+    <h1 class="text-3xl text-center">{{ i18n.t("pages.orders.orders") }}</h1>
   </div>
 </template>
