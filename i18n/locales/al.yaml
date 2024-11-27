@@ -8,7 +8,15 @@ pages:
     email: "Email"
     password: "Fjalëkalimi"
     no-account: "Nuk keni ende një llogari?"
-    create-account: "Krijo llogari falas"
+    create-account: "Krijo llogari"
+    forgot-password: "Keni harruar fjalëkalimi?"
+    click-here: "Kliko këtu"
+  forgot-password:
+    password-recovery: "Rikthimi i fjalëkalimit"
+    email: "Email"
+    send: "Dërgo"
+    have-account: "Keni llogari?"
+    login: "Kyçu"
   orders:
     orders: "Porositë"
   profile:
@@ -42,7 +50,7 @@ components:
     incoming: "Të Hyrat"
     orders: "Porositë"
     profile: "Profili"
-    logout: "Ckyqu"
+    logout: "Çkyçu"
     users: "Përdoruesit"
     navigation: "Navigimi"
   user:
@@ -66,5 +74,6 @@ components:
       cancel: "Anulo"
       update: "Përditëso"
 validations:
-  invalid-name-password: "Emri i përdoruesit ose fjalëkalimi është gabim."
+  invalid-email-password: "Emaili i përdoruesit ose fjalëkalimi është gabim."
+  invalid-email: "Emaili i përdoruesit është gabim."
   something-wrong: "Diçka shkoi keq, ju lutemi provoni përsëri."
