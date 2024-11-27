@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
   if (!user) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Invalid username or password.",
+      statusMessage: "validations.invalid-name-password",
     });
   }
 
@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
   if (!validPassword) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Invalid username or password.",
+      statusMessage: "validations.invalid-name-password",
     });
   }
 
@@ -55,7 +55,7 @@ export default defineEventHandler(async (event) => {
     console.log("fisky error", error);
     throw createError({
       statusCode: 400,
-      statusMessage: "Something went wrong, please try again.",
+      statusMessage: "validations.something-wrong",
     });
   }
 });
