@@ -1,4 +1,3 @@
-import { sendEmail } from "~/server/utils/email";
 import db from "@/models/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
