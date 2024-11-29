@@ -11,12 +11,18 @@ pages:
     create-account: "Create account"
     forgot-password: "Forgot password?"
     click-here: "Click here"
+    toasts:
+      login-complete: "Login Completed!"
+      registration-complete: "Registration Complete!"
   forgot-password:
     password-recovery: "Password recovery"
     email: "Email"
     send: "Send"
     have-account: "Do you have account?"
     login: "Login"
+    toasts:
+      password-send-to-email: "Password send to your email!"
+      updated-password: "Password Changed!"
   orders:
     orders: "orders"
   profile:
@@ -68,6 +74,8 @@ components:
       admin: "Admin"
       employee: "Employee"
       customer: "Customer"
+      toasts:
+        user-added: "User added!"
     update:
       first-name: "First Name"
       last-name: "Last Name"
@@ -75,9 +83,29 @@ components:
       update-user: "Update User"
       cancel: "Cancel"
       update: "Update"
+      admin: "Admin"
+      employee: "Employee"
+      customer: "Customer"
+      toasts:
+        user-updated: "User Updated!",
+        user-deactivated: "User Deactivated!"
+        user-restored: "User Restored!"
+        user-deleted: "User Deleted!"
+        user-profile-updated: "User profile updated!"
 validations:
   user-not-found: "User not found!"
   invalid-email-password: "Invalid Email or password."
   invalid-old-password: "Invalid old password."
   invalid-email: "Invalid Email."
   something-wrong: "Something went wrong, please try again."
+  wrong: "Something went wrong"
+  not-authorized: "Not Authorized!"
+page-titles:
+  forgot-password: "Forgot password"
+  incoming: "Incoming"
+  index: "Home"
+  login: "Login"
+  orders: "Orders"
+  profile: "Profile"
+  register: "Register"
+  users: "Users"

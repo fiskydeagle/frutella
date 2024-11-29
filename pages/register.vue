@@ -7,7 +7,7 @@ const i18n = useI18n();
 
 useHead(() => {
   return {
-    title: "Frutella - Register",
+    title: "Frutella - " + i18n.t("page-titles.register"),
     meta: [
       {
         name: "description",

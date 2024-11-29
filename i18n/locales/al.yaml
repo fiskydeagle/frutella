@@ -4,19 +4,25 @@ pages:
   index:
     home: "Ballina"
   login:
-    login: "Hyrje"
+    login: "Kyçu"
     email: "Email"
     password: "Fjalëkalimi"
     no-account: "Nuk keni ende një llogari?"
     create-account: "Krijo llogari"
     forgot-password: "Keni harruar fjalëkalimi?"
     click-here: "Kliko këtu"
+    toasts:
+      login-complete: "Kyçja me Sukses!"
+      registration-complete: "Regjistrimi me Sukses!"
   forgot-password:
     password-recovery: "Rikthimi i fjalëkalimit"
     email: "Email"
     send: "Dërgo"
     have-account: "Keni llogari?"
     login: "Kyçu"
+    toasts:
+      Password-send-to-email: "Fjalëkalimi është dërguar në email"
+      updated-password: "Fjalëkalimi është Ndrruar!"
   orders:
     orders: "Porositë"
   profile:
@@ -68,6 +74,8 @@ components:
       admin: "Admin"
       employee: "Puntor"
       customer: "Klient"
+      toasts:
+        user-added: "Përdoruesi u Shtua!"
     update:
       first-name: "Emri"
       last-name: "Mbiemri"
@@ -75,9 +83,29 @@ components:
       update-user: "Përditëso Përdoruesin"
       cancel: "Anulo"
       update: "Përditëso"
+      admin: "Admin"
+      employee: "Puntor"
+      customer: "Klient"
+      toasts:
+        user-updated: "përdoruesi është Përditësuar!"
+        user-deactivated: "Përdoruesi është Deaktivizuar!"
+        user-restored: "Përdoruesi është Kthyer!"
+        user-deleted: "Përdoruesi është Fshirë!"
+        user-profile-updated: "Profili i Përdoruesit është Përditësuar!"
 validations:
   user-not-found: "Përdoruesi nuk u gjet!"
   invalid-email-password: "Emaili i përdoruesit ose fjalëkalimi është gabim."
   invalid-old-password: "Fjalëkalimi i vjetër gabim."
   invalid-email: "Emaili i përdoruesit është gabim."
   something-wrong: "Diçka shkoi keq, ju lutemi provoni përsëri."
+  wrong: "Diçka shkoi keq"
+  not-authorized: "I pa autorizuar!"
+page-titles:
+  forgot-password: "Forgot password"
+  incoming: "Të Hyrat"
+  index: "Ballina"
+  login: "Kyçu"
+  orders: "Porositë"
+  profile: "Profili"
+  register: "Regjistrohu"
+  users: "Përdoruesit"

@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   ) {
     throw createError({
       statusCode: 403,
-      statusMessage: "Not Authorized!",
+      statusMessage: "validations.not-authorized",
     });
   }
 
@@ -56,7 +56,7 @@ export default defineEventHandler(async (event) => {
                   "updatedByUserLastName": "', COALESCE(updatedByUser.lastName, ''), '"
                 }'
               )
-            `),
+            `)
           ),
           "rows",
         ],
@@ -68,10 +68,10 @@ export default defineEventHandler(async (event) => {
 
     return incomings.map((incoming) => {
       const rows = JSON.parse(`[${incoming.dataValues.rows}]`).map(
-        (row: any) => ({ ...row, value: +row.value }),
+        (row: any) => ({ ...row, value: +row.value })
       );
       const deletedRows = rows.filter(
-        (row: { deletedAt: string }) => row.deletedAt,
+        (row: { deletedAt: string }) => row.deletedAt
       );
 
       const minusTotal =
