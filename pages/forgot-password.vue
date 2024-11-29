@@ -7,7 +7,7 @@ const i18n = useI18n();
 
 useHead(() => {
   return {
-    title: "Frutella - Forgot password",
+    title: "Frutella - " + i18n.t("page-titles.forgot-password"),
     meta: [
       {
         name: "description",

@@ -28,7 +28,7 @@ export const useAuthUser = () => {
       });
 
       toast.add({
-        title: "Registration Completed!",
+        title: i18n.t("pages.login.toasts.registration-complete"),
         color: "green",
         icon: "i-lucide-check-circle",
       });
@@ -62,7 +62,7 @@ export const useAuthUser = () => {
       });
 
       toast.add({
-        title: "Login Completed!",
+        title: i18n.t("pages.login.toasts.login-complete"),
         color: "green",
         icon: "i-lucide-check-circle",
       });
@@ -92,7 +92,7 @@ export const useAuthUser = () => {
       });
 
       toast.add({
-        title: "Password send to your email!",
+        title: i18n.t("pages.forgot-password.toasts.password-send-to-email"),
         color: "green",
         icon: "i-lucide-check-circle",
       });

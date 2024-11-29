@@ -5,7 +5,7 @@ const i18n = useI18n();
 
 useHead(() => {
   return {
-    title: "Frutella - Home",
+    title: "Frutella - " + i18n.t("page-titles.index"),
     meta: [
       {
         name: "description",

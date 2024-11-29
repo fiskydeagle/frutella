@@ -3,7 +3,7 @@ const i18n = useI18n();
 
 useHead(() => {
   return {
-    title: "Frutella - Orders",
+    title: "Frutella - " + i18n.t("page-titles.orders"),
     meta: [
       {
         name: "description",

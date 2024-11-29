@@ -29,7 +29,7 @@ export const useSystemUsers = () => {
       });
 
       toast.add({
-        title: "User added!",
+        title: i18n.t("user.add.toasts.user-added"),
         color: "green",
         icon: "i-lucide-check-circle",
       });
@@ -60,7 +60,7 @@ export const useSystemUsers = () => {
       });
 
       toast.add({
-        title: "User updated!",
+        title: i18n.t("components.user.add.toasts.user-updated"),
         color: "green",
         icon: "i-lucide-check-circle",
       });
@@ -89,7 +89,7 @@ export const useSystemUsers = () => {
       });
 
       toast.add({
-        title: "User deactivated!",
+        title: i18n.t("components.user.add.toasts.user-deactivated"),
         color: "green",
         icon: "i-lucide-check-circle",
       });
@@ -118,7 +118,7 @@ export const useSystemUsers = () => {
       });
 
       toast.add({
-        title: "User restored!",
+        title: i18n.t("components.user.add.toasts.user-restored"),
         color: "green",
         icon: "i-lucide-check-circle",
       });
@@ -147,7 +147,7 @@ export const useSystemUsers = () => {
       });
 
       toast.add({
-        title: "User deleted!",
+        title: i18n.t("components.user.add.toasts.user-deleted"),
         color: "green",
         icon: "i-lucide-check-circle",
       });
@@ -177,7 +177,7 @@ export const useSystemUsers = () => {
       });
 
       toast.add({
-        title: "User profile updated!",
+        title: i18n.t("components.user.add.toasts.user-profile-updated"),
         color: "green",
         icon: "i-lucide-check-circle",
       });
@@ -207,7 +207,7 @@ export const useSystemUsers = () => {
       });
 
       toast.add({
-        title: "Password changed!",
+        title: i18n.t("pages.forgot-password.toasts.updated-password"),
         color: "green",
         icon: "i-lucide-check-circle",
       });

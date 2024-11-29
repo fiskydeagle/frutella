@@ -9,7 +9,7 @@ const { user } = useAuthUser();
 
 useHead(() => {
   return {
-    title: "Frutella - Profile",
+    title: "Frutella - " + i18n.t("page-titles.profile"),
     meta: [
       {
         name: "description",
