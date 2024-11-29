@@ -56,7 +56,7 @@ watch(
         role: props.user.role,
       });
     }
-  }
+  },
 );
 </script>
 
@@ -133,7 +133,7 @@ watch(
               variant="ghost"
               @click="isOpen = false"
             >
-              {{ i18n.t("components.user.update.update-cancel") }}
+              {{ i18n.t("components.user.update.cancel") }}
             </UButton>
 
             <UButton

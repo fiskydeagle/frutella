@@ -37,8 +37,11 @@ const state = reactive({
   password: undefined,
 });
 
+const registerLoading = ref<boolean>(false);
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
+  registerLoading.value = true;
   await register(state);
+  registerLoading.value = false;
 };
 </script>
 
@@ -86,9 +89,26 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 
         <template #footer>
           <div class="flex flex-col gap-2 justify-end text-center">
-            <UButton class="justify-center" size="xl" type="submit">
+            <UButton
+              :loading="registerLoading"
+              class="justify-center"
+              size="xl"
+              type="submit"
+            >
               {{ i18n.t("pages.register.register") }}
             </UButton>
+
+            <div class="flex gap-x-6 gap-y-2 flex-wrap justify-center">
+              <div>
+                <p>{{ i18n.t("pages.forgot-password.have-account") }}</p>
+                <ULink
+                  :to="{ name: 'login' }"
+                  active-class="text-primary"
+                  inactive-class="text-primary hover:text-primary-600"
+                  >{{ i18n.t("pages.forgot-password.login") }}
+                </ULink>
+              </div>
+            </div>
           </div>
         </template>
       </UCard>

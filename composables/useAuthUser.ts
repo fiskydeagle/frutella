@@ -80,6 +80,36 @@ export const useAuthUser = () => {
     }
   };
 
+  const recoverPassword = async (state: { email: string | undefined }) => {
+    try {
+      await $fetch("/api/recover-password", {
+        method: "POST",
+        body: state,
+      });
+
+      Object.assign(state, {
+        email: undefined,
+      });
+
+      toast.add({
+        title: "Password send to your email!",
+        color: "green",
+        icon: "i-lucide-check-circle",
+      });
+
+      router.push({
+        name: "login",
+      });
+    } catch (error: any) {
+      toast.add({
+        title: i18n.t(error.statusMessage),
+        description: error.data.data ? error.data.data.join(", ") : undefined,
+        color: "red",
+        icon: "i-lucide-alert-triangle",
+      });
+    }
+  };
+
   const logout = () => {
     authToken.value = undefined;
     user.value = undefined;
@@ -94,6 +124,7 @@ export const useAuthUser = () => {
 
     register,
     login,
+    recoverPassword,
     logout,
   };
 };

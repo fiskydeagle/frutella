@@ -8,11 +8,22 @@ pages:
     email: "Email"
     password: "Password"
     no-account: "Don't have an account yet?"
-    create-account: "Create free account"
+    create-account: "Create account"
+    forgot-password: "Forgot password?"
+    click-here: "Click here"
+  forgot-password:
+    password-recovery: "Password recovery"
+    email: "Email"
+    send: "Send"
+    have-account: "Do you have account?"
+    login: "Login"
   orders:
     orders: "orders"
   profile:
     profile: "Profile"
+    update-profile: "Update profile"
+    update-password: "Update password"
+    update: "Update"
   register:
     register: "Register"
     first-name: "First Name"
@@ -65,5 +76,8 @@ components:
       cancel: "Cancel"
       update: "Update"
 validations:
-  invalid-name-password: "Invalid username or password."
+  user-not-found: "User not found!"
+  invalid-email-password: "Invalid Email or password."
+  invalid-old-password: "Invalid old password."
+  invalid-email: "Invalid Email."
   something-wrong: "Something went wrong, please try again."
