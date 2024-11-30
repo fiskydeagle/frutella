@@ -25,7 +25,23 @@ await getIncomings();
 
 <template>
   <div>
-    <h1 class="text-3xl text-center">{{ i18n.t("pages.incoming.title") }}</h1>
+    <h1 class="text-3xl text-center mb-6">
+      {{ i18n.t("pages.incoming.title") }}
+    </h1>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <Incoming-Item />
+      <Incoming-Item />
+      <Incoming-Item />
+      <Incoming-Item />
+      <Incoming-Item />
+      <Incoming-Item />
+      <Incoming-Item />
+      <Incoming-Item />
+      <Incoming-Item />
+      <Incoming-Item />
+      <Incoming-Item />
+      <Incoming-Item />
+    </div>
     <pre class="text-xs">{{ incomings }}</pre>
   </div>
 </template>
