@@ -16,11 +16,11 @@ export default {
         name: "Shqipe",
         file: "al.yaml",
       },
-      {
+      /*{
         code: "en",
         name: "English",
         file: "en.yaml",
-      },
+      },*/
     ],
   },
 

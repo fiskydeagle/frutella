@@ -3,6 +3,8 @@ import { type InferType, object, string } from "yup";
 import { type User, UserRole } from "~/types";
 import type { FormSubmitEvent } from "#ui/types";
 
+const i18n = useI18n();
+
 type Props = {
   user: User;
   isModalOpen: boolean;
@@ -54,7 +56,7 @@ watch(
         role: props.user.role,
       });
     }
-  },
+  }
 );
 </script>
 
@@ -77,7 +79,9 @@ watch(
           <div
             class="flex justify-between items-center text-lg font-normal leading-6"
           >
-            <h6 class="text-xl">Update User</h6>
+            <h6 class="text-xl">
+              {{ i18n.t("components.user.update.update-user") }}
+            </h6>
             <UButton
               color="gray"
               variant="ghost"
@@ -89,29 +93,41 @@ watch(
         </template>
 
         <div class="flex flex-col gap-4">
-          <UFormGroup size="lg" label="First Name" name="firstName">
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('components.user.update.first-name')"
+            name="firstName"
+          >
             <UInput v-model="state.firstName" />
           </UFormGroup>
 
-          <UFormGroup size="lg" label="Last Name" name="lastName">
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('components.user.update.last-name')"
+            name="lastName"
+          >
             <UInput v-model="state.lastName" />
           </UFormGroup>
 
-          <UFormGroup size="lg" label="Role" name="role">
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('components.user.update.role')"
+            name="role"
+          >
             <USelectMenu
               v-model="state.role"
               :options="[
                 {
                   id: UserRole.ADMIN,
-                  label: 'Admin',
+                  label: i18n.t('components.user.update.admin'),
                 },
                 {
                   id: UserRole.EMPLOYEE,
-                  label: 'Employee',
+                  label: i18n.t('components.user.update.employee'),
                 },
                 {
                   id: UserRole.CUSTOMER,
-                  label: 'Customer',
+                  label: i18n.t('components.user.update.customer'),
                 },
               ]"
               value-attribute="id"
@@ -129,7 +145,7 @@ watch(
               variant="ghost"
               @click="isOpen = false"
             >
-              Cancel
+              {{ i18n.t("components.user.update.cancel") }}
             </UButton>
 
             <UButton
@@ -138,7 +154,7 @@ watch(
               type="submit"
               :loading="loading"
             >
-              Update
+              {{ i18n.t("components.user.update.update") }}
             </UButton>
           </div>
         </template>

@@ -13,6 +13,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/cookie": "^0.6.0",
     "@types/node": "^22.9.0",
+    "@types/nodemailer": "^6.4.17",
     "@types/yup": "^0.32.0",
     "autoprefixer": "^10.4.20",
     "nuxt": "^3.10.0",
@@ -29,6 +30,7 @@
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "mysql2": "^3.9.4",
+    "nodemailer": "^6.9.16",
     "prettier": "^3.3.3",
     "sequelize": "^6.31.0",
     "yup": "^1.4.0"

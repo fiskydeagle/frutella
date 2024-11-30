@@ -3,6 +3,7 @@ import type { User } from "~/types";
 export const useAuthUser = () => {
   const toast = useToast();
   const router = useRouter();
+  const i18n = useI18n();
 
   const authToken = useCookie<string | undefined>("authToken");
   const user = useCookie<User | undefined>("user");
@@ -27,7 +28,7 @@ export const useAuthUser = () => {
       });
 
       toast.add({
-        title: "Registration Completed!",
+        title: i18n.t("pages.login.toasts.registration-complete"),
         color: "green",
         icon: "i-lucide-check-circle",
       });
@@ -37,7 +38,7 @@ export const useAuthUser = () => {
       });
     } catch (error: any) {
       toast.add({
-        title: error.statusMessage,
+        title: i18n.t(error.statusMessage),
         description: error.data.data ? error.data.data.join(", ") : undefined,
         color: "red",
         icon: "i-lucide-alert-triangle",
@@ -61,7 +62,7 @@ export const useAuthUser = () => {
       });
 
       toast.add({
-        title: "Login Completed!",
+        title: i18n.t("pages.login.toasts.login-complete"),
         color: "green",
         icon: "i-lucide-check-circle",
       });
@@ -71,7 +72,37 @@ export const useAuthUser = () => {
       });
     } catch (error: any) {
       toast.add({
-        title: error.statusMessage,
+        title: i18n.t(error.statusMessage),
+        description: error.data.data ? error.data.data.join(", ") : undefined,
+        color: "red",
+        icon: "i-lucide-alert-triangle",
+      });
+    }
+  };
+
+  const recoverPassword = async (state: { email: string | undefined }) => {
+    try {
+      await $fetch("/api/recover-password", {
+        method: "POST",
+        body: state,
+      });
+
+      Object.assign(state, {
+        email: undefined,
+      });
+
+      toast.add({
+        title: i18n.t("pages.forgot-password.toasts.password-send-to-email"),
+        color: "green",
+        icon: "i-lucide-check-circle",
+      });
+
+      router.push({
+        name: "login",
+      });
+    } catch (error: any) {
+      toast.add({
+        title: i18n.t(error.statusMessage),
         description: error.data.data ? error.data.data.join(", ") : undefined,
         color: "red",
         icon: "i-lucide-alert-triangle",
@@ -93,6 +124,7 @@ export const useAuthUser = () => {
 
     register,
     login,
+    recoverPassword,
     logout,
   };
 };
