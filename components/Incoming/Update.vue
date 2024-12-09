@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { type InferType, object, string } from "yup";
-import { UserRole } from "~/types";
+import { type InferType, object, string, number } from "yup";
+import { type Incoming, IncomingType } from "~/types";
 import type { FormSubmitEvent } from "#ui/types";
 
 const i18n = useI18n();
@@ -8,34 +8,32 @@ const i18n = useI18n();
 type Props = {
   isModalOpen: boolean;
   loading: boolean;
+  incoming: Incoming;
 };
 
 type EmitType = {
   (event: "onClose"): void;
-  (event: "onSubmit", user: typeof state): void;
+  (event: "onSubmit", incoming: typeof state): void;
 };
 
 const props = defineProps<Props>();
 const emits = defineEmits<EmitType>();
 
 const schema = object({
-  firstName: string().required("Required"),
-  lastName: string().required("Required"),
-  email: string().email("Invalid email").required("Required"),
-  role: string().required("Required"),
-  password: string()
-    .min(8, "Must be at least 8 characters")
+  type: string().required("Required"),
+  description: string().required("Required"),
+  value: number()
+    .moreThan(0, "The number must be greater than 0")
     .required("Required"),
 });
 
 type Schema = InferType<typeof schema>;
 
 const state = reactive({
-  firstName: undefined,
-  lastName: undefined,
-  email: undefined,
-  role: undefined,
-  password: undefined,
+  id: props.incoming.id,
+  type: props.incoming.type,
+  description: props.incoming.description,
+  value: Math.abs(+props.incoming.value),
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
@@ -52,13 +50,12 @@ const isOpen = computed({
 watch(
   () => isOpen.value,
   (isOpen) => {
-    if (!isOpen) {
+    if (isOpen) {
       Object.assign(state, {
-        firstName: undefined,
-        lastName: undefined,
-        email: undefined,
-        role: undefined,
-        password: undefined,
+        id: props.incoming.id,
+        type: props.incoming.type,
+        description: props.incoming.description,
+        value: Math.abs(+props.incoming.value),
       });
     }
   },
@@ -85,7 +82,7 @@ watch(
             class="flex justify-between items-center text-lg font-normal leading-6"
           >
             <h6 class="text-xl">
-              {{ i18n.t("components.user.add.add-user") }}
+              {{ i18n.t("components.incoming.update.update-incoming") }}
             </h6>
             <UButton
               color="gray"
@@ -100,60 +97,41 @@ watch(
         <div class="flex flex-col gap-4">
           <UFormGroup
             size="lg"
-            :label="i18n.t('components.user.add.first-name')"
-            name="firstName"
+            :label="i18n.t('components.incoming.update.type')"
+            name="type"
           >
-            <UInput v-model="state.firstName" />
-          </UFormGroup>
-
-          <UFormGroup
-            size="lg"
-            :label="i18n.t('components.user.add.last-name')"
-            name="lastName"
-          >
-            <UInput v-model="state.lastName" />
-          </UFormGroup>
-
-          <UFormGroup
-            size="lg"
-            :label="i18n.t('components.user.add.email')"
-            name="email"
-          >
-            <UInput v-model="state.email" />
-          </UFormGroup>
-
-          <UFormGroup
-            size="lg"
-            :label="i18n.t('components.user.add.role')"
-            name="role"
-          >
-            <USelectMenu
-              v-model="state.role"
+            <URadioGroup
+              v-model="state.type"
+              class="radio-group-flex"
               :options="[
                 {
-                  id: UserRole.ADMIN,
-                  label: i18n.t('components.user.add.admin'),
+                  id: IncomingType.Addition,
+                  label: i18n.t('components.incoming.update.addition'),
                 },
                 {
-                  id: UserRole.EMPLOYEE,
-                  label: i18n.t('components.user.add.employee'),
-                },
-                {
-                  id: UserRole.CUSTOMER,
-                  label: i18n.t('components.user.add.customer'),
+                  id: IncomingType.Discount,
+                  label: i18n.t('components.incoming.update.discount'),
                 },
               ]"
               value-attribute="id"
-              :placeholder="i18n.t('components.user.add.role')"
+              :placeholder="i18n.t('components.incoming.update.type')"
             />
           </UFormGroup>
 
           <UFormGroup
             size="lg"
-            :label="i18n.t('components.user.add.password')"
-            name="password"
+            :label="i18n.t('components.incoming.update.description')"
+            name="description"
           >
-            <UInput v-model="state.password" type="password" />
+            <UInput v-model="state.description" />
+          </UFormGroup>
+
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('components.incoming.update.value')"
+            name="value"
+          >
+            <UInput v-model="state.value" type="number" />
           </UFormGroup>
         </div>
 
@@ -166,7 +144,7 @@ watch(
               variant="ghost"
               @click="isOpen = false"
             >
-              {{ i18n.t("components.user.add.cancel") }}
+              {{ i18n.t("components.incoming.update.cancel") }}
             </UButton>
 
             <UButton
@@ -175,7 +153,7 @@ watch(
               type="submit"
               :loading="loading"
             >
-              {{ i18n.t("components.user.add.add") }}
+              {{ i18n.t("components.incoming.update.update") }}
             </UButton>
           </div>
         </template>

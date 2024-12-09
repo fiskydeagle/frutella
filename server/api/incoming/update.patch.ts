@@ -1,26 +1,25 @@
 import db from "@/models/index.js";
 import Sequelize from "sequelize";
-import bcrypt from "bcrypt";
+import { IncomingType } from "~/types";
 
 interface Payload {
-  oldPassword: string;
-  password: string;
+  id: number;
+  description: string;
+  type: IncomingType;
+  value: number;
 }
 
 export default defineEventHandler(async (event) => {
   if (!event.context.user) {
     throw createError({
       statusCode: 403,
-      statusMessage: "validations.not-authorized",
+      statusMessage: "validations.user-not-found",
     });
   }
 
-  const body: Payload = await readBody(event);
-
   const user = await db.Users.findOne({
     where: { id: event.context.user.id },
-    attributes: ["id", "password"],
-    paranoid: false,
+    attributes: ["id"],
   });
 
   if (!user) {
@@ -30,27 +29,27 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const validPassword = await bcrypt.compare(
-    body.oldPassword,
-    user.dataValues.password,
-  );
+  const body: Payload = await readBody(event);
 
-  if (!validPassword) {
+  const incoming = await db.Incomings.findOne({
+    where: { id: body.id },
+    attributes: ["id", "description", "type", "value", "updatedBy"],
+  });
+
+  if (!incoming) {
     throw createError({
-      statusCode: 400,
-      statusMessage: "validations.invalid-old-password",
+      statusCode: 404,
+      statusMessage: "components.incoming.update.toasts.incoming-not-found",
     });
   }
 
-  const hashedPassword = await bcrypt.hash(body.password, 10);
-
   try {
-    return await user.update(
-      {
-        password: hashedPassword,
-      },
-      { silent: true },
-    );
+    return await incoming.update({
+      description: body.description,
+      type: body.type,
+      value: body.type === IncomingType.Discount ? -1 * body.value : body.value,
+      updatedBy: user.dataValues.id,
+    });
   } catch (error: any) {
     if (error instanceof Sequelize.ValidationError) {
       throw createError({
