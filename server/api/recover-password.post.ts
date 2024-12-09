@@ -1,7 +1,6 @@
 import db from "@/models/index.js";
 import bcrypt from "bcrypt";
 import Sequelize from "sequelize";
-import { UserRole } from "~/types";
 
 interface Payload {
   email: string;
@@ -53,7 +52,7 @@ export default defineEventHandler(async (event) => {
     if (error instanceof Sequelize.ValidationError) {
       throw createError({
         statusCode: 400,
-        statusMessage: "Something went wrong.",
+        statusMessage: "validations.wrong",
         data: error.errors.map((item) => item.message),
       });
     }

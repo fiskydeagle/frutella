@@ -29,7 +29,7 @@ export const useSystemUsers = () => {
       });
 
       toast.add({
-        title: i18n.t("user.add.toasts.user-added"),
+        title: i18n.t("components.user.add.toasts.user-added"),
         color: "green",
         icon: "i-lucide-check-circle",
       });

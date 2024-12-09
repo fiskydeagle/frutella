@@ -111,8 +111,8 @@ const usersRows = computed(() => {
       name: `${user.firstName} ${user.lastName}`,
       email: user.email,
       role: user.role,
-      createdAt: format(new Date(user.createdAt), "dd MMMM, yyyy"),
-      updatedAt: format(new Date(user.updatedAt), "dd MMMM, yyyy"),
+      createdAt: format(new Date(user.createdAt), "dd.MM.yyyy"),
+      updatedAt: format(new Date(user.updatedAt), "dd.MM.yyyy"),
       createdBy: user.createdByUser
         ? `${user.createdByUser.firstName} ${user.createdByUser.lastName}`
         : "-",
@@ -157,13 +157,13 @@ const onUpdateUser = async (state: any) => {
     userUpdateModal.value = false;
     setTimeout(() => {
       userToUpdate.value = null;
-    }, 1000);
+    }, 400);
   }
 
   userUpdateLoading.value = false;
   setTimeout(() => {
     userToUpdate.value = null;
-  }, 1000);
+  }, 400);
 };
 const updateUserClose = () => {
   userUpdateModal.value = false;

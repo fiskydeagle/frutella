@@ -1,6 +1,21 @@
+common:
+  load-more: "Load more"
 pages:
   incoming:
     title: "Incoming"
+    count: "Count"
+    date: "Date"
+    total: "Total"
+    add: "Add"
+    add-new-entry: "Add new entry"
+    created-at: "Created At"
+    updated-at: "Updated At"
+    deleted-at: "Deleted At"
+    created-by: "Created By"
+    updated-by: "Updated By"
+    deleted-by: "Updated By"
+    update: "Update"
+    delete: "Delete"
   index:
     home: "Home"
   login:
@@ -92,13 +107,46 @@ components:
         user-restored: "User Restored!"
         user-deleted: "User Deleted!"
         user-profile-updated: "User profile updated!"
+  incoming:
+    add:
+      add-incoming: "Add incoming"
+      type: "Type"
+      addition: "Addition"
+      discount: "Discount"
+      description: "Description"
+      value: "Value"
+      cancel: "Cancel"
+      add: "Add"
+      for-date: "for date: "
+      toasts:
+        incoming-added: "Incoming added!"
+    update:
+      update-incoming: "Update incoming"
+      type: "Type"
+      addition: "Addition"
+      discount: "Discount"
+      description: "Description"
+      created-at: "Created At"
+      value: "Value"
+      cancel: "Cancel"
+      update: "Update"
+      toasts:
+        incoming-not-found: "Incoming not found."
+        incoming-updated: "Incoming updated."
+    delete:
+      delete-incoming: "Delete incoming"
+      description: "Are you sure you want to delete this?"
+      cancel: "Cancel"
+      delete: "Delete"
+      toasts:
+        incoming-deleted: "Incoming deleted."
 validations:
   user-not-found: "User not found!"
   invalid-email-password: "Invalid Email or password."
   invalid-old-password: "Invalid old password."
   invalid-email: "Invalid Email."
   something-wrong: "Something went wrong, please try again."
-  wrong: "Something went wrong"
+  wrong: "Something went wrong."
   not-authorized: "Not Authorized!"
 page-titles:
   forgot-password: "Forgot password"

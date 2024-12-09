@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
   ) {
     throw createError({
       statusCode: 403,
-      statusMessage: "Not Authorized!",
+      statusMessage: "validations.not-authorized",
     });
   }
 
@@ -40,13 +40,13 @@ export default defineEventHandler(async (event) => {
     if (error instanceof Sequelize.ValidationError) {
       throw createError({
         statusCode: 400,
-        statusMessage: "Something went wrong.",
+        statusMessage: "validations.wrong",
         data: error.errors.map((item) => item.message),
       });
     }
     throw createError({
       statusCode: 400,
-      statusMessage: "Something went wrong, please try again.",
+      statusMessage: "validations.something-wrong",
     });
   }
 });

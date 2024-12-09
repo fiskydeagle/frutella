@@ -47,4 +47,5 @@ export interface GroupedIncoming {
   rows: Incoming[];
   total: number;
   count: number;
+  createdAt: string;
 }
