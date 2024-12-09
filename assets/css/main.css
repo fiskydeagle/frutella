@@ -1,0 +1,7 @@
+.radio-group-flex fieldset {
+    @apply flex gap-6;
+    .items-start input ,
+    .items-start label {
+        @apply cursor-pointer
+    }
+}

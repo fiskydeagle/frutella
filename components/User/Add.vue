@@ -3,6 +3,8 @@ import { type InferType, object, string } from "yup";
 import { UserRole } from "~/types";
 import type { FormSubmitEvent } from "#ui/types";
 
+const i18n = useI18n();
+
 type Props = {
   isModalOpen: boolean;
   loading: boolean;
@@ -82,7 +84,9 @@ watch(
           <div
             class="flex justify-between items-center text-lg font-normal leading-6"
           >
-            <h6 class="text-xl">Add User</h6>
+            <h6 class="text-xl">
+              {{ i18n.t("components.user.add.add-user") }}
+            </h6>
             <UButton
               color="gray"
               variant="ghost"
@@ -94,41 +98,61 @@ watch(
         </template>
 
         <div class="flex flex-col gap-4">
-          <UFormGroup size="lg" label="First Name" name="firstName">
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('components.user.add.first-name')"
+            name="firstName"
+          >
             <UInput v-model="state.firstName" />
           </UFormGroup>
 
-          <UFormGroup size="lg" label="Last Name" name="lastName">
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('components.user.add.last-name')"
+            name="lastName"
+          >
             <UInput v-model="state.lastName" />
           </UFormGroup>
 
-          <UFormGroup size="lg" label="Email" name="email">
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('components.user.add.email')"
+            name="email"
+          >
             <UInput v-model="state.email" />
           </UFormGroup>
 
-          <UFormGroup size="lg" label="Role" name="role">
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('components.user.add.role')"
+            name="role"
+          >
             <USelectMenu
               v-model="state.role"
               :options="[
                 {
                   id: UserRole.ADMIN,
-                  label: 'Admin',
+                  label: i18n.t('components.user.add.admin'),
                 },
                 {
                   id: UserRole.EMPLOYEE,
-                  label: 'Employee',
+                  label: i18n.t('components.user.add.employee'),
                 },
                 {
                   id: UserRole.CUSTOMER,
-                  label: 'Customer',
+                  label: i18n.t('components.user.add.customer'),
                 },
               ]"
               value-attribute="id"
-              placeholder="Role"
+              :placeholder="i18n.t('components.user.add.role')"
             />
           </UFormGroup>
 
-          <UFormGroup size="lg" label="Password" name="password">
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('components.user.add.password')"
+            name="password"
+          >
             <UInput v-model="state.password" type="password" />
           </UFormGroup>
         </div>
@@ -142,7 +166,7 @@ watch(
               variant="ghost"
               @click="isOpen = false"
             >
-              Cancel
+              {{ i18n.t("components.user.add.cancel") }}
             </UButton>
 
             <UButton
@@ -151,7 +175,7 @@ watch(
               type="submit"
               :loading="loading"
             >
-              Add
+              {{ i18n.t("components.user.add.add") }}
             </UButton>
           </div>
         </template>

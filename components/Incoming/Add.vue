@@ -1,37 +1,39 @@
 <script setup lang="ts">
-import { type InferType, object, string } from "yup";
-import { type User, UserRole } from "~/types";
+import { format } from "date-fns";
+import { type InferType, object, string, number } from "yup";
+import { IncomingType } from "~/types";
 import type { FormSubmitEvent } from "#ui/types";
 
 const i18n = useI18n();
 
 type Props = {
-  user: User;
   isModalOpen: boolean;
   loading: boolean;
+  createdAt?: string;
 };
 
 type EmitType = {
   (event: "onClose"): void;
-  (event: "onSubmit", user: typeof state): void;
+  (event: "onSubmit", incoming: typeof state): void;
 };
 
 const props = defineProps<Props>();
 const emits = defineEmits<EmitType>();
 
 const schema = object({
-  firstName: string().required("Required"),
-  lastName: string().required("Required"),
-  role: string().required("Required"),
+  type: string().required("Required"),
+  description: string().required("Required"),
+  value: number()
+    .moreThan(0, "The number must be greater than 0")
+    .required("Required"),
 });
 
 type Schema = InferType<typeof schema>;
 
 const state = reactive({
-  id: props.user.id,
-  firstName: props.user.firstName,
-  lastName: props.user.lastName,
-  role: props.user.role,
+  type: IncomingType.Addition,
+  description: undefined,
+  value: undefined,
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
@@ -48,15 +50,14 @@ const isOpen = computed({
 watch(
   () => isOpen.value,
   (isOpen) => {
-    if (isOpen) {
+    if (!isOpen) {
       Object.assign(state, {
-        id: props.user.id,
-        firstName: props.user.firstName,
-        lastName: props.user.lastName,
-        role: props.user.role,
+        type: IncomingType.Addition,
+        description: undefined,
+        value: undefined,
       });
     }
-  }
+  },
 );
 </script>
 
@@ -80,7 +81,11 @@ watch(
             class="flex justify-between items-center text-lg font-normal leading-6"
           >
             <h6 class="text-xl">
-              {{ i18n.t("components.user.update.update-user") }}
+              {{ i18n.t("components.incoming.add.add-incoming") }}
+              <template v-if="createdAt">
+                {{ i18n.t("components.incoming.add.for-date") }}
+                {{ format(new Date(createdAt), "dd.MM.yyyy") }}
+              </template>
             </h6>
             <UButton
               color="gray"
@@ -95,44 +100,41 @@ watch(
         <div class="flex flex-col gap-4">
           <UFormGroup
             size="lg"
-            :label="i18n.t('components.user.update.first-name')"
-            name="firstName"
+            :label="i18n.t('components.incoming.add.type')"
+            name="type"
           >
-            <UInput v-model="state.firstName" />
-          </UFormGroup>
-
-          <UFormGroup
-            size="lg"
-            :label="i18n.t('components.user.update.last-name')"
-            name="lastName"
-          >
-            <UInput v-model="state.lastName" />
-          </UFormGroup>
-
-          <UFormGroup
-            size="lg"
-            :label="i18n.t('components.user.update.role')"
-            name="role"
-          >
-            <USelectMenu
-              v-model="state.role"
+            <URadioGroup
+              v-model="state.type"
+              class="radio-group-flex"
               :options="[
                 {
-                  id: UserRole.ADMIN,
-                  label: i18n.t('components.user.update.admin'),
+                  id: IncomingType.Addition,
+                  label: i18n.t('components.incoming.add.addition'),
                 },
                 {
-                  id: UserRole.EMPLOYEE,
-                  label: i18n.t('components.user.update.employee'),
-                },
-                {
-                  id: UserRole.CUSTOMER,
-                  label: i18n.t('components.user.update.customer'),
+                  id: IncomingType.Discount,
+                  label: i18n.t('components.incoming.add.discount'),
                 },
               ]"
               value-attribute="id"
-              placeholder="Role"
+              :placeholder="i18n.t('components.incoming.add.type')"
             />
+          </UFormGroup>
+
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('components.incoming.add.description')"
+            name="description"
+          >
+            <UInput v-model="state.description" />
+          </UFormGroup>
+
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('components.incoming.add.value')"
+            name="value"
+          >
+            <UInput v-model="state.value" type="number" />
           </UFormGroup>
         </div>
 
@@ -145,7 +147,7 @@ watch(
               variant="ghost"
               @click="isOpen = false"
             >
-              {{ i18n.t("components.user.update.cancel") }}
+              {{ i18n.t("components.incoming.add.cancel") }}
             </UButton>
 
             <UButton
@@ -154,7 +156,7 @@ watch(
               type="submit"
               :loading="loading"
             >
-              {{ i18n.t("components.user.update.update") }}
+              {{ i18n.t("components.incoming.add.add") }}
             </UButton>
           </div>
         </template>

@@ -1,6 +1,72 @@
+common:
+  load-more: "Load more"
 pages:
   incoming:
     title: "Incoming"
+    count: "Count"
+    date: "Date"
+    total: "Total"
+    add: "Add"
+    add-new-entry: "Add new entry"
+    created-at: "Created At"
+    updated-at: "Updated At"
+    deleted-at: "Deleted At"
+    created-by: "Created By"
+    updated-by: "Updated By"
+    deleted-by: "Updated By"
+    update: "Update"
+    delete: "Delete"
+  index:
+    home: "Home"
+  login:
+    login: "Login"
+    email: "Email"
+    password: "Password"
+    no-account: "Don't have an account yet?"
+    create-account: "Create account"
+    forgot-password: "Forgot password?"
+    click-here: "Click here"
+    toasts:
+      login-complete: "Login Completed!"
+      registration-complete: "Registration Complete!"
+  forgot-password:
+    password-recovery: "Password recovery"
+    email: "Email"
+    send: "Send"
+    have-account: "Do you have account?"
+    login: "Login"
+    toasts:
+      password-send-to-email: "Password send to your email!"
+      updated-password: "Password Changed!"
+  orders:
+    orders: "orders"
+  profile:
+    profile: "Profile"
+    update-profile: "Update profile"
+    update-password: "Update password"
+    update: "Update"
+  register:
+    register: "Register"
+    first-name: "First Name"
+    last-name: "Last Name"
+    email: "Email"
+    password: "Password"
+  users:
+    users: "Users"
+    add-users: "Add Users"
+    id: "Id"
+    name: "Name"
+    email: "Email"
+    role: "Role"
+    created-at: "Created At"
+    updated-at: "Updated At"
+    created-by: "Created By"
+    updated-by: "Updated By"
+    update: "Update"
+    deactivate: "Deactivate"
+    restore: "Restore"
+    delete: "Delete"
+    add-user: "Add User"
 components:
   left-navigation:
     home: "Home"
@@ -10,3 +76,84 @@ components:
     logout: "Log out"
     users: "Users"
     navigation: "Navigation"
+  user:
+    add:
+      first-name: "First Name"
+      last-name: "Last Name"
+      email: "Email"
+      role: "Role"
+      password: "Password"
+      add-user: "Add User"
+      cancel: "Cancel"
+      add: "Add"
+      admin: "Admin"
+      employee: "Employee"
+      customer: "Customer"
+      toasts:
+        user-added: "User added!"
+    update:
+      first-name: "First Name"
+      last-name: "Last Name"
+      role: "Role"
+      update-user: "Update User"
+      cancel: "Cancel"
+      update: "Update"
+      admin: "Admin"
+      employee: "Employee"
+      customer: "Customer"
+      toasts:
+        user-updated: "User Updated!",
+        user-deactivated: "User Deactivated!"
+        user-restored: "User Restored!"
+        user-deleted: "User Deleted!"
+        user-profile-updated: "User profile updated!"
+  incoming:
+    add:
+      add-incoming: "Add incoming"
+      type: "Type"
+      addition: "Addition"
+      discount: "Discount"
+      description: "Description"
+      value: "Value"
+      cancel: "Cancel"
+      add: "Add"
+      for-date: "for date: "
+      toasts:
+        incoming-added: "Incoming added!"
+    update:
+      update-incoming: "Update incoming"
+      type: "Type"
+      addition: "Addition"
+      discount: "Discount"
+      description: "Description"
+      created-at: "Created At"
+      value: "Value"
+      cancel: "Cancel"
+      update: "Update"
+      toasts:
+        incoming-not-found: "Incoming not found."
+        incoming-updated: "Incoming updated."
+    delete:
+      delete-incoming: "Delete incoming"
+      description: "Are you sure you want to delete this?"
+      cancel: "Cancel"
+      delete: "Delete"
+      toasts:
+        incoming-deleted: "Incoming deleted."
+validations:
+  user-not-found: "User not found!"
+  invalid-email-password: "Invalid Email or password."
+  invalid-old-password: "Invalid old password."
+  invalid-email: "Invalid Email."
+  something-wrong: "Something went wrong, please try again."
+  wrong: "Something went wrong."
+  not-authorized: "Not Authorized!"
+page-titles:
+  forgot-password: "Forgot password"
+  incoming: "Incoming"
+  index: "Home"
+  login: "Login"
+  orders: "Orders"
+  profile: "Profile"
+  register: "Register"
+  users: "Users"

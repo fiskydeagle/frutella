@@ -3,9 +3,11 @@ import { format } from "date-fns";
 import { useSystemUsers } from "~/composables/useSystemUsers";
 import { type User } from "~/types";
 
+const i18n = useI18n();
+
 useHead(() => {
   return {
-    title: "Frutella - Users",
+    title: "Frutella - " + i18n.t("page-titles.users"),
     meta: [
       {
         name: "description",
@@ -33,35 +35,35 @@ await getUsers();
 const columns = [
   {
     key: "id",
-    label: "ID",
+    label: i18n.t("pages.users.id"),
   },
   {
     key: "name",
-    label: "Name",
+    label: i18n.t("pages.users.name"),
   },
   {
     key: "email",
-    label: "Email",
+    label: i18n.t("pages.users.email"),
   },
   {
     key: "role",
-    label: "Role",
+    label: i18n.t("pages.users.role"),
   },
   {
     key: "createdAt",
-    label: "Created At",
+    label: i18n.t("pages.users.created-at"),
   },
   {
     key: "updatedAt",
-    label: "Updated At",
+    label: i18n.t("pages.users.updated-at"),
   },
   {
     key: "createdBy",
-    label: "Created By",
+    label: i18n.t("pages.users.created-by"),
   },
   {
     key: "updatedBy",
-    label: "Updated By",
+    label: i18n.t("pages.users.updated-by"),
   },
   {
     label: "",
@@ -77,7 +79,7 @@ const usersRows = computed(() => {
     const actions = [
       {
         event: "update",
-        label: "Update",
+        label: i18n.t("pages.users.update"),
         icon: "ph:pencil-duotone",
       },
     ];
@@ -85,20 +87,20 @@ const usersRows = computed(() => {
     if (!user.deletedAt) {
       actions.push({
         event: "deactivate",
-        label: "Deactivate",
+        label: i18n.t("pages.users.deactivate"),
         icon: "ph:user-circle-minus-duotone",
       });
     } else {
       actions.push({
         event: "restore",
-        label: "Restore",
+        label: i18n.t("pages.users.restore"),
         icon: "ph:user-circle-plus-duotone",
       });
     }
 
     actions.push({
       event: "delete",
-      label: "Delete",
+      label: i18n.t("pages.users.delete"),
       icon: "ph:trash-duotone",
     });
 
@@ -109,8 +111,8 @@ const usersRows = computed(() => {
       name: `${user.firstName} ${user.lastName}`,
       email: user.email,
       role: user.role,
-      createdAt: format(new Date(user.createdAt), "dd MMMM, yyyy"),
-      updatedAt: format(new Date(user.updatedAt), "dd MMMM, yyyy"),
+      createdAt: format(new Date(user.createdAt), "dd.MM.yyyy"),
+      updatedAt: format(new Date(user.updatedAt), "dd.MM.yyyy"),
       createdBy: user.createdByUser
         ? `${user.createdByUser.firstName} ${user.createdByUser.lastName}`
         : "-",
@@ -155,13 +157,13 @@ const onUpdateUser = async (state: any) => {
     userUpdateModal.value = false;
     setTimeout(() => {
       userToUpdate.value = null;
-    }, 1000);
+    }, 400);
   }
 
   userUpdateLoading.value = false;
   setTimeout(() => {
     userToUpdate.value = null;
-  }, 1000);
+  }, 400);
 };
 const updateUserClose = () => {
   userUpdateModal.value = false;
@@ -192,7 +194,7 @@ const action = async (event: string, row: any) => {
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div class="flex justify-end order-1 sm:order-3">
           <UButton size="lg" type="button" @click="addUserAction">
-            Add User
+            {{ i18n.t("pages.users.add-user") }}
           </UButton>
         </div>
         <div class="order-2 flex">
