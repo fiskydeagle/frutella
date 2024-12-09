@@ -9,7 +9,7 @@ export const useIncoming = () => {
   const count = ref<number>(0);
   const page = ref<number>(0);
   const total = ref<number>(0);
-  const limit = ref<number>(1);
+  const limit = ref<number>(14);
 
   const getIncomings = async () => {
     try {
