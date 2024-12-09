@@ -70,6 +70,7 @@ pages:
 components:
   left-navigation:
     home: "Home"
+    products: "Products"
     incoming: "Incoming"
     orders: "Orders"
     profile: "Profile"
@@ -150,8 +151,9 @@ validations:
   not-authorized: "Not Authorized!"
 page-titles:
   forgot-password: "Forgot password"
-  incoming: "Incoming"
   index: "Home"
+  products: "Products"
+  incoming: "Incoming"
   login: "Login"
   orders: "Orders"
   profile: "Profile"

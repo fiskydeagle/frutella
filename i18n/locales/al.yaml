@@ -70,6 +70,7 @@ pages:
 components:
   left-navigation:
     home: "Ballina"
+    products: "Produktet"
     incoming: "Të Hyrat"
     orders: "Porositë"
     profile: "Profili"
@@ -150,8 +151,9 @@ validations:
   not-authorized: "I pa autorizuar!"
 page-titles:
   forgot-password: "Forgot password"
-  incoming: "Të Hyrat"
   index: "Ballina"
+  products: "Produktet"
+  incoming: "Të Hyrat"
   login: "Kyçu"
   orders: "Porositë"
   profile: "Profili"

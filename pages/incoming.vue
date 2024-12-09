@@ -10,7 +10,7 @@ useHead(() => {
     meta: [
       {
         name: "description",
-        content: "Incoming Page.",
+        content: i18n.t("page-titles.incoming"),
       },
     ],
   };

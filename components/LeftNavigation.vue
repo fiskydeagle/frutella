@@ -15,6 +15,11 @@ const links = computed(() => {
         to: { name: "index" },
       },
       {
+        label: i18n.t("components.left-navigation.products"),
+        icon: "ph:package-duotone",
+        to: { name: "products" },
+      },
+      {
         label: i18n.t("components.left-navigation.incoming"),
         icon: "ph:chart-line-up-duotone",
         to: { name: "incoming" },
@@ -77,7 +82,7 @@ watch(
   () => route.path,
   () => {
     isOpen.value = false;
-  }
+  },
 );
 </script>
 <template>
