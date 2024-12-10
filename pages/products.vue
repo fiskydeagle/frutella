@@ -222,7 +222,7 @@ const action = async (event: string, row: any) => {
           <UPopover mode="hover" class="">
             <img
               :src="row.image"
-              class="w-auto h-10 rounded"
+              class="w-10 h-10 rounded object-cover border border-gray-300"
               alt="product image"
             />
             <template #panel>
