@@ -37,16 +37,11 @@ export default defineEventHandler(async (event) => {
 
       const filePath = path.resolve(`public${deleteFilePath}`);
 
-      console.log("fisky filePath", filePath);
-
       try {
         if (fs.existsSync(filePath)) {
-          fs.rmdirSync(filePath);
-        } else {
-          throw new Error("validations.something-wrong");
+          fs.rmdirSync(filePath, { recursive: true });
         }
       } catch (error: any) {
-        console.log("fisky error", error);
         throw createError({
           statusCode: 400,
           statusMessage: "validations.something-wrong",
