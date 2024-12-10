@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { format } from "date-fns";
-import { useSystemUsers } from "~/composables/useSystemUsers";
-import { type User } from "~/types";
+import { useProduct } from "~/composables/useProduct";
+import { type Product } from "~/types";
 
 const i18n = useI18n();
 
@@ -22,48 +22,48 @@ definePageMeta({
 });
 
 const {
-  users,
-  getUsers,
-  addUser,
-  updateUser,
-  deactivateUser,
-  restoreUser,
-  deleteUser,
-} = useSystemUsers();
-await getUsers();
+  products,
+  getProducts,
+  addProduct,
+  updateProduct,
+  deactivateProduct,
+  restoreProduct,
+  deleteProduct,
+} = useProduct();
+await getProducts();
 
 const columns = [
   {
     key: "id",
-    label: i18n.t("pages.users.id"),
+    label: i18n.t("pages.products.id"),
   },
   {
     key: "name",
-    label: i18n.t("pages.users.name"),
+    label: i18n.t("pages.products.name"),
   },
   {
-    key: "email",
-    label: i18n.t("pages.users.email"),
+    key: "image",
+    label: i18n.t("pages.products.image"),
   },
   {
-    key: "role",
-    label: i18n.t("pages.users.role"),
+    key: "unitType",
+    label: i18n.t("pages.products.unit-type"),
   },
   {
     key: "createdAt",
-    label: i18n.t("pages.users.created-at"),
+    label: i18n.t("pages.products.created-at"),
   },
   {
     key: "updatedAt",
-    label: i18n.t("pages.users.updated-at"),
+    label: i18n.t("pages.products.updated-at"),
   },
   {
     key: "createdBy",
-    label: i18n.t("pages.users.created-by"),
+    label: i18n.t("pages.products.created-by"),
   },
   {
     key: "updatedBy",
-    label: i18n.t("pages.users.updated-by"),
+    label: i18n.t("pages.products.updated-by"),
   },
   {
     label: "",
@@ -74,114 +74,109 @@ const columns = [
 
 const selectedColumns = ref([...columns]);
 
-const usersRows = computed(() => {
-  return users.value?.map((user) => {
+const productsRows = computed(() => {
+  return products.value?.map((product) => {
     const actions = [
       {
         event: "update",
-        label: i18n.t("pages.users.update"),
+        label: i18n.t("pages.products.update"),
         icon: "ph:pencil-duotone",
       },
     ];
 
-    if (!user.deletedAt) {
+    if (!product.deletedAt) {
       actions.push({
         event: "deactivate",
-        label: i18n.t("pages.users.deactivate"),
-        icon: "ph:user-circle-minus-duotone",
+        label: i18n.t("pages.products.deactivate"),
+        icon: "ph:eye-slash-duotone",
       });
     } else {
       actions.push({
         event: "restore",
-        label: i18n.t("pages.users.restore"),
-        icon: "ph:user-circle-plus-duotone",
+        label: i18n.t("pages.products.restore"),
+        icon: "ph:eye-duotone",
       });
     }
 
     actions.push({
       event: "delete",
-      label: i18n.t("pages.users.delete"),
+      label: i18n.t("pages.products.delete"),
       icon: "ph:trash-duotone",
     });
 
     return {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      name: `${user.firstName} ${user.lastName}`,
-      email: user.email,
-      role: user.role,
-      createdAt: format(new Date(user.createdAt), "dd.MM.yyyy"),
-      updatedAt: format(new Date(user.updatedAt), "dd.MM.yyyy"),
-      createdBy: user.createdByUser
-        ? `${user.createdByUser.firstName} ${user.createdByUser.lastName}`
+      id: product.id,
+      name: product.name,
+      image: product.image,
+      unitType: product.unitType,
+      createdAt: format(new Date(product.createdAt), "dd.MM.yyyy"),
+      updatedAt: format(new Date(product.updatedAt), "dd.MM.yyyy"),
+      createdBy: product.createdByUser
+        ? `${product.createdByUser.firstName} ${product.createdByUser.lastName}`
         : "-",
-      updatedBy: user.updatedByUser
-        ? `${user.updatedByUser.firstName} ${user.updatedByUser.lastName}`
+      updatedBy: product.updatedByUser
+        ? `${product.updatedByUser.firstName} ${product.updatedByUser.lastName}`
         : "-",
-      deletedAt: user.deletedAt,
+      deletedAt: product.deletedAt,
       actions,
     };
   });
 });
 
-const userAddModal = ref<boolean>(false);
-const userAddLoading = ref<boolean>(false);
-const addUserAction = () => {
-  userAddModal.value = true;
+const productAddModal = ref<boolean>(false);
+const productAddLoading = ref<boolean>(false);
+const addProductAction = () => {
+  productAddModal.value = true;
 };
-const onAddUser = async (state: any) => {
-  userAddLoading.value = true;
+const onAddProduct = async (state: any) => {
+  productAddLoading.value = true;
 
-  if (await addUser(state)) {
-    userAddModal.value = false;
+  if (await addProduct(state)) {
+    productAddModal.value = false;
   }
 
-  userAddLoading.value = false;
+  productAddLoading.value = false;
 };
-const addUserClose = () => {
-  userAddModal.value = false;
+const addProductClose = () => {
+  productAddModal.value = false;
 };
 
-const userToUpdate = ref<User | null>(null);
-const userUpdateModal = ref<boolean>(false);
-const userUpdateLoading = ref<boolean>(false);
-const updateUserAction = (row: any) => {
-  userToUpdate.value = row;
-  userUpdateModal.value = true;
+const productToUpdate = ref<Product | null>(null);
+const productUpdateModal = ref<boolean>(false);
+const productUpdateLoading = ref<boolean>(false);
+const updateProductAction = (row: any) => {
+  productToUpdate.value = row;
+  productUpdateModal.value = true;
 };
-const onUpdateUser = async (state: any) => {
-  userUpdateLoading.value = true;
+const onUpdateProduct = async (state: any) => {
+  productUpdateLoading.value = true;
 
-  if (await updateUser(state)) {
-    userUpdateModal.value = false;
+  if (await updateProduct(state)) {
+    productUpdateModal.value = false;
     setTimeout(() => {
-      userToUpdate.value = null;
+      productToUpdate.value = null;
     }, 400);
   }
 
-  userUpdateLoading.value = false;
-  setTimeout(() => {
-    userToUpdate.value = null;
-  }, 400);
+  productUpdateLoading.value = false;
 };
-const updateUserClose = () => {
-  userUpdateModal.value = false;
+const updateProductClose = () => {
+  productUpdateModal.value = false;
 };
 
 const action = async (event: string, row: any) => {
   switch (event) {
     case "update":
-      updateUserAction(row);
+      updateProductAction(row);
       break;
     case "deactivate":
-      await deactivateUser(row.id);
+      await deactivateProduct(row.id);
       break;
     case "restore":
-      await restoreUser(row.id);
+      await restoreProduct(row.id);
       break;
     case "delete":
-      await deleteUser(row.id);
+      await deleteProduct(row.id);
       break;
   }
 };
@@ -189,12 +184,14 @@ const action = async (event: string, row: any) => {
 
 <template>
   <div>
-    <h1 class="text-3xl text-center mb-6">Users</h1>
-    <div class="px-3 py-3 border-b border-gray-200 dark:border-gray-700">
+    <h1 class="text-3xl text-center mb-6">
+      {{ i18n.t("pages.products.products") }}
+    </h1>
+    <div class="px-3 pb-3 border-b border-gray-200 dark:border-gray-700">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div class="flex justify-end order-1 sm:order-3">
-          <UButton size="lg" type="button" @click="addUserAction">
-            {{ i18n.t("pages.users.add-user") }}
+          <UButton size="lg" type="button" @click="addProductAction">
+            {{ i18n.t("pages.products.add-product") }}
           </UButton>
         </div>
         <div class="order-2 flex">
@@ -209,9 +206,36 @@ const action = async (event: string, row: any) => {
         </div>
       </div>
     </div>
-    <UTable :columns="selectedColumns" :rows="usersRows" class="frutella-table">
-      <template #role-data="{ row }">
-        <span class="capitalize">{{ row.role }}</span>
+    <UTable
+      :columns="selectedColumns"
+      :rows="productsRows"
+      class="frutella-table"
+    >
+      <template #unitType-data="{ row }">
+        <span class="capitalize">
+          {{ i18n.t("components.product.add." + row.unitType) }}
+        </span>
+      </template>
+
+      <template #image-data="{ row }">
+        <div class="flex justify-start" v-if="row.image">
+          <UPopover mode="hover" class="">
+            <img
+              :src="row.image"
+              class="w-auto h-10 rounded"
+              alt="product image"
+            />
+            <template #panel>
+              <div class="p-2">
+                <img
+                  :src="row.image"
+                  class="w-auto h-auto max-h-60 rounded"
+                  alt="product image"
+                />
+              </div>
+            </template>
+          </UPopover>
+        </div>
       </template>
 
       <template #actions-data="{ row }">
@@ -255,20 +279,20 @@ const action = async (event: string, row: any) => {
       </template>
     </UTable>
 
-    <UserAdd
-      :is-modal-open="userAddModal"
-      :loading="userAddLoading"
-      @on-close="addUserClose"
-      @on-submit="onAddUser"
+    <ProductAdd
+      :is-modal-open="productAddModal"
+      :loading="productAddLoading"
+      @on-close="addProductClose"
+      @on-submit="onAddProduct"
     />
 
-    <UserUpdate
-      v-if="userToUpdate"
-      :user="userToUpdate"
-      :is-modal-open="userUpdateModal"
-      :loading="userUpdateLoading"
-      @on-close="updateUserClose"
-      @on-submit="onUpdateUser"
+    <ProductUpdate
+      v-if="productToUpdate"
+      :product="productToUpdate"
+      :is-modal-open="productUpdateModal"
+      :loading="productUpdateLoading"
+      @on-close="updateProductClose"
+      @on-submit="onUpdateProduct"
     />
   </div>
 </template>

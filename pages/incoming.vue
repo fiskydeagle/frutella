@@ -117,10 +117,10 @@ const loadMore = async () => {
 
 <template>
   <div>
-    <h1 class="text-3xl text-center mb-4">
+    <h1 class="text-3xl text-center mb-6">
       {{ i18n.t("pages.incoming.title") }}
     </h1>
-    <div class="flex justify-between items-start gap-4 mb-6">
+    <div class="px-3 pb-3 flex justify-between items-start gap-4">
       <h2 class="text-3xl font-medium">
         {{ i18n.t("pages.incoming.total") }}:
         <span class="inline-block">{{ total.toFixed(2) }} €</span>

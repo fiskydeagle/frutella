@@ -53,7 +53,7 @@ export interface GroupedIncoming {
 export enum UnitType {
   Piece = "piece",
   Kg = "kg",
-  Liter = "Liter",
+  Liter = "liter",
   Crates = "crates",
   Box = "box",
 }

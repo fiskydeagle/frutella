@@ -189,8 +189,8 @@ const action = async (event: string, row: any) => {
 
 <template>
   <div>
-    <h1 class="text-3xl text-center mb-6">Users</h1>
-    <div class="px-3 py-3 border-b border-gray-200 dark:border-gray-700">
+    <h1 class="text-3xl text-center mb-6">{{ i18n.t("pages.users.users") }}</h1>
+    <div class="px-3 pb-3 border-b border-gray-200 dark:border-gray-700">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div class="flex justify-end order-1 sm:order-3">
           <UButton size="lg" type="button" @click="addUserAction">
@@ -211,7 +211,9 @@ const action = async (event: string, row: any) => {
     </div>
     <UTable :columns="selectedColumns" :rows="usersRows" class="frutella-table">
       <template #role-data="{ row }">
-        <span class="capitalize">{{ row.role }}</span>
+        <span class="capitalize">
+          {{ i18n.t("components.user.add." + row.role) }}
+        </span>
       </template>
 
       <template #actions-data="{ row }">

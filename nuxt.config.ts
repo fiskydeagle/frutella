@@ -1,4 +1,7 @@
 export default {
+  dir: {
+    public: "public", // Default path; set explicitly
+  },
   modules: ["@nuxt/ui", "@nuxtjs/i18n"],
   buildModules: ["@nuxtjs/date-fns"],
   devtools: { enabled: true },
