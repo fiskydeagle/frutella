@@ -1,6 +1,8 @@
 import db from "@/models/index.js";
 import Sequelize from "sequelize";
 import { UserRole } from "~/types";
+import fs from "fs";
+import path from "path";
 
 interface Payload {
   productId: number;
@@ -22,7 +24,7 @@ export default defineEventHandler(async (event) => {
 
   const product = await db.Products.findOne({
     where: { id: body.productId },
-    attributes: ["id"],
+    attributes: ["id", "image"],
     paranoid: false,
   });
 
@@ -31,6 +33,25 @@ export default defineEventHandler(async (event) => {
       statusCode: 400,
       statusMessage: "validations.something-wrong",
     });
+  }
+
+  if (product.dataValues.image) {
+    const imageLink = product.dataValues.image.split("/");
+    imageLink.pop();
+    const deleteFilePath = imageLink.join("/");
+
+    const filePath = path.resolve(`public${deleteFilePath}`);
+
+    try {
+      if (fs.existsSync(filePath)) {
+        fs.rmdirSync(filePath, { recursive: true });
+      }
+    } catch (error: any) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "validations.something-wrong",
+      });
+    }
   }
 
   try {
