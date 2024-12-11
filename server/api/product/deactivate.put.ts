@@ -3,10 +3,7 @@ import Sequelize from "sequelize";
 import { UserRole } from "~/types";
 
 interface Payload {
-  id: number;
-  firstName: string;
-  lastName: string;
-  role: UserRole;
+  productId: number;
 }
 
 export default defineEventHandler(async (event) => {
@@ -23,13 +20,13 @@ export default defineEventHandler(async (event) => {
 
   const body: Payload = await readBody(event);
 
-  const user = await db.Users.findOne({
-    where: { id: body.id },
-    attributes: ["id", "firstName", "lastName", "role"],
+  const product = await db.Products.findOne({
+    where: { id: body.productId },
+    attributes: ["id", "updatedBy"],
     paranoid: false,
   });
 
-  if (!user) {
+  if (!product) {
     throw createError({
       statusCode: 400,
       statusMessage: "validations.something-wrong",
@@ -37,10 +34,9 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    return await user.update({
-      firstName: body.firstName,
-      lastName: body.lastName,
-      role: body.role,
+    await product.destroy();
+
+    return await product.update({
       updatedBy: event.context.user.id,
     });
   } catch (error: any) {

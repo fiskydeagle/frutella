@@ -1,5 +1,6 @@
 common:
   load-more: "Listo më tepër"
+  size: "Kapaciteti"
 pages:
   incoming:
     title: "Të Hyrat"
@@ -53,7 +54,6 @@ pages:
     password: "Fjalëkalimi"
   users:
     users: "Përdoruesit"
-    add-users: "Shto Përdorues"
     id: "ID"
     name: "Emri"
     email: "Email"
@@ -63,10 +63,25 @@ pages:
     created-by: "Krijuar Nga"
     updated-by: "Përditësuar Nga"
     update: "Përditëso"
-    deactivate: "Çaktivizo"
+    deactivate: "Deaktivizo"
     restore: "Rikthe"
-    delete: "Fshij"
+    delete: "Fshije"
     add-user: "Shto Përdorues"
+  products:
+    products: "Produktet"
+    id: "ID"
+    name: "Emri"
+    image: "Fotografija"
+    unit-type: "Tipi i njësisë"
+    created-at: "Krijuar Më"
+    updated-at: "Përditësuar Më"
+    created-by: "Krijuar Nga"
+    updated-by: "Përditësuar Nga"
+    update: "Përditëso"
+    deactivate: "Deaktivizo"
+    restore: "Rikthe"
+    delete: "Fshije"
+    add-product: "Shto Produkt"
 components:
   left-navigation:
     home: "Ballina"
@@ -75,6 +90,7 @@ components:
     profile: "Profili"
     logout: "Çkyçu"
     users: "Përdoruesit"
+    products: "Produktet"
     navigation: "Navigimi"
   user:
     add:
@@ -102,11 +118,12 @@ components:
       employee: "Puntor"
       customer: "Klient"
       toasts:
-        user-updated: "përdoruesi është Përditësuar!"
+        user-updated: "Përdoruesi është Përditësuar!"
         user-deactivated: "Përdoruesi është Deaktivizuar!"
         user-restored: "Përdoruesi është Kthyer!"
         user-deleted: "Përdoruesi është Fshirë!"
         user-profile-updated: "Profili i Përdoruesit është Përditësuar!"
+        user-can-t-deactivate-yourself: "Nuk mund të deaktivizoni veten tuaj!"
   incoming:
     add:
       add-incoming: "Shto të hyrat"
@@ -140,6 +157,40 @@ components:
       delete: "Fshije"
       toasts:
         incoming-deleted: "E hyra u fshi."
+  product:
+    add:
+      name: "Emri"
+      image: "Fotografija"
+      drop-or-click-upload: "Lësho foton këtu ose kliko per të ngarkuar."
+      unit-type: "Tipi i njësisë"
+      add-product: "Shto Produkt"
+      cancel: "Anulo"
+      add: "Shto"
+      piece: "Copë"
+      kg: "Kg"
+      liter: "Litër"
+      crates: "Gajbe"
+      box: "Kuti"
+      toasts:
+        product-added: "Produkti u shtua!"
+    update:
+      name: "Emri"
+      image: "Fotografija"
+      drop-or-click-upload: "Lësho foton këtu ose kliko per të ngarkuar."
+      unit-type: "Tipi i njësisë"
+      update-product: "Përditëso produktin"
+      cancel: "Anulo"
+      update: "Përditëso"
+      piece: "Copë"
+      kg: "Kg"
+      liter: "Litër"
+      crates: "Gajbe"
+      box: "Kuti"
+      toasts:
+        product-updated: "Produkti është Përditësuar!"
+        product-deactivated: "Produkti është Deaktivizuar!"
+        product-restored: "Produkti është Kthyer!"
+        product-deleted: "Produkti është Fshirë!"
 validations:
   user-not-found: "Përdoruesi nuk u gjet!"
   invalid-email-password: "Emaili i përdoruesit ose fjalëkalimi është gabim."
@@ -150,10 +201,11 @@ validations:
   not-authorized: "I pa autorizuar!"
 page-titles:
   forgot-password: "Forgot password"
-  incoming: "Të Hyrat"
   index: "Ballina"
+  incoming: "Të Hyrat"
   login: "Kyçu"
   orders: "Porositë"
   profile: "Profili"
   register: "Regjistrohu"
   users: "Përdoruesit"
+  products: "Produktet"

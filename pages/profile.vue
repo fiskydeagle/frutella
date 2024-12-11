@@ -13,7 +13,7 @@ useHead(() => {
     meta: [
       {
         name: "description",
-        content: "Profile Page.",
+        content: i18n.t("page-titles.profile"),
       },
     ],
   };

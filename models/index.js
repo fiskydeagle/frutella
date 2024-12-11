@@ -7,6 +7,7 @@ import allConfig from "~~/config/config.json";
 import User from "./user.js";
 import Post from "./posts.js";
 import Incoming from "./incomings.js";
+import Products from "./products.js";
 
 const env = process.env.NODE_ENV || "development";
 const config = allConfig[env];
@@ -28,6 +29,7 @@ if (config.use_env_variable) {
 db["Users"] = User(sequelize, DataTypes);
 db["Posts"] = Post(sequelize, DataTypes);
 db["Incomings"] = Incoming(sequelize, DataTypes);
+db["Products"] = Products(sequelize, DataTypes);
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {

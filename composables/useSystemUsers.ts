@@ -49,6 +49,7 @@ export const useSystemUsers = () => {
   };
 
   const updateUser = async (state: {
+    id: number | undefined;
     firstName: string | undefined;
     lastName: string | undefined;
     role: UserRole | undefined;
@@ -60,7 +61,7 @@ export const useSystemUsers = () => {
       });
 
       toast.add({
-        title: i18n.t("components.user.add.toasts.user-updated"),
+        title: i18n.t("components.user.update.toasts.user-updated"),
         color: "green",
         icon: "i-lucide-check-circle",
       });
@@ -89,7 +90,7 @@ export const useSystemUsers = () => {
       });
 
       toast.add({
-        title: i18n.t("components.user.add.toasts.user-deactivated"),
+        title: i18n.t("components.user.update.toasts.user-deactivated"),
         color: "green",
         icon: "i-lucide-check-circle",
       });
@@ -118,7 +119,7 @@ export const useSystemUsers = () => {
       });
 
       toast.add({
-        title: i18n.t("components.user.add.toasts.user-restored"),
+        title: i18n.t("components.user.update.toasts.user-restored"),
         color: "green",
         icon: "i-lucide-check-circle",
       });
@@ -147,7 +148,7 @@ export const useSystemUsers = () => {
       });
 
       toast.add({
-        title: i18n.t("components.user.add.toasts.user-deleted"),
+        title: i18n.t("components.user.update.toasts.user-deleted"),
         color: "green",
         icon: "i-lucide-check-circle",
       });
@@ -177,7 +178,7 @@ export const useSystemUsers = () => {
       });
 
       toast.add({
-        title: i18n.t("components.user.add.toasts.user-profile-updated"),
+        title: i18n.t("components.user.update.toasts.user-profile-updated"),
         color: "green",
         icon: "i-lucide-check-circle",
       });

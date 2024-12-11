@@ -11,7 +11,7 @@ useHead(() => {
     meta: [
       {
         name: "description",
-        content: "Register Page.",
+        content: i18n.t("page-titles.register"),
       },
     ],
   };

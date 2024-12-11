@@ -9,7 +9,7 @@ useHead(() => {
     meta: [
       {
         name: "description",
-        content: "Home Page.",
+        content: i18n.t("page-titles.index"),
       },
     ],
   };
@@ -25,6 +25,5 @@ const { user } = useAuthUser();
 <template>
   <div>
     <h1 class="text-3xl text-center">{{ i18n.t("pages.index.home") }}</h1>
-    <pre>{{ user }}</pre>
   </div>
 </template>
