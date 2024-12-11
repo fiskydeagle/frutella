@@ -1,12 +1,11 @@
 import db from "@/models/index.js";
 import Sequelize from "sequelize";
 import { UserRole } from "~/types";
+import fs from "fs";
+import path from "path";
 
 interface Payload {
-  id: number;
-  firstName: string;
-  lastName: string;
-  role: UserRole;
+  productId: number;
 }
 
 export default defineEventHandler(async (event) => {
@@ -23,26 +22,40 @@ export default defineEventHandler(async (event) => {
 
   const body: Payload = await readBody(event);
 
-  const user = await db.Users.findOne({
-    where: { id: body.id },
-    attributes: ["id", "firstName", "lastName", "role"],
+  const product = await db.Products.findOne({
+    where: { id: body.productId },
+    attributes: ["id", "image"],
     paranoid: false,
   });
 
-  if (!user) {
+  if (!product) {
     throw createError({
       statusCode: 400,
       statusMessage: "validations.something-wrong",
     });
   }
 
+  if (product.dataValues.image) {
+    const imageLink = product.dataValues.image.split("/");
+    imageLink.pop();
+    const deleteFilePath = imageLink.join("/");
+
+    const filePath = path.resolve(`public${deleteFilePath}`);
+
+    try {
+      if (fs.existsSync(filePath)) {
+        fs.rmdirSync(filePath, { recursive: true });
+      }
+    } catch (error: any) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "validations.something-wrong",
+      });
+    }
+  }
+
   try {
-    return await user.update({
-      firstName: body.firstName,
-      lastName: body.lastName,
-      role: body.role,
-      updatedBy: event.context.user.id,
-    });
+    return await product.destroy({ force: true });
   } catch (error: any) {
     if (error instanceof Sequelize.ValidationError) {
       throw createError({

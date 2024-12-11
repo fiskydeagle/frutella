@@ -11,7 +11,7 @@ useHead(() => {
     meta: [
       {
         name: "description",
-        content: "Forgot password Page.",
+        content: i18n.t("page-titles.forgot-password"),
       },
     ],
   };

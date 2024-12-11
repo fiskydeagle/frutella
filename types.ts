@@ -49,3 +49,25 @@ export interface GroupedIncoming {
   count: number;
   createdAt: string;
 }
+
+export enum UnitType {
+  Piece = "piece",
+  Kg = "kg",
+  Liter = "liter",
+  Crates = "crates",
+  Box = "box",
+}
+
+export interface Product {
+  id: number;
+  name: string;
+  image: string;
+  unitType: UnitType;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  createdBy: string;
+  updatedBy: string;
+  createdByUser?: User;
+  updatedByUser?: User;
+}

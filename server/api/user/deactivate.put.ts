@@ -29,14 +29,15 @@ export default defineEventHandler(async (event) => {
   if (!user) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Something went wrong, please try again.",
+      statusMessage: "validations.something-wrong",
     });
   }
 
   if (user.dataValues.id === event.context.user.id) {
     throw createError({
       statusCode: 400,
-      statusMessage: "You can't deactivate yourself!",
+      statusMessage:
+        "components.user.update.toasts.user-can-t-deactivate-yourself",
     });
   }
 

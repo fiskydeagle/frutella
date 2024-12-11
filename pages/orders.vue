@@ -7,7 +7,7 @@ useHead(() => {
     meta: [
       {
         name: "description",
-        content: "Orders Page.",
+        content: i18n.t("page-titles.orders"),
       },
     ],
   };

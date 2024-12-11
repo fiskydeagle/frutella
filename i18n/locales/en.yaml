@@ -1,5 +1,6 @@
 common:
   load-more: "Load more"
+  size: "Size"
 pages:
   incoming:
     title: "Incoming"
@@ -53,8 +54,7 @@ pages:
     password: "Password"
   users:
     users: "Users"
-    add-users: "Add Users"
-    id: "Id"
+    id: "ID"
     name: "Name"
     email: "Email"
     role: "Role"
@@ -67,6 +67,21 @@ pages:
     restore: "Restore"
     delete: "Delete"
     add-user: "Add User"
+  products:
+    products: "Products"
+    id: "ID"
+    name: "Name"
+    image: "Image"
+    unit-type: "Unit Type"
+    created-at: "Created At"
+    updated-at: "Updated At"
+    created-by: "Created By"
+    updated-by: "Updated By"
+    update: "Update"
+    deactivate: "Deactivate"
+    restore: "Restore"
+    delete: "Delete"
+    add-product: "Add Product"
 components:
   left-navigation:
     home: "Home"
@@ -75,6 +90,7 @@ components:
     profile: "Profile"
     logout: "Log out"
     users: "Users"
+    products: "Products"
     navigation: "Navigation"
   user:
     add:
@@ -107,6 +123,7 @@ components:
         user-restored: "User Restored!"
         user-deleted: "User Deleted!"
         user-profile-updated: "User profile updated!"
+        user-can-t-deactivate-yourself: "You can't deactivate yourself!"
   incoming:
     add:
       add-incoming: "Add incoming"
@@ -140,6 +157,40 @@ components:
       delete: "Delete"
       toasts:
         incoming-deleted: "Incoming deleted."
+  product:
+    add:
+      name: "Name"
+      image: "Image"
+      drop-or-click-upload: "Drop files here or click to upload."
+      unit-type: "Unit type"
+      add-product: "Add Product"
+      cancel: "Cancel"
+      add: "Add"
+      piece: "Piece"
+      kg: "Kg"
+      liter: "Liter"
+      crates: "Crates"
+      box: "Box"
+      toasts:
+        product-added: "Product added!"
+    update:
+      name: "Name"
+      image: "Image"
+      drop-or-click-upload: "Drop files here or click to upload."
+      unit-type: "Unit type"
+      update-product: "Update Product"
+      cancel: "Cancel"
+      update: "Update"
+      piece: "Piece"
+      kg: "Kg"
+      liter: "Liter"
+      crates: "Crates"
+      box: "Box"
+      toasts:
+        product-updated: "Product Updated!",
+        product-deactivated: "Product Deactivated!"
+        product-restored: "Product Restored!"
+        product-deleted: "Product Deleted!"
 validations:
   user-not-found: "User not found!"
   invalid-email-password: "Invalid Email or password."
@@ -150,10 +201,11 @@ validations:
   not-authorized: "Not Authorized!"
 page-titles:
   forgot-password: "Forgot password"
-  incoming: "Incoming"
   index: "Home"
+  incoming: "Incoming"
   login: "Login"
   orders: "Orders"
   profile: "Profile"
   register: "Register"
   users: "Users"
+  products: "Products"
