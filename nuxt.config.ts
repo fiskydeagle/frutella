@@ -1,4 +1,10 @@
 export default {
+  app: {
+    head: {
+      title: "Frutella",
+      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    },
+  },
   dir: {
     public: "public", // Default path; set explicitly
   },

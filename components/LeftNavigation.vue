@@ -7,24 +7,13 @@ const { user, authToken } = useAuthUser();
 const route = useRoute();
 
 const links = computed(() => {
-  const links: any = [
-    [
-      {
-        label: i18n.t("components.left-navigation.home"),
-        icon: "ph:house-line-duotone",
-        to: { name: "index" },
-      },
-      {
-        label: i18n.t("components.left-navigation.incoming"),
-        icon: "ph:chart-line-up-duotone",
-        to: { name: "incoming" },
-      },
-      {
-        label: i18n.t("components.left-navigation.orders"),
-        icon: "ph:shopping-cart-duotone",
-        to: { name: "orders" },
-      },
-    ],
+  const links: any = [];
+  const topLinks = [
+    {
+      label: i18n.t("components.left-navigation.orders"),
+      icon: "ph:shopping-cart-duotone",
+      to: { name: "orders" },
+    },
   ];
 
   if (user.value && authToken.value) {
@@ -44,18 +33,28 @@ const links = computed(() => {
     ];
 
     if (user.value?.role === UserRole.ADMIN) {
-      userLinks.unshift({
+      topLinks.push({
         label: i18n.t("components.left-navigation.products"),
         icon: "ph:package-duotone",
         to: { name: "products" },
       });
-      userLinks.unshift({
+
+      topLinks.push({
         label: i18n.t("components.left-navigation.users"),
         icon: "ph:users-three-duotone",
         to: { name: "users" },
       });
     }
 
+    if ([UserRole.ADMIN, UserRole.EMPLOYEE].includes(user.value?.role)) {
+      topLinks.push({
+        label: i18n.t("components.left-navigation.incoming"),
+        icon: "ph:chart-line-up-duotone",
+        to: { name: "incoming" },
+      });
+    }
+
+    links.push(topLinks);
     links.push(userLinks);
   }
 
@@ -87,7 +86,16 @@ watch(
 </script>
 <template>
   <div>
-    <UVerticalNavigation v-if="windowWidth > 640" :links="links" />
+    <div v-if="windowWidth > 640" class="flex flex-col items-start gap-3">
+      <NuxtLink :to="{ name: 'index' }">
+        <img
+          src="/frutella.svg"
+          :alt="i18n.t('components.left-navigation.home')"
+          class="rounded-full w-20 h-auto ml-5"
+        />
+      </NuxtLink>
+      <UVerticalNavigation :links="links" />
+    </div>
     <div v-else>
       <UIcon
         name="ph:list-duotone"
@@ -129,7 +137,16 @@ watch(
             </div>
           </template>
 
-          <UVerticalNavigation :links="links" />
+          <div class="flex flex-col items-start gap-3 w-full">
+            <NuxtLink :to="{ name: 'index' }">
+              <img
+                src="/frutella.svg"
+                :alt="i18n.t('components.left-navigation.home')"
+                class="rounded-full w-20 h-auto ml-5"
+              />
+            </NuxtLink>
+            <UVerticalNavigation :links="links" />
+          </div>
         </UCard>
       </USlideover>
     </div>

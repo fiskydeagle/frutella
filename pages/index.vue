@@ -25,6 +25,5 @@ const { user } = useAuthUser();
 <template>
   <div>
     <h1 class="text-3xl text-center">{{ i18n.t("pages.index.home") }}</h1>
-    <pre>{{ user }}</pre>
   </div>
 </template>
