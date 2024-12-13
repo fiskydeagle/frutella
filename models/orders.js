@@ -1,7 +1,7 @@
 "use strict";
 import { Model } from "sequelize";
 export default (sequelize, DataTypes) => {
-  class Products extends Model {
+  class Orders extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,33 +9,37 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models["Products"].belongsTo(models["Users"], {
+      models["Orders"].belongsTo(models["Users"], {
+        foreignKey: "userId",
+        as: "user",
+      });
+      models["Orders"].belongsToMany(models["Products"], {
+        through: models["ProductsOrders"],
+        foreignKey: "orderId",
+        as: "products",
+      });
+      models["Orders"].belongsTo(models["Users"], {
         foreignKey: "createdBy",
         as: "createdByUser",
       });
-      models["Products"].belongsTo(models["Users"], {
+      models["Orders"].belongsTo(models["Users"], {
         foreignKey: "updatedBy",
         as: "updatedByUser",
-      });
-      models["Products"].belongsToMany(models["Orders"], {
-        through: models["ProductsOrders"],
-        foreignKey: "productId",
-        as: "orders",
       });
     }
   }
 
-  Products.init(
+  Orders.init(
     {
-      name: DataTypes.STRING,
-      image: DataTypes.STRING,
-      unitType: DataTypes.STRING,
+      userId: DataTypes.INTEGER,
+      status: DataTypes.BOOLEAN,
+      payed: DataTypes.BOOLEAN,
     },
     {
       sequelize,
-      modelName: "Products",
+      modelName: "Orders",
       paranoid: true,
     },
   );
-  return Products;
+  return Orders;
 };

@@ -58,6 +58,13 @@ export enum UnitType {
   Box = "box",
 }
 
+export interface ProductsOrders {
+  productId: number;
+  orderId: number;
+  qty: number;
+  price: number;
+}
+
 export interface Product {
   id: number;
   name: string;
@@ -68,6 +75,23 @@ export interface Product {
   deletedAt: string | null;
   createdBy: string;
   updatedBy: string;
+  createdByUser?: User;
+  updatedByUser?: User;
+  productsOrders?: ProductsOrders;
+}
+
+export interface Order {
+  id: number;
+  userId: number;
+  status: boolean;
+  payed: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  createdBy: string;
+  updatedBy: string;
+  user: User;
+  products: Product[];
   createdByUser?: User;
   updatedByUser?: User;
 }
