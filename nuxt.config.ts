@@ -9,7 +9,10 @@ export default {
     public: "public", // Default path; set explicitly
   },
   modules: ["@nuxt/ui", "@nuxtjs/i18n"],
-  buildModules: ["@nuxtjs/date-fns"],
+  buildModules: ["@nuxtjs/date-fns", "mysql2"],
+  build: {
+    transpile: ["mysql2"],
+  },
   devtools: { enabled: true },
   css: ["@/assets/css/main.css"],
 
