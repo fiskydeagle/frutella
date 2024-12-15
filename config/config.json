@@ -15,7 +15,10 @@
     "dialect": "mysql"
   },
   "production": {
-    "use_env_variable": "DATABASE_URL",
+    "username": "dizarium_frutella",
+    "password": "1QHxcaGKmLhzaQwy2bMMkOYe",
+    "database": "dizarium_frutella",
+    "host": "localhost",
     "dialect": "mysql"
   }
 }
