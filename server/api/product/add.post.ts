@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const dateNow = Date.now();
-  const uploadDir = path.resolve(`public/uploads/${dateNow}`);
+  const uploadDir = path.resolve(`.output/public/uploads/${dateNow}`);
   const filePath = path.join(uploadDir, uploadedImage.filename);
 
   // Ensure the directory exists

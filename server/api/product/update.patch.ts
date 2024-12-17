@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
       imageLink.pop();
       const deleteFilePath = imageLink.join("/");
 
-      const filePath = path.resolve(`public${deleteFilePath}`);
+      const filePath = path.resolve(`.output/public${deleteFilePath}`);
 
       try {
         if (fs.existsSync(filePath)) {
@@ -58,7 +58,7 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    const uploadDir = path.resolve(`public/uploads/${dateNow}`);
+    const uploadDir = path.resolve(`.output/public/uploads/${dateNow}`);
     const filePath = path.join(uploadDir, uploadedImage.filename);
 
     // Ensure the directory exists

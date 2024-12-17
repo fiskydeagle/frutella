@@ -15,7 +15,10 @@
     "dialect": "mysql"
   },
   "production": {
-    "use_env_variable": "DATABASE_URL",
+    "username": "frutella_user",
+    "password": "SDG8M/ENJptFVC[G",
+    "database": "frutella_db",
+    "host": "127.0.0.1",
     "dialect": "mysql"
   }
 }
