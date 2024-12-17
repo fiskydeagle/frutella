@@ -51,10 +51,12 @@ export const useAuthUser = () => {
     password: string | undefined;
   }) => {
     try {
-      await $fetch("/api/login", {
+      const authTokenResponse = await $fetch("/api/login", {
         method: "POST",
         body: state,
       });
+
+      authToken.value = authTokenResponse;
 
       Object.assign(state, {
         email: undefined,
