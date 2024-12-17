@@ -2,7 +2,9 @@
 import { useAuthUser } from "~/composables/useAuthUser";
 
 const { authToken } = useAuthUser();
-const isLoggedIn = computed(() => !!authToken);
+const isLoggedIn = computed(() => {
+  return authToken.value;
+});
 </script>
 <template>
   <div class="py-10 flex max-sm:flex-col">
