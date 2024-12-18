@@ -1,6 +1,8 @@
 {
+  "name": "frutella-app",
   "private": true,
   "scripts": {
+    "start": "PORT=3301 JWT_SECRET=1QHxcaGKmLhzaQwy2bMMkOYe EMAIL_HOST=sandbox.smtp.mailtrap.io EMAIL_PORT=587 EMAIL_SECURE=false EMAIL_USER=993aadcd19a58d EMAIL_PASS=d7f312524920e4 EMAIL_FROM=fiskydeagle@gmail.com node .output/server/index.mjs",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
@@ -31,6 +33,7 @@
     "jwt-decode": "^4.0.0",
     "mysql2": "^3.11.5",
     "nodemailer": "^6.9.16",
+    "pm2": "^5.4.3",
     "prettier": "^3.3.3",
     "sequelize": "^6.37.5",
     "yup": "^1.4.0"

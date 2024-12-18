@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
     imageLink.pop();
     const deleteFilePath = imageLink.join("/");
 
-    const filePath = path.resolve(`public${deleteFilePath}`);
+    const filePath = path.resolve(`.output/public${deleteFilePath}`);
 
     try {
       if (fs.existsSync(filePath)) {
