@@ -80,7 +80,11 @@ export default defineEventHandler(async (event) => {
           "updatedByUserId",
         ],
       ],
-      group: [db.Sequelize.fn("DATE", db.Sequelize.col("Incoming.createdAt"))],
+      group: [
+        db.Sequelize.fn("DATE", db.Sequelize.col("Incoming.createdAt")),
+        "createdByUser.id",
+        "updatedByUser.id",
+      ],
     });
 
     return {
