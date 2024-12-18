@@ -188,7 +188,6 @@ const action = async (event: string, row: any) => {
       {{ i18n.t("pages.products.products") }}
     </h1>
     <div class="px-3 pb-3 border-b border-gray-200 dark:border-gray-700">
-      <pre class="text-xs">{{ useRuntimeConfig().public }}</pre>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div class="flex justify-end order-1 sm:order-3">
           <UButton size="lg" type="button" @click="addProductAction">
