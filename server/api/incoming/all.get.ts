@@ -111,7 +111,7 @@ export default defineEventHandler(async (event) => {
           total: +(incoming.dataValues.total - minusTotal).toFixed(2),
         };
       }),
-      total: await db.Incomings.sum("value"),
+      total: (await db.Incomings.sum("value")) || 0,
     };
   } catch (error: any) {
     return {
