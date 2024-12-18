@@ -221,14 +221,14 @@ const action = async (event: string, row: any) => {
         <div class="flex justify-start" v-if="row.image">
           <UPopover mode="hover" class="">
             <img
-              :src="row.image"
+              :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${row.image}`"
               class="w-10 h-10 rounded object-cover border border-gray-300"
               alt="product image"
             />
             <template #panel>
               <div class="p-2">
                 <img
-                  :src="row.image"
+                  :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${row.image}`"
                   class="w-auto h-auto max-h-60 rounded"
                   alt="product image"
                 />

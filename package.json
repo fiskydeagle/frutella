@@ -2,7 +2,7 @@
   "name": "frutella-app",
   "private": true,
   "scripts": {
-    "start": "PORT=3301 JWT_SECRET=1QHxcaGKmLhzaQwy2bMMkOYe EMAIL_HOST=sandbox.smtp.mailtrap.io EMAIL_PORT=587 EMAIL_SECURE=false EMAIL_USER=993aadcd19a58d EMAIL_PASS=d7f312524920e4 EMAIL_FROM=fiskydeagle@gmail.com node .output/server/index.mjs",
+    "start": "PORT=3301 JWT_SECRET=1QHxcaGKmLhzaQwy2bMMkOYe EMAIL_HOST=sandbox.smtp.mailtrap.io EMAIL_PORT=587 EMAIL_SECURE=false EMAIL_USER=993aadcd19a58d EMAIL_PASS=d7f312524920e4 EMAIL_FROM=fiskydeagle@gmail.com PUBLIC_FILES_URL=http://vps-1d302442.vps.ovh.net/frutella-uploads SERVER_FILES_PATH=/home/debian/public_html/frutella-uploads node .output/server/index.mjs",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",

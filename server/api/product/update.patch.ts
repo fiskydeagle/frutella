@@ -23,6 +23,8 @@ export default defineEventHandler(async (event) => {
     });
   }
 
+  const envPath = process.env.SERVER_FILES_PATH || "public/uploads";
+
   const query: Payload = await getQuery(event);
 
   let filename;
@@ -35,7 +37,7 @@ export default defineEventHandler(async (event) => {
       imageLink.pop();
       const deleteFilePath = imageLink.join("/");
 
-      const filePath = path.resolve(`.output/public${deleteFilePath}`);
+      const filePath = path.resolve(`${envPath}${deleteFilePath}`);
 
       try {
         if (fs.existsSync(filePath)) {
@@ -58,7 +60,7 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    const uploadDir = path.resolve(`.output/public/uploads/${dateNow}`);
+    const uploadDir = path.resolve(`${envPath}/${dateNow}`);
     const filePath = path.join(uploadDir, uploadedImage.filename);
 
     // Ensure the directory exists
@@ -89,7 +91,7 @@ export default defineEventHandler(async (event) => {
     if (filename) {
       return await product.update({
         name: query.name,
-        image: `/uploads/${dateNow}/${filename}`,
+        image: `/${dateNow}/${filename}`,
         unitType: query.unitType,
         updatedBy: event.context.user.id,
       });

@@ -131,7 +131,7 @@ watch(
                 class="overflow-hidden border border-gray-300 rounded relative h-48"
               >
                 <img
-                  :src="product.image"
+                  :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${product.image}`"
                   alt="product image"
                   class="w-full h-full object-contain"
                 />
