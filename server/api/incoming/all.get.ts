@@ -28,18 +28,17 @@ export default defineEventHandler(async (event) => {
         {
           model: db.Users,
           as: "createdByUser",
-          attributes: ["id", "firstName", "lastName"],
+          attributes: ["id"],
           required: false,
-          paranoid: event.context.user.role !== UserRole.ADMIN,
         },
         {
           model: db.Users,
           as: "updatedByUser",
-          attributes: ["id", "firstName", "lastName"],
+          attributes: ["id"],
           required: false,
-          paranoid: event.context.user.role !== UserRole.ADMIN,
         },
       ],
+      paranoid: event.context.user.role !== UserRole.ADMIN,
       attributes: [
         [
           db.Sequelize.fn(
@@ -80,7 +79,11 @@ export default defineEventHandler(async (event) => {
           "updatedByUserId",
         ],
       ],
-      group: [db.Sequelize.fn("DATE", db.Sequelize.col("Incoming.createdAt"))],
+      group: [
+        db.Sequelize.fn("DATE", db.Sequelize.col("Incoming.createdAt")),
+        "createdByUser.id",
+        "updatedByUser.id",
+      ],
     });
 
     return {
@@ -108,7 +111,7 @@ export default defineEventHandler(async (event) => {
           total: +(incoming.dataValues.total - minusTotal).toFixed(2),
         };
       }),
-      total: await db.Incomings.sum("value"),
+      total: (await db.Incomings.sum("value")) || 0,
     };
   } catch (error: any) {
     return {
