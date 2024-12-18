@@ -5,20 +5,23 @@
     "database": "frutella_db",
     "host": "127.0.0.1",
     "dialect": "mysql",
-    "logging": false
+    "timezone": "+01:00",
+    "logging": true
   },
   "test": {
     "username": "root",
     "password": null,
     "database": "frutella_db",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "+01:00"
   },
   "production": {
     "username": "frutella_user",
     "password": "SDG8M/ENJptFVC[G",
     "database": "frutella_db",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "+01:00"
   }
 }
