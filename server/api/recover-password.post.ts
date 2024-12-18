@@ -39,14 +39,14 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    await user.update({
-      password: hashedPassword,
-    });
-
     await sendEmail({
       to: body.email,
       subject: "New Password",
       html: `${"New password:"} ${password}`,
+    });
+
+    await user.update({
+      password: hashedPassword,
     });
   } catch (error: any) {
     if (error instanceof Sequelize.ValidationError) {

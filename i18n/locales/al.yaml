@@ -37,7 +37,7 @@ pages:
     have-account: "Keni llogari?"
     login: "Kyçu"
     toasts:
-      Password-send-to-email: "Fjalëkalimi është dërguar në email"
+      password-send-to-email: "Fjalëkalimi është dërguar në email"
       updated-password: "Fjalëkalimi është Ndrruar!"
   orders:
     orders: "Porositë"
