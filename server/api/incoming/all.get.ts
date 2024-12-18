@@ -28,18 +28,17 @@ export default defineEventHandler(async (event) => {
         {
           model: db.Users,
           as: "createdByUser",
-          attributes: ["id", "firstName", "lastName"],
+          attributes: ["id"],
           required: false,
-          paranoid: event.context.user.role !== UserRole.ADMIN,
         },
         {
           model: db.Users,
           as: "updatedByUser",
-          attributes: ["id", "firstName", "lastName"],
+          attributes: ["id"],
           required: false,
-          paranoid: event.context.user.role !== UserRole.ADMIN,
         },
       ],
+      paranoid: event.context.user.role !== UserRole.ADMIN,
       attributes: [
         [
           db.Sequelize.fn(
