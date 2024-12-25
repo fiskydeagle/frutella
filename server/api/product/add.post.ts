@@ -21,6 +21,8 @@ export default defineEventHandler(async (event) => {
     });
   }
 
+  const envPath = process.env.SERVER_FILES_PATH || "public/uploads";
+
   const query: Payload = await getQuery(event);
 
   const formData = await readMultipartFormData(event);
@@ -42,7 +44,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const dateNow = Date.now();
-  const uploadDir = path.resolve(`public/uploads/${dateNow}`);
+  const uploadDir = path.resolve(`${envPath}/${dateNow}`);
   const filePath = path.join(uploadDir, uploadedImage.filename);
 
   // Ensure the directory exists
@@ -56,7 +58,7 @@ export default defineEventHandler(async (event) => {
   try {
     return await db.Products.create({
       name: query.name,
-      image: `/uploads/${dateNow}/${uploadedImage.filename}`,
+      image: `/${dateNow}/${uploadedImage.filename}`,
       unitType: query.unitType,
       createdBy: event.context.user.id,
       updatedBy: event.context.user.id,

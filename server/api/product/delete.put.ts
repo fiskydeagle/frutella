@@ -20,6 +20,8 @@ export default defineEventHandler(async (event) => {
     });
   }
 
+  const envPath = process.env.SERVER_FILES_PATH || "public/uploads";
+
   const body: Payload = await readBody(event);
 
   const product = await db.Products.findOne({
@@ -40,7 +42,7 @@ export default defineEventHandler(async (event) => {
     imageLink.pop();
     const deleteFilePath = imageLink.join("/");
 
-    const filePath = path.resolve(`public${deleteFilePath}`);
+    const filePath = path.resolve(`${envPath}${deleteFilePath}`);
 
     try {
       if (fs.existsSync(filePath)) {

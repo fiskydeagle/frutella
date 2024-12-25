@@ -23,9 +23,7 @@ export default defineEventHandler(async (event) => {
   try {
     const { count, rows: incomings } = await db.Incomings.findAndCountAll({
       limit: +query.offset + +query.limit,
-      order: [
-        ["createdAt", "DESC"], // Sort by 'columnName' in ascending order
-      ],
+      order: [["createdAt", "DESC"]],
       include: [
         {
           model: db.Users,
@@ -44,39 +42,48 @@ export default defineEventHandler(async (event) => {
       attributes: [
         [
           db.Sequelize.fn(
-            "GROUP_CONCAT", // Aggregate fields into an array
+            "GROUP_CONCAT",
             db.Sequelize.literal(`
-              CONCAT
-              (
-                '{
-                  "id": "', Incoming.id, '", ','
-                  "value": "', Incoming.value, '", ','
-                  "description": "', Incoming.description, '", ','
-                  "type": "', Incoming.type, '", ','
-                  "createdAt": "', Incoming.createdAt, '", ','
-                  "updatedAt": "', Incoming.updatedAt, '", ','
-                  "deletedAt": "', COALESCE(Incoming.deletedAt, ''), '", ','
-                  "createdBy": "', Incoming.createdBy, '", ','
-                  "updatedBy": "', Incoming.updatedBy, '", ','
-                  
-                  "createdByUserFirstName": "', COALESCE(createdByUser.firstName, ''), '", ','
-                  "createdByUserLastName": "', COALESCE(createdByUser.lastName, ''), '", ','
-                  "updatedByUserFirstName": "', COALESCE(updatedByUser.firstName, ''), '", ','
-                  "updatedByUserLastName": "', COALESCE(updatedByUser.lastName, ''), '"
-                }'
-              )
-            `),
+          CONCAT(
+            '{"id":"', Incoming.id, 
+            '","value":"', Incoming.value, 
+            '","description":"', Incoming.description, 
+            '","type":"', Incoming.type, 
+            '","createdAt":"', Incoming.createdAt, 
+            '","updatedAt":"', Incoming.updatedAt, 
+            '","deletedAt":"', COALESCE(Incoming.deletedAt, ''), 
+            '","createdBy":"', Incoming.createdBy, 
+            '","updatedBy":"', Incoming.updatedBy, 
+            '","createdByUserFirstName":"', COALESCE(createdByUser.firstName, ''), 
+            '","createdByUserLastName":"', COALESCE(createdByUser.lastName, ''), 
+            '","updatedByUserFirstName":"', COALESCE(updatedByUser.firstName, ''), 
+            '","updatedByUserLastName":"', COALESCE(updatedByUser.lastName, ''), 
+            '"}'
+          )
+        `),
           ),
           "rows",
         ],
         [db.Sequelize.fn("SUM", db.Sequelize.col("value")), "total"],
-        [db.Sequelize.fn("COUNT", "*"), "count"],
+        [db.Sequelize.fn("COUNT", db.Sequelize.col("Incoming.id")), "count"],
         [
           db.Sequelize.fn("DATE", db.Sequelize.col("Incoming.createdAt")),
           "createdAt",
         ],
+        [
+          db.Sequelize.fn("MAX", db.Sequelize.col("createdByUser.id")),
+          "createdByUserId",
+        ],
+        [
+          db.Sequelize.fn("MAX", db.Sequelize.col("updatedByUser.id")),
+          "updatedByUserId",
+        ],
       ],
-      group: [db.Sequelize.fn("DATE", db.Sequelize.col("Incoming.createdAt"))],
+      group: [
+        db.Sequelize.fn("DATE", db.Sequelize.col("Incoming.createdAt")),
+        "createdByUser.id",
+        "updatedByUser.id",
+      ],
     });
 
     return {
@@ -104,7 +111,7 @@ export default defineEventHandler(async (event) => {
           total: +(incoming.dataValues.total - minusTotal).toFixed(2),
         };
       }),
-      total: await db.Incomings.sum("value"),
+      total: (await db.Incomings.sum("value")) || 0,
     };
   } catch (error: any) {
     return {

@@ -1,6 +1,7 @@
 import db from "@/models/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import mysql from "mysql2";
 
 interface Payload {
   email: string;
@@ -8,6 +9,15 @@ interface Payload {
 }
 
 export default defineEventHandler(async (event) => {
+  const connection = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "password",
+  });
+
+  // Close the connection immediately
+  connection.destroy();
+
   const body: Payload = await readBody(event);
 
   const user = await db.Users.findOne({
