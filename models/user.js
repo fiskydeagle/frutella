@@ -1,6 +1,5 @@
 "use strict";
 import { Model } from "sequelize";
-import { BOOLEAN } from "sequelize/lib/data-types";
 export default (sequelize, DataTypes) => {
   class User extends Model {
     /**

@@ -36,43 +36,50 @@ const columns = [
   {
     key: "id",
     label: i18n.t("pages.products.id"),
+    isVisible: false,
   },
   {
     key: "name",
     label: i18n.t("pages.products.name"),
+    isVisible: true,
   },
   {
     key: "image",
     label: i18n.t("pages.products.image"),
+    isVisible: true,
   },
   {
     key: "unitType",
     label: i18n.t("pages.products.unit-type"),
+    isVisible: true,
   },
   {
     key: "createdAt",
     label: i18n.t("pages.products.created-at"),
+    isVisible: true,
   },
   {
     key: "updatedAt",
     label: i18n.t("pages.products.updated-at"),
+    isVisible: false,
   },
   {
     key: "createdBy",
     label: i18n.t("pages.products.created-by"),
+    isVisible: false,
   },
   {
     key: "updatedBy",
     label: i18n.t("pages.products.updated-by"),
+    isVisible: false,
   },
   {
     label: "",
     key: "actions",
     class: "w-1",
+    isVisible: true,
   },
 ];
-
-const selectedColumns = ref([...columns]);
 
 const productsRows = computed(() => {
   return products.value?.map((product) => {
@@ -104,6 +111,8 @@ const productsRows = computed(() => {
       icon: "ph:trash-duotone",
     });
 
+    const cssClass = product.deletedAt ? "bg-red-500 bg-opacity-20" : "";
+
     return {
       id: product.id,
       name: product.name,
@@ -118,6 +127,7 @@ const productsRows = computed(() => {
         ? `${product.updatedByUser.firstName} ${product.updatedByUser.lastName}`
         : "-",
       deletedAt: product.deletedAt,
+      class: cssClass,
       actions,
     };
   });
@@ -164,19 +174,19 @@ const updateProductClose = () => {
   productUpdateModal.value = false;
 };
 
-const action = async (event: string, row: any) => {
-  switch (event) {
+const action = async (event: { event: string; row: any }) => {
+  switch (event.event) {
     case "update":
-      updateProductAction(row);
+      updateProductAction(event.row);
       break;
     case "deactivate":
-      await deactivateProduct(row.id);
+      await deactivateProduct(event.row.id);
       break;
     case "restore":
-      await restoreProduct(row.id);
+      await restoreProduct(event.row.id);
       break;
     case "delete":
-      await deleteProduct(row.id);
+      await deleteProduct(event.row.id);
       break;
   }
 };
@@ -188,28 +198,18 @@ const action = async (event: string, row: any) => {
       {{ i18n.t("pages.products.products") }}
     </h1>
     <div class="px-3 pb-3 border-b border-gray-200 dark:border-gray-700">
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div class="flex justify-end order-1 sm:order-3">
-          <UButton size="lg" type="button" @click="addProductAction">
-            {{ i18n.t("pages.products.add-product") }}
-          </UButton>
-        </div>
-        <div class="order-2 flex">
-          <USelectMenu
-            v-model="selectedColumns"
-            :options="columns.filter((columns) => columns.key !== 'actions')"
-            size="lg"
-            multiple
-            placeholder="Columns"
-            class="w-full sm:w-48 max-w-full"
-          />
-        </div>
+      <div class="flex justify-end">
+        <UButton size="lg" type="button" @click="addProductAction">
+          {{ i18n.t("pages.products.add-product") }}
+        </UButton>
       </div>
     </div>
-    <UTable
-      :columns="selectedColumns"
+    <DataTable
+      :dynamic-columns="true"
+      :identifier="'data-table-products'"
+      :columns="columns"
       :rows="productsRows"
-      class="frutella-table"
+      @on-action-click="action"
     >
       <template #unitType-data="{ row }">
         <span class="capitalize">
@@ -237,47 +237,7 @@ const action = async (event: string, row: any) => {
           </UPopover>
         </div>
       </template>
-
-      <template #actions-data="{ row }">
-        <span
-          v-if="row.deletedAt"
-          class="absolute -z-10 top-0 right-0 w-full h-full bg-red-500 bg-opacity-20"
-        ></span>
-        <div v-if="row.actions && row.actions.length">
-          <UPopover
-            class="flex justify-end [&>*]:block [&>*]:w-auto"
-            :popper="{ placement: 'bottom-end' }"
-          >
-            <button
-              class="flex justify-center items-center rounded text-neutral-500 hover:text-neutral-700"
-            >
-              <UIcon name="fe:elipsis-v" class="text-3xl -my-2 -mx-1" />
-            </button>
-            <template #panel="{ close }">
-              <div class="flex flex-col rounded-2xl shadow-shadow-lg px-3 py-2">
-                <button
-                  v-for="actionItem in row.actions"
-                  :key="'action-btn-' + actionItem.event"
-                  type="button"
-                  class="py-2 pr-6 pl-0 body-1 text-left flex gap-2 group/action"
-                  @click.prevent="
-                    close();
-                    action(actionItem.event, row);
-                  "
-                >
-                  <Icon
-                    :name="actionItem.icon"
-                    size="20"
-                    class="block text-neutral-500 group-hover/action:text-neutral-700"
-                  />
-                  {{ actionItem.label }}
-                </button>
-              </div>
-            </template>
-          </UPopover>
-        </div>
-      </template>
-    </UTable>
+    </DataTable>
 
     <ProductAdd
       :is-modal-open="productAddModal"
@@ -296,8 +256,3 @@ const action = async (event: string, row: any) => {
     />
   </div>
 </template>
-<style lang="postcss">
-.frutella-table tr {
-  @apply relative;
-}
-</style>

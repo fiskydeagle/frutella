@@ -1,3 +1,10 @@
+export type DataTableColumnsType = {
+  key: string;
+  label: string;
+  class?: string;
+  isVisible?: boolean;
+};
+
 export enum UserRole {
   ADMIN = "admin",
   EMPLOYEE = "employee",

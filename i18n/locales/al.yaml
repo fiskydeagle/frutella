@@ -59,6 +59,7 @@ pages:
   users:
     users: "Përdoruesit"
     id: "ID"
+    company: "Kompania"
     name: "Emri"
     email: "Email"
     role: "Roli"
@@ -67,6 +68,7 @@ pages:
     created-by: "Krijuar Nga"
     updated-by: "Përditësuar Nga"
     update: "Përditëso"
+    verify: "Verifiko"
     deactivate: "Deaktivizo"
     restore: "Rikthe"
     delete: "Fshije"
@@ -123,6 +125,7 @@ components:
       customer: "Klient"
       toasts:
         user-updated: "Përdoruesi është Përditësuar!"
+        user-verified: "Përdoruesi është Verifikuar!"
         user-deactivated: "Përdoruesi është Deaktivizuar!"
         user-restored: "Përdoruesi është Kthyer!"
         user-deleted: "Përdoruesi është Fshirë!"

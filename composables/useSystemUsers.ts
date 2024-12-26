@@ -80,6 +80,35 @@ export const useSystemUsers = () => {
     return true;
   };
 
+  const verifyUser = async (userId: number) => {
+    try {
+      await $fetch("/api/user/verify", {
+        method: "PUT",
+        body: {
+          userId,
+        },
+      });
+
+      toast.add({
+        title: i18n.t("components.user.update.toasts.user-verified"),
+        color: "green",
+        icon: "i-lucide-check-circle",
+      });
+
+      await getUsers();
+    } catch (error: any) {
+      toast.add({
+        title: i18n.t(error.statusMessage),
+        description: error.data.data ? error.data.data.join(", ") : undefined,
+        color: "red",
+        icon: "i-lucide-alert-triangle",
+      });
+
+      return false;
+    }
+    return true;
+  };
+
   const deactivateUser = async (userId: number) => {
     try {
       await $fetch("/api/user/deactivate", {
@@ -232,6 +261,7 @@ export const useSystemUsers = () => {
     getUsers,
     addUser,
     updateUser,
+    verifyUser,
     deactivateUser,
     restoreUser,
     deleteUser,

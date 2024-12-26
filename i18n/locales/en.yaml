@@ -59,6 +59,7 @@ pages:
   users:
     users: "Users"
     id: "ID"
+    company: "Company"
     name: "Name"
     email: "Email"
     role: "Role"
@@ -67,6 +68,7 @@ pages:
     created-by: "Created By"
     updated-by: "Updated By"
     update: "Update"
+    verify: "Verify"
     deactivate: "Deactivate"
     restore: "Restore"
     delete: "Delete"
@@ -123,6 +125,7 @@ components:
       customer: "Customer"
       toasts:
         user-updated: "User Updated!",
+        user-verified: "User Verified!"
         user-deactivated: "User Deactivated!"
         user-restored: "User Restored!"
         user-deleted: "User Deleted!"
