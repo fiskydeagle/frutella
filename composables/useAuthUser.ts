@@ -9,9 +9,11 @@ export const useAuthUser = () => {
   const user = useCookie<User | undefined>("user");
 
   const register = async (state: {
+    company: string | undefined;
     firstName: string | undefined;
     lastName: string | undefined;
     email: string | undefined;
+    tel: string | undefined;
     password: string | undefined;
   }) => {
     try {
@@ -21,9 +23,11 @@ export const useAuthUser = () => {
       });
 
       Object.assign(state, {
+        company: undefined,
         firstName: undefined,
         lastName: undefined,
         email: undefined,
+        tel: undefined,
         password: undefined,
       });
 

@@ -1,6 +1,8 @@
 common:
   load-more: "Load more"
   size: "Size"
+layout:
+  account-not-verified: "Your account is not active, please wait until an Admin verifies your account."
 pages:
   incoming:
     title: "Incoming"
@@ -48,9 +50,11 @@ pages:
     update: "Update"
   register:
     register: "Register"
+    company: "Company"
     first-name: "First Name"
     last-name: "Last Name"
     email: "Email"
+    tel: "Phone"
     password: "Password"
   users:
     users: "Users"

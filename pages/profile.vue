@@ -20,7 +20,7 @@ useHead(() => {
 });
 
 definePageMeta({
-  middleware: "auth",
+  middleware: ["auth"],
 });
 
 const { updateProfile, changePassword } = useSystemUsers();

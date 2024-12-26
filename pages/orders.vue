@@ -14,7 +14,7 @@ useHead(() => {
 });
 
 definePageMeta({
-  middleware: "auth",
+  middleware: ["auth", "verified"],
 });
 </script>
 

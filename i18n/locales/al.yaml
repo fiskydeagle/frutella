@@ -1,6 +1,8 @@
 common:
   load-more: "Listo më tepër"
   size: "Kapaciteti"
+layout:
+  account-not-verified: "Llogaria juaj nuk është aktive, ju lutemi prisni derisa një administrator të verifikojë llogarinë tuaj."
 pages:
   incoming:
     title: "Të Hyrat"
@@ -47,10 +49,12 @@ pages:
     update-password: "Përditëso fjalëkalimin"
     update: "Përditëso"
   register:
+    company: "Kompania"
     register: "Regjistrohu"
     first-name: "Emri"
     last-name: "Mbiemri"
     email: "Email"
+    tel: "Telefoni"
     password: "Fjalëkalimi"
   users:
     users: "Përdoruesit"

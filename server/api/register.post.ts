@@ -4,9 +4,11 @@ import Sequelize from "sequelize";
 import { UserRole } from "~/types";
 
 interface Payload {
+  company: string;
   firstName: string;
   lastName: string;
   email: string;
+  tel: string;
   password: string;
 }
 
@@ -16,9 +18,11 @@ export default defineEventHandler(async (event) => {
 
   try {
     return await db.Users.create({
+      company: body.company,
       firstName: body.firstName,
       lastName: body.lastName,
       email: body.email,
+      tel: body.tel,
       role: UserRole.CUSTOMER,
       password: hashedPassword,
     });

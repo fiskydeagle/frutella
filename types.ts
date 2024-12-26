@@ -6,10 +6,18 @@ export enum UserRole {
 
 export interface User {
   id: number;
+  sort: number;
+  company: string;
   firstName: string;
   lastName: string;
   email: string;
+  image?: string;
+  city?: string;
+  address?: string;
+  tel?: string;
+  googleMap?: string;
   role: UserRole;
+  verified: boolean;
   password: string | null | undefined;
   createdAt: string;
   updatedAt: string;
