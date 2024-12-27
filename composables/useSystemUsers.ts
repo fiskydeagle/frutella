@@ -197,13 +197,27 @@ export const useSystemUsers = () => {
   };
 
   const updateProfile = async (state: {
+    company: string | undefined;
     firstName: string | undefined;
     lastName: string | undefined;
+    imageLink: string | undefined;
+    image: File[] | undefined;
+    deleteImage: boolean;
+    city: string | undefined;
+    address: string | undefined;
+    tel: string | undefined;
+    googleMap: string | undefined;
   }) => {
+    const formData = new FormData();
+
+    if (state.image && state.image.length)
+      formData.append("image", state.image[0]);
+
     try {
       await $fetch("/api/user/profile", {
         method: "PATCH",
-        body: state,
+        body: formData,
+        query: state,
       });
 
       toast.add({
