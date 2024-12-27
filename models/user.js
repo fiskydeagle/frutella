@@ -22,6 +22,8 @@ export default (sequelize, DataTypes) => {
 
   User.init(
     {
+      sort: DataTypes.INTEGER,
+      company: DataTypes.STRING,
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
       email: {
@@ -31,7 +33,13 @@ export default (sequelize, DataTypes) => {
           isEmail: true, // Validates the email format
         },
       },
+      image: DataTypes.STRING,
+      city: DataTypes.STRING,
+      address: DataTypes.STRING,
+      tel: DataTypes.STRING,
+      googleMap: DataTypes.STRING,
       role: DataTypes.STRING,
+      verified: DataTypes.BOOLEAN,
       password: {
         type: DataTypes.STRING,
         get() {
