@@ -57,7 +57,7 @@ module.exports = {
       verified: {
         allowNull: false,
         type: Sequelize.BOOLEAN,
-        default: false,
+        defaultValue: false,
       },
       password: {
         allowNull: false,
