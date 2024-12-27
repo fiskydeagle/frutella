@@ -55,6 +55,7 @@ export const useProduct = () => {
   const updateProduct = async (state: {
     id: number | undefined;
     name: string | undefined;
+    imageLink: string | undefined;
     image: File[] | undefined;
     unitType: UnitType | undefined;
   }) => {

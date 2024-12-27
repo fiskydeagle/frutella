@@ -1,6 +1,8 @@
 common:
   load-more: "Load more"
   size: "Size"
+layout:
+  account-not-verified: "Your account is not active, please wait until an Admin verifies your account."
 pages:
   incoming:
     title: "Incoming"
@@ -43,26 +45,47 @@ pages:
     orders: "orders"
   profile:
     profile: "Profile"
+    company: "Company"
+    first-name: "First Name"
+    last-name: "Last Name"
+    image: "Image"
+    drop-or-click-upload: "Drop files here or click to upload."
+    city: "City"
+    search-city: "Search city"
+    address: "Address"
+    tel: "Phone"
+    google-map-link: "Google Map Link"
+    password: "Password"
+    old-password: "Old Password"
     update-profile: "Update profile"
     update-password: "Update password"
     update: "Update"
   register:
     register: "Register"
+    company: "Company"
     first-name: "First Name"
     last-name: "Last Name"
     email: "Email"
+    tel: "Phone"
     password: "Password"
   users:
     users: "Users"
     id: "ID"
+    company: "Company"
+    image: "Image"
     name: "Name"
     email: "Email"
     role: "Role"
+    city: "City"
+    address: "Address"
+    tel: "Phone"
+    google-map-link: "Google Map Link"
     created-at: "Created At"
     updated-at: "Updated At"
     created-by: "Created By"
     updated-by: "Updated By"
     update: "Update"
+    verify: "Verify"
     deactivate: "Deactivate"
     restore: "Restore"
     delete: "Delete"
@@ -119,10 +142,11 @@ components:
       customer: "Customer"
       toasts:
         user-updated: "User Updated!",
+        user-verified: "User Verified!"
         user-deactivated: "User Deactivated!"
         user-restored: "User Restored!"
         user-deleted: "User Deleted!"
-        user-profile-updated: "User profile updated!"
+        user-profile-updated: "Profile updated!"
         user-can-t-deactivate-yourself: "You can't deactivate yourself!"
   incoming:
     add:

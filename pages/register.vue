@@ -20,9 +20,11 @@ useHead(() => {
 const { register } = useAuthUser();
 
 const schema = object({
+  company: string().required("Required"),
   firstName: string().required("Required"),
   lastName: string().required("Required"),
   email: string().email("Invalid email").required("Required"),
+  tel: string().required("Required"),
   password: string()
     .min(8, "Must be at least 8 characters")
     .required("Required"),
@@ -31,9 +33,11 @@ const schema = object({
 type Schema = InferType<typeof schema>;
 
 const state = reactive({
+  company: undefined,
   firstName: undefined,
   lastName: undefined,
   email: undefined,
+  tel: undefined,
   password: undefined,
 });
 
@@ -56,6 +60,14 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
         <div class="flex flex-col gap-4">
           <UFormGroup
             size="lg"
+            :label="i18n.t('pages.register.company')"
+            name="company"
+          >
+            <UInput v-model="state.company" />
+          </UFormGroup>
+
+          <UFormGroup
+            size="lg"
             :label="i18n.t('pages.register.first-name')"
             name="firstName"
           >
@@ -76,6 +88,14 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
             name="email"
           >
             <UInput v-model="state.email" />
+          </UFormGroup>
+
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('pages.register.tel')"
+            name="tel"
+          >
+            <UInput v-model="state.tel" />
           </UFormGroup>
 
           <UFormGroup

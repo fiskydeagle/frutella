@@ -36,6 +36,8 @@
     "pm2": "^5.4.3",
     "prettier": "^3.3.3",
     "sequelize": "^6.37.5",
+    "sortablejs": "^1.15.6",
+    "vue": "latest",
     "yup": "^1.4.0"
   }
 }

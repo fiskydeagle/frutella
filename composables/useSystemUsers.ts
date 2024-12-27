@@ -80,6 +80,35 @@ export const useSystemUsers = () => {
     return true;
   };
 
+  const verifyUser = async (userId: number) => {
+    try {
+      await $fetch("/api/user/verify", {
+        method: "PUT",
+        body: {
+          userId,
+        },
+      });
+
+      toast.add({
+        title: i18n.t("components.user.update.toasts.user-verified"),
+        color: "green",
+        icon: "i-lucide-check-circle",
+      });
+
+      await getUsers();
+    } catch (error: any) {
+      toast.add({
+        title: i18n.t(error.statusMessage),
+        description: error.data.data ? error.data.data.join(", ") : undefined,
+        color: "red",
+        icon: "i-lucide-alert-triangle",
+      });
+
+      return false;
+    }
+    return true;
+  };
+
   const deactivateUser = async (userId: number) => {
     try {
       await $fetch("/api/user/deactivate", {
@@ -168,13 +197,27 @@ export const useSystemUsers = () => {
   };
 
   const updateProfile = async (state: {
+    company: string | undefined;
     firstName: string | undefined;
     lastName: string | undefined;
+    imageLink: string | undefined;
+    image: File[] | undefined;
+    deleteImage: boolean;
+    city: string | undefined;
+    address: string | undefined;
+    tel: string | undefined;
+    googleMap: string | undefined;
   }) => {
+    const formData = new FormData();
+
+    if (state.image && state.image.length)
+      formData.append("image", state.image[0]);
+
     try {
       await $fetch("/api/user/profile", {
         method: "PATCH",
-        body: state,
+        body: formData,
+        query: state,
       });
 
       toast.add({
@@ -232,6 +275,7 @@ export const useSystemUsers = () => {
     getUsers,
     addUser,
     updateUser,
+    verifyUser,
     deactivateUser,
     restoreUser,
     deleteUser,
