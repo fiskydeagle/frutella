@@ -48,7 +48,10 @@ const profileSchema = object({
     "is-empty-or-valid",
     "Invalid Google Maps link",
     (value) =>
-      value === undefined || value === "" || googleMapsLinkRegex.test(value), // Validate Google Maps link
+      value === null ||
+      value === undefined ||
+      value === "" ||
+      googleMapsLinkRegex.test(value), // Validate Google Maps link
   ),
 });
 
