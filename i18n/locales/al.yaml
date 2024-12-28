@@ -71,6 +71,7 @@ pages:
   users:
     users: "Përdoruesit"
     id: "ID"
+    sort: "Numri rendor"
     company: "Kompania"
     image: "Fotografija"
     name: "Emri"
@@ -117,6 +118,7 @@ components:
     navigation: "Navigimi"
   user:
     add:
+      sort: "Numri rendor"
       company: "Kompania"
       first-name: "Emri"
       last-name: "Mbiemri"
@@ -139,6 +141,7 @@ components:
       toasts:
         user-added: "Përdoruesi u Shtua!"
     update:
+      sort: "Numri rendor"
       company: "Kompania"
       first-name: "Emri"
       last-name: "Mbiemri"

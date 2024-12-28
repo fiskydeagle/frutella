@@ -71,6 +71,7 @@ pages:
   users:
     users: "Users"
     id: "ID"
+    sort: "Sort number"
     company: "Company"
     image: "Image"
     name: "Name"
@@ -117,6 +118,7 @@ components:
     navigation: "Navigation"
   user:
     add:
+      sort: "Sort number"
       company: "Company"
       first-name: "First Name"
       last-name: "Last Name"
@@ -139,6 +141,7 @@ components:
       toasts:
         user-added: "User added!"
     update:
+      sort: "Sort number"
       company: "Company"
       first-name: "First Name"
       last-name: "Last Name"

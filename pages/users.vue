@@ -42,6 +42,11 @@ const columns = [
     isVisible: false,
   },
   {
+    key: "sort",
+    label: i18n.t("pages.users.sort"),
+    isVisible: false,
+  },
+  {
     key: "company",
     label: i18n.t("pages.users.company"),
     isVisible: true,
@@ -158,6 +163,7 @@ const usersRows = computed(() => {
 
     return {
       id: user.id,
+      sort: user.sort,
       company: user.company,
       image: user.image,
       firstName: user.firstName,

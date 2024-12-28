@@ -16,6 +16,7 @@ export const useSystemUsers = () => {
   };
 
   const addUser = async (state: {
+    sort: number | undefined;
     company: string | undefined;
     firstName: string | undefined;
     lastName: string | undefined;

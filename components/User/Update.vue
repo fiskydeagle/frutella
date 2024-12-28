@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type InferType, mixed, object, string } from "yup";
+import { type InferType, mixed, number, object, string } from "yup";
 import { type User, UserRole } from "~/types";
 import type { FormSubmitEvent } from "#ui/types";
 
@@ -24,6 +24,14 @@ const { kosovoCities } = useUtils();
 const googleMapsLinkRegex =
   /^https?:\/\/(www\.)?google\.(com|[a-z]{2})\/maps(\?q=[^&]+|\/search\/|\/place\/|\/@[^,]+,[^,]+,)/;
 const schema = object({
+  sort: number()
+    .transform((value, originalValue) => {
+      return originalValue === "" ? null : value; //
+    })
+    .integer("Sort number must be an integer")
+    .nullable()
+    .optional()
+    .positive("Sort number must be a positive number"),
   company: string().required("Required"),
   firstName: string().required("Required"),
   lastName: string().required("Required"),
@@ -58,6 +66,7 @@ const editImage = ref<boolean>(!props.user.image);
 
 const state = reactive({
   id: props.user.id,
+  sort: props.user.sort,
   company: props.user.company,
   firstName: props.user.firstName,
   lastName: props.user.lastName,
@@ -97,6 +106,7 @@ watch(
       editImage.value = !props.user.image;
       Object.assign(state, {
         id: props.user.id,
+        sort: props.user.sort,
         company: props.user.company,
         firstName: props.user.firstName,
         lastName: props.user.lastName,
@@ -155,6 +165,14 @@ watch(
           <div class="w-full flex flex-col gap-4">
             <UFormGroup
               size="lg"
+              :label="i18n.t('components.user.update.sort')"
+              name="sort"
+            >
+              <UInput type="number" :min="1" v-model="state.sort" />
+            </UFormGroup>
+
+            <UFormGroup
+              size="lg"
               :label="i18n.t('components.user.update.company')"
               name="company"
             >
@@ -202,33 +220,6 @@ watch(
                 placeholder="Role"
               />
             </UFormGroup>
-
-            <UFormGroup
-              size="lg"
-              :label="i18n.t('components.user.update.city')"
-              name="city"
-            >
-              <USelectMenu
-                v-model="state.city"
-                searchable
-                :searchable-placeholder="
-                  i18n.t('components.user.update.search-city')
-                "
-                :placeholder="i18n.t('components.user.update.city')"
-                :options="kosovoCities"
-                value-attribute="code"
-                option-attribute="name"
-                :search-attributes="['name', 'colors']"
-              />
-            </UFormGroup>
-
-            <UFormGroup
-              size="lg"
-              :label="i18n.t('components.user.update.address')"
-              name="address"
-            >
-              <UTextarea v-model="state.address" autoresize />
-            </UFormGroup>
           </div>
           <div class="w-full flex flex-col gap-4">
             <UFormGroup
@@ -265,6 +256,33 @@ watch(
                   @change="formRef?.validate('image', { silent: true })"
                 />
               </template>
+            </UFormGroup>
+
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.user.update.city')"
+              name="city"
+            >
+              <USelectMenu
+                v-model="state.city"
+                searchable
+                :searchable-placeholder="
+                  i18n.t('components.user.update.search-city')
+                "
+                :placeholder="i18n.t('components.user.update.city')"
+                :options="kosovoCities"
+                value-attribute="code"
+                option-attribute="name"
+                :search-attributes="['name', 'colors']"
+              />
+            </UFormGroup>
+
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.user.update.address')"
+              name="address"
+            >
+              <UTextarea v-model="state.address" autoresize />
             </UFormGroup>
 
             <UFormGroup

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type InferType, mixed, object, string } from "yup";
+import { type InferType, mixed, number, object, string } from "yup";
 import { UserRole } from "~/types";
 import type { FormSubmitEvent } from "#ui/types";
 
@@ -23,6 +23,14 @@ const { kosovoCities } = useUtils();
 const googleMapsLinkRegex =
   /^https?:\/\/(www\.)?google\.(com|[a-z]{2})\/maps(\?q=[^&]+|\/search\/|\/place\/|\/@[^,]+,[^,]+,)/;
 const schema = object({
+  sort: number()
+    .transform((value, originalValue) => {
+      return originalValue === "" ? null : value; //
+    })
+    .integer("Sort number must be an integer")
+    .nullable()
+    .optional()
+    .positive("Sort number must be a positive number"),
   company: string().required("Required"),
   firstName: string().required("Required"),
   lastName: string().required("Required"),
@@ -59,6 +67,7 @@ const formRef = ref();
 const imageUploading = ref<boolean>(false);
 
 const state = reactive({
+  sort: undefined,
   company: undefined,
   firstName: undefined,
   lastName: undefined,
@@ -88,6 +97,7 @@ watch(
   (isOpen) => {
     if (!isOpen) {
       Object.assign(state, {
+        sort: undefined,
         company: undefined,
         firstName: undefined,
         lastName: undefined,
@@ -144,6 +154,14 @@ watch(
 
         <div class="flex max-sm:flex-col gap-4 w-full">
           <div class="w-full flex flex-col gap-4">
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.user.add.sort')"
+              name="sort"
+            >
+              <UInput type="number" :min="1" v-model="state.sort" />
+            </UFormGroup>
+
             <UFormGroup
               size="lg"
               :label="i18n.t('components.user.add.company')"

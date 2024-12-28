@@ -6,6 +6,7 @@ import fs from "fs";
 
 interface Payload {
   id: number;
+  sort?: string | number;
   company: string;
   firstName: string;
   lastName: string;
@@ -115,6 +116,7 @@ export default defineEventHandler(async (event) => {
   try {
     if (filename) {
       return await user.update({
+        sort: query.sort || null,
         company: query.company,
         firstName: query.firstName,
         lastName: query.lastName,
@@ -128,6 +130,7 @@ export default defineEventHandler(async (event) => {
       });
     } else {
       return await user.update({
+        sort: query.sort || null,
         company: query.company,
         firstName: query.firstName,
         lastName: query.lastName,
