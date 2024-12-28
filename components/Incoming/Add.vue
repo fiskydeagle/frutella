@@ -67,7 +67,6 @@ watch(
     :ui="{
       width: 'w-full sm:max-w-md',
     }"
-    class="max-w-md"
   >
     <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
       <UCard

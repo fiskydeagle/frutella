@@ -71,12 +71,13 @@ const profileState = reactive({
   city: user.value?.city || "vu",
   address: user.value?.address,
   tel: user.value?.tel,
-  googleMap: user.value?.googleMap,
+  googleMap: user.value?.googleMap || "",
 });
 
 const profileLoading = ref<boolean>(false);
 const onProfileUpdate = async (event: FormSubmitEvent<ProfileSchema>) => {
   profileLoading.value = true;
+
   if (
     (!profileState.image || !profileState.image.length) &&
     profileState.imageLink &&
@@ -84,6 +85,7 @@ const onProfileUpdate = async (event: FormSubmitEvent<ProfileSchema>) => {
   ) {
     profileState.deleteImage = true;
   }
+
   if (await updateProfile(profileState)) {
     editImage.value = !user.value?.image;
     Object.assign(profileState, {
@@ -96,7 +98,7 @@ const onProfileUpdate = async (event: FormSubmitEvent<ProfileSchema>) => {
       city: user.value?.city || "vu",
       address: user.value?.address,
       tel: user.value?.tel,
-      googleMap: user.value?.googleMap,
+      googleMap: user.value?.googleMap || "",
     });
   }
   profileLoading.value = false;
@@ -139,6 +141,7 @@ const onPasswordUpdate = async (event: FormSubmitEvent<PasswordSchema>) => {
 
     <div class="flex max-md:flex-col gap-x-6 gap-y-4">
       <UForm
+        ref="formRef"
         :schema="profileSchema"
         :state="profileState"
         class="space-y-4 w-full"

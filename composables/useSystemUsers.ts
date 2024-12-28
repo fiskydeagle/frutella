@@ -16,16 +16,28 @@ export const useSystemUsers = () => {
   };
 
   const addUser = async (state: {
+    company: string | undefined;
     firstName: string | undefined;
     lastName: string | undefined;
     email: string | undefined;
     role: UserRole | undefined;
     password: string | undefined;
+    image: File[] | undefined;
+    city: string | undefined;
+    address: string | undefined;
+    tel: string | undefined;
+    googleMap: string | undefined;
   }) => {
+    const formData = new FormData();
+
+    if (state.image && state.image.length)
+      formData.append("image", state.image[0]);
+
     try {
       await $fetch("/api/user/add", {
         method: "POST",
-        body: state,
+        body: formData,
+        query: state,
       });
 
       toast.add({
@@ -50,14 +62,28 @@ export const useSystemUsers = () => {
 
   const updateUser = async (state: {
     id: number | undefined;
+    company: string | undefined;
     firstName: string | undefined;
     lastName: string | undefined;
     role: UserRole | undefined;
+    imageLink: string | undefined;
+    image: File[] | undefined;
+    deleteImage: boolean;
+    city: string | undefined;
+    address: string | undefined;
+    tel: string | undefined;
+    googleMap: string | undefined;
   }) => {
+    const formData = new FormData();
+
+    if (state.image && state.image.length)
+      formData.append("image", state.image[0]);
+
     try {
       await $fetch("/api/user/update", {
         method: "PATCH",
-        body: state,
+        body: formData,
+        query: state,
       });
 
       toast.add({

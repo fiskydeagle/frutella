@@ -220,9 +220,6 @@ const onUpdateUser = async (state: any) => {
   }
 
   userUpdateLoading.value = false;
-  setTimeout(() => {
-    userToUpdate.value = null;
-  }, 400);
 };
 const updateUserClose = () => {
   userUpdateModal.value = false;

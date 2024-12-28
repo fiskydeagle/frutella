@@ -74,7 +74,6 @@ watch(
     :ui="{
       width: 'w-full sm:max-w-md',
     }"
-    class="max-w-md"
   >
     <UForm
       ref="formRef"

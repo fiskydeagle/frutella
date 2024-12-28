@@ -136,7 +136,7 @@ export const useUtils = () => {
   };
 
   const kosovoCities = [
-    { code: "pr", name: "Prishtië" },
+    { code: "pr", name: "Prishtinë" },
     { code: "pz", name: "Prizren" },
     { code: "pe", name: "Pejë" },
     { code: "mi", name: "Mitrovicë" },
@@ -144,8 +144,8 @@ export const useUtils = () => {
     { code: "gjk", name: "Gjakovë" },
     { code: "fe", name: "Ferizaj" },
     { code: "vu", name: "Vushtrri" },
-    { code: "po", name: "Podujev" },
-    { code: "su", name: "Suharek" },
+    { code: "po", name: "Podujevë" },
+    { code: "su", name: "Suharekë" },
     { code: "ra", name: "Rahovec" },
     { code: "dr", name: "Drenas" },
     { code: "ma", name: "Malishevë" },
