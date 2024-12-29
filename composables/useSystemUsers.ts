@@ -1,9 +1,11 @@
 import type { User } from "~/types";
 import { UserRole } from "~/types";
+import { useAuthUser } from "~/composables/useAuthUser";
 
 export const useSystemUsers = () => {
   const toast = useToast();
   const i18n = useI18n();
+  const { user } = useAuthUser();
 
   const users = ref<User[]>();
 
@@ -241,11 +243,24 @@ export const useSystemUsers = () => {
       formData.append("image", state.image[0]);
 
     try {
-      await $fetch("/api/user/profile", {
+      const profileResponse = await $fetch<User>("/api/user/profile", {
         method: "PATCH",
         body: formData,
         query: state,
       });
+
+      if (user && user.value && profileResponse && profileResponse.id) {
+        user.value.company = profileResponse.company;
+        user.value.image = profileResponse.image;
+        user.value.firstName = profileResponse.firstName;
+        user.value.lastName = profileResponse.lastName;
+        user.value.email = profileResponse.email;
+        user.value.role = profileResponse.role;
+        user.value.city = profileResponse.city;
+        user.value.address = profileResponse.address;
+        user.value.tel = profileResponse.tel;
+        user.value.googleMap = profileResponse.googleMap;
+      }
 
       toast.add({
         title: i18n.t("components.user.update.toasts.user-profile-updated"),
