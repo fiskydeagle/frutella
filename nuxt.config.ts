@@ -41,4 +41,10 @@ export default {
   },
 
   compatibilityDate: "2024-11-16",
+
+  runtimeConfig: {
+    public: {
+      PUBLIC_FILES_URL: process.env.PUBLIC_FILES_URL || "/uploads",
+    },
+  },
 };

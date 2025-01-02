@@ -16,7 +16,7 @@ useHead(() => {
 });
 
 definePageMeta({
-  middleware: "auth",
+  middleware: ["auth", "verified"],
 });
 
 const { orders, getOrders } = useOrder();

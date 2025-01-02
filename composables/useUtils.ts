@@ -1,10 +1,4 @@
 export const useUtils = () => {
-  let i18n: any;
-
-  if (import.meta.client) {
-    i18n = useI18n();
-  }
-
   const GBinByte = 1073741824;
   const round = (num: number, decimalPlaces: number = 0) => {
     const p = Math.pow(10, decimalPlaces);
@@ -141,6 +135,35 @@ export const useUtils = () => {
     return num.toString();
   };
 
+  const kosovoCities = [
+    { code: "pr", name: "Prishtinë" },
+    { code: "pz", name: "Prizren" },
+    { code: "pe", name: "Pejë" },
+    { code: "mi", name: "Mitrovicë" },
+    { code: "gj", name: "Gjilan" },
+    { code: "gjk", name: "Gjakovë" },
+    { code: "fe", name: "Ferizaj" },
+    { code: "vu", name: "Vushtrri" },
+    { code: "po", name: "Podujevë" },
+    { code: "su", name: "Suharekë" },
+    { code: "ra", name: "Rahovec" },
+    { code: "dr", name: "Drenas" },
+    { code: "ma", name: "Malishevë" },
+    { code: "ka", name: "Kamenicë" },
+    { code: "li", name: "Lipjan" },
+    { code: "da", name: "Dragash" },
+    { code: "sh", name: "Shtime" },
+    { code: "kc", name: "Kaçanik" },
+    { code: "ob", name: "Obiliq" },
+    { code: "sk", name: "Skenderaj" },
+    { code: "fk", name: "Fushë Kosovë" },
+    { code: "nb", name: "Novobërd" },
+    { code: "he", name: "Hani i Elezit" },
+    { code: "zp", name: "Zubin Potok" },
+    { code: "le", name: "Leposaviq" },
+    { code: "ze", name: "Zveçan" },
+  ];
+
   return {
     GBinByte,
     round,
@@ -154,5 +177,6 @@ export const useUtils = () => {
     differenceInPercentage,
     stripHtmlTags,
     formatNumber,
+    kosovoCities,
   };
 };

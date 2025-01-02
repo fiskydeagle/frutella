@@ -85,7 +85,6 @@ watch(
     :ui="{
       width: 'w-full sm:max-w-md',
     }"
-    class="max-w-md"
   >
     <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
       <UCard
@@ -131,7 +130,7 @@ watch(
                 class="overflow-hidden border border-gray-300 rounded relative h-48"
               >
                 <img
-                  :src="product.image"
+                  :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${product.image}`"
                   alt="product image"
                   class="w-full h-full object-contain"
                 />

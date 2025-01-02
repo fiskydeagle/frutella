@@ -9,6 +9,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      sort: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
+      },
+      company: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
       firstName: {
         allowNull: false,
         type: Sequelize.STRING,
@@ -22,9 +30,34 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING,
       },
+      image: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
+      city: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
+      address: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
+      tel: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
+      googleMap: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
       role: {
         allowNull: false,
         type: Sequelize.STRING,
+      },
+      verified: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       password: {
         allowNull: false,

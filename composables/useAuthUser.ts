@@ -9,9 +9,11 @@ export const useAuthUser = () => {
   const user = useCookie<User | undefined>("user");
 
   const register = async (state: {
+    company: string | undefined;
     firstName: string | undefined;
     lastName: string | undefined;
     email: string | undefined;
+    tel: string | undefined;
     password: string | undefined;
   }) => {
     try {
@@ -21,9 +23,11 @@ export const useAuthUser = () => {
       });
 
       Object.assign(state, {
+        company: undefined,
         firstName: undefined,
         lastName: undefined,
         email: undefined,
+        tel: undefined,
         password: undefined,
       });
 
@@ -51,10 +55,12 @@ export const useAuthUser = () => {
     password: string | undefined;
   }) => {
     try {
-      await $fetch("/api/login", {
+      const authTokenResponse = await $fetch("/api/login", {
         method: "POST",
         body: state,
       });
+
+      authToken.value = authTokenResponse;
 
       Object.assign(state, {
         email: undefined,

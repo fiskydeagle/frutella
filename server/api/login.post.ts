@@ -1,6 +1,7 @@
 import db from "@/models/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import mysql from "mysql2";
 
 interface Payload {
   email: string;

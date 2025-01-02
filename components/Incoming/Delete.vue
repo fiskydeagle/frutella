@@ -32,7 +32,6 @@ const isOpen = computed({
     :ui="{
       width: 'w-full sm:max-w-md',
     }"
-    class="max-w-md"
   >
     <UCard
       :ui="{

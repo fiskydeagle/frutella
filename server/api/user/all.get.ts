@@ -14,6 +14,10 @@ export default defineEventHandler(async (event) => {
   }
   return db.Users.findAll({
     include: ["createdByUser", "updatedByUser"],
+    order: [
+      ["verified", "ASC"],
+      ["createdAt", "DESC"],
+    ],
     paranoid: false,
   });
 });
