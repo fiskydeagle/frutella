@@ -262,54 +262,57 @@ const action = async (event: { event: string; row: any }) => {
         </UButton>
       </div>
     </div>
-    <DataTable
-      :dynamic-columns="true"
-      :identifier="'data-table-users'"
-      :columns="columns"
-      :rows="usersRows"
-      @on-action-click="action"
-    >
-      <template #role-data="{ row }">
-        <span class="capitalize">
-          {{ i18n.t("components.user.add." + row.role) }}
-        </span>
-      </template>
 
-      <template #image-data="{ row }">
-        <div class="flex justify-start" v-if="row.image">
-          <UPopover mode="hover" class="">
-            <img
-              :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${row.image}`"
-              class="w-10 h-10 rounded object-cover border border-gray-300"
-              alt="product image"
-            />
-            <template #panel>
-              <div class="p-2">
-                <img
-                  :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${row.image}`"
-                  class="w-auto h-auto max-h-60 rounded"
-                  alt="product image"
-                />
-              </div>
-            </template>
-          </UPopover>
-        </div>
-      </template>
+    <ClientOnly>
+      <DataTable
+        :dynamic-columns="true"
+        :identifier="'data-table-users'"
+        :columns="columns"
+        :rows="usersRows"
+        @on-action-click="action"
+      >
+        <template #role-data="{ row }">
+          <span class="capitalize">
+            {{ i18n.t("components.user.add." + row.role) }}
+          </span>
+        </template>
 
-      <template #city-data="{ row }">
-        {{ kosovoCities.find((city) => city.code === row.city)?.name }}
-      </template>
+        <template #image-data="{ row }">
+          <div class="flex justify-start" v-if="row.image">
+            <UPopover mode="hover" class="">
+              <img
+                :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${row.image}`"
+                class="w-10 h-10 rounded object-cover border border-gray-300"
+                alt="product image"
+              />
+              <template #panel>
+                <div class="p-2">
+                  <img
+                    :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${row.image}`"
+                    class="w-auto h-auto max-h-60 rounded"
+                    alt="product image"
+                  />
+                </div>
+              </template>
+            </UPopover>
+          </div>
+        </template>
 
-      <template #tel-data="{ row }">
-        <a v-if="row.tel" :href="`tel:${row.tel}`">{{ row.tel }}</a>
-      </template>
+        <template #city-data="{ row }">
+          {{ kosovoCities.find((city) => city.code === row.city)?.name }}
+        </template>
 
-      <template #googleMap-data="{ row }">
-        <a v-if="row.googleMap" :href="row.googleMap" target="_blank">
-          <UIcon name="ph:map-pin-duotone" size="30" />
-        </a>
-      </template>
-    </DataTable>
+        <template #tel-data="{ row }">
+          <a v-if="row.tel" :href="`tel:${row.tel}`">{{ row.tel }}</a>
+        </template>
+
+        <template #googleMap-data="{ row }">
+          <a v-if="row.googleMap" :href="row.googleMap" target="_blank">
+            <UIcon name="ph:map-pin-duotone" size="30" />
+          </a>
+        </template>
+      </DataTable>
+    </ClientOnly>
 
     <UserAdd
       :is-modal-open="userAddModal"

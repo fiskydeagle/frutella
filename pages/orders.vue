@@ -203,27 +203,30 @@ const action = async (event: { event: string; row: any }) => {
         </UButton>
       </div>
     </div>
+
     <p v-if="!orderUser" class="mt-6 text-xl text-center">
       {{ i18n.t("pages.orders.please-select-user") }}
     </p>
-    <DataTable
-      v-else
-      :dynamic-columns="true"
-      :identifier="'data-table-orders'"
-      :columns="columns"
-      :rows="ordersRows"
-      @on-action-click="action"
-    >
-      <template #orders-data="{ row }">
-        <p class="whitespace-normal">{{ row.orders }}</p>
-      </template>
 
-      <template #status-data="{ row }">
-        <span class="capitalize">
-          {{ i18n.t("components.order.cart.status." + row.status) }}
-        </span>
-      </template>
-    </DataTable>
+    <ClientOnly v-else>
+      <DataTable
+        :dynamic-columns="true"
+        :identifier="'data-table-orders'"
+        :columns="columns"
+        :rows="ordersRows"
+        @on-action-click="action"
+      >
+        <template #orders-data="{ row }">
+          <p class="whitespace-normal">{{ row.orders }}</p>
+        </template>
+
+        <template #status-data="{ row }">
+          <span class="capitalize">
+            {{ i18n.t("components.order.cart.status." + row.status) }}
+          </span>
+        </template>
+      </DataTable>
+    </ClientOnly>
   </div>
 
   <OrderAdd

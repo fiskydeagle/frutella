@@ -262,7 +262,7 @@ watch(
                 :options="kosovoCities"
                 value-attribute="code"
                 option-attribute="name"
-                :search-attributes="['name', 'colors']"
+                :search-attributes="['name']"
               />
             </UFormGroup>
 

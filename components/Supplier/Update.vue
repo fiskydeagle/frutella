@@ -19,6 +19,8 @@ type EmitType = {
 const props = defineProps<Props>();
 const emits = defineEmits<EmitType>();
 
+const { kosovoCities } = useUtils();
+
 const schema = object({
   company: string().required("Required"),
   image: mixed()
@@ -86,7 +88,7 @@ watch(
         tel: props.supplier.tel,
       });
     }
-  }
+  },
 );
 </script>
 
@@ -186,14 +188,25 @@ watch(
             :label="i18n.t('components.supplier.update.city')"
             name="city"
           >
-            <UInput v-model="state.city" />
+            <USelectMenu
+              v-model="state.city"
+              searchable
+              :searchable-placeholder="
+                i18n.t('components.supplier.update.search-city')
+              "
+              :placeholder="i18n.t('components.supplier.update.city')"
+              :options="kosovoCities"
+              value-attribute="code"
+              option-attribute="name"
+              :search-attributes="['name']"
+            />
           </UFormGroup>
           <UFormGroup
             size="lg"
             :label="i18n.t('components.supplier.update.address')"
             name="address"
           >
-            <UInput v-model="state.address" />
+            <UTextarea v-model="state.address" autoresize />
           </UFormGroup>
 
           <UFormGroup

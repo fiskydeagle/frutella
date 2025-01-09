@@ -33,6 +33,8 @@ const {
 } = useSupplier();
 await getSuppliers();
 
+const { kosovoCities } = useUtils();
+
 const columns = [
   {
     key: "id",
@@ -231,37 +233,41 @@ const action = async (event: { event: string; row: any }) => {
         </UButton>
       </div>
     </div>
-    <DataTable
-      :dynamic-columns="true"
-      :identifier="'data-table-suppliers'"
-      :columns="columns"
-      :rows="suppliersRows"
-      @on-action-click="action"
-    >
-      <template #company-data="{ row }">
-        <strong>{{ row.company }}</strong>
-      </template>
-      <template #image-data="{ row }">
-        <div class="flex justify-start" v-if="row.image">
-          <UPopover mode="hover" class="">
-            <img
-              :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${row.image}`"
-              class="w-10 h-10 rounded object-cover border border-gray-300"
-              alt="product image"
-            />
-            <template #panel>
-              <div class="p-2">
-                <img
-                  :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${row.image}`"
-                  class="w-auto h-auto max-h-60 rounded"
-                  alt="product image"
-                />
-              </div>
-            </template>
-          </UPopover>
-        </div>
-      </template>
-    </DataTable>
+
+    <ClientOnly>
+      <DataTable
+        :dynamic-columns="true"
+        :identifier="'data-table-suppliers'"
+        :columns="columns"
+        :rows="suppliersRows"
+        @on-action-click="action"
+      >
+        <template #image-data="{ row }">
+          <div class="flex justify-start" v-if="row.image">
+            <UPopover mode="hover" class="">
+              <img
+                :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${row.image}`"
+                class="w-10 h-10 rounded object-cover border border-gray-300"
+                alt="product image"
+              />
+              <template #panel>
+                <div class="p-2">
+                  <img
+                    :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${row.image}`"
+                    class="w-auto h-auto max-h-60 rounded"
+                    alt="product image"
+                  />
+                </div>
+              </template>
+            </UPopover>
+          </div>
+        </template>
+
+        <template #city-data="{ row }">
+          {{ kosovoCities.find((city) => city.code === row.city)?.name }}
+        </template>
+      </DataTable>
+    </ClientOnly>
 
     <SupplierAdd
       :is-modal-open="supplierAddModal"
