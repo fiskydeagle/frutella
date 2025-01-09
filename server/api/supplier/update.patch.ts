@@ -99,16 +99,7 @@ export default defineEventHandler(async (event) => {
 
   const supplier = await db.Suppliers.findOne({
     where: { id: query.id },
-    attributes: [
-      "id",
-      "company",
-      "image",
-      "firstName",
-      "lastName",
-      "city",
-      "address",
-      "tel",
-    ],
+    attributes: ["id", "image"],
     paranoid: false,
   });
 

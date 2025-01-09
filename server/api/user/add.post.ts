@@ -50,7 +50,7 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    const uploadDir = path.resolve(`${envPath}/products/${dateNow}`);
+    const uploadDir = path.resolve(`${envPath}/users/${dateNow}`);
     const filePath = path.join(uploadDir, uploadedImage.filename);
 
     // Ensure the directory exists
@@ -60,7 +60,6 @@ export default defineEventHandler(async (event) => {
 
     // Save the file
     fs.writeFileSync(filePath, uploadedImage.data);
-
     filename = uploadedImage.filename;
   }
 
@@ -74,7 +73,7 @@ export default defineEventHandler(async (event) => {
         email: query.email,
         role: query.role,
         password: hashedPassword,
-        image: `/products/${dateNow}/${filename}`,
+        image: `/users/${dateNow}/${filename}`,
         city: query.city,
         address: query.address,
         tel: query.tel,
