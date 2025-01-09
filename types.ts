@@ -86,3 +86,21 @@ export interface Product {
   createdByUser?: User;
   updatedByUser?: User;
 }
+
+export interface Supplier {
+  id: number;
+  company: string;
+  image: string;
+  firstName: string;
+  lastName: string;
+  city: string;
+  address: string;
+  tel: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  createdBy: string;
+  updatedBy: string;
+  createdByUser?: User;
+  updatedByUser?: User;
+}
