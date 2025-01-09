@@ -115,6 +115,25 @@ pages:
     restore: "Rikthe"
     delete: "Fshije"
     add-product: "Shto Produkt"
+  suppliers:
+    suppliers: "Furnitorët"
+    id: "ID"
+    company: "Kompania"
+    image: "Fotografija"
+    firstName: "Emri"
+    lastName: "Mbiemri"
+    city: "Qyteti"
+    address: "Address"
+    tel: "Telefoni"
+    created-at: "Krijuar Më"
+    updated-at: "Përditësuar Më"
+    created-by: "Krijuar Nga"
+    updated-by: "Përditësuar Nga"
+    update: "Përditëso"
+    deactivate: "Deaktivizo"
+    restore: "Rikthe"
+    delete: "Fshije"
+    add-supplier: "Shto Furnitorë"
 components:
   left-navigation:
     home: "Ballina"
@@ -125,6 +144,7 @@ components:
     users: "Përdoruesit"
     products: "Produktet"
     navigation: "Navigimi"
+    suppliers: "Furnitorët"
   user:
     add:
       sort: "Numri rendor"
@@ -257,6 +277,38 @@ components:
         processing: "Në Proces"
         done: "E Dorëzuar"
         canceled: "E Anuluar"
+  supplier:
+    add:
+      company: "Kompania"
+      image: "Fotografija"
+      firstName: "Emri"
+      lastName: "Mbiemri"
+      city: "Qyteti"
+      address: "Adresa"
+      tel: "Telefoni"
+      drop-or-click-upload: "Lësho foton këtu ose kliko per të ngarkuar."
+      add-supplier: "Shto Furnitorë"
+      cancel: "Anulo"
+      add: "Shto"
+      toasts:
+        supplier-added: "Supplier added!"
+    update:
+      company: "Kompania"
+      image: "Fotografija"
+      firstName: "Emri"
+      lastName: "Mbiemri"
+      city: "Qyteti"
+      address: "Adresa"
+      tel: "Telefoni"
+      drop-or-click-upload: "Lësho foton këtu ose kliko per të ngarkuar."
+      update-supplier: "Përditëso Furnitorin"
+      cancel: "Anulo"
+      update: "Përditëso"
+      toasts:
+        supplier-updated: "Furnitori është Përditësuar!"
+        supplier-deactivated: "Furnitori është Deaktivizuar!"
+        supplier-restored: "Furnitori është Kthyer!"
+        supplier-deleted: "Furnitori është Fshirë!"
 validations:
   user-not-found: "Përdoruesi nuk u gjet!"
   invalid-email-password: "Emaili i përdoruesit ose fjalëkalimi është gabim."
@@ -275,3 +327,4 @@ page-titles:
   register: "Regjistrohu"
   users: "Përdoruesit"
   products: "Produktet"
+  suppliers: "Furnitorët"

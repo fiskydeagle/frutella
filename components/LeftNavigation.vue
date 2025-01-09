@@ -40,6 +40,12 @@ const links = computed(() => {
       });
 
       topLinks.push({
+        label: i18n.t("components.left-navigation.suppliers"),
+        icon: "ph:truck-duotone",
+        to: { name: "suppliers" },
+      });
+
+      topLinks.push({
         label: i18n.t("components.left-navigation.users"),
         icon: "ph:users-three-duotone",
         to: { name: "users" },
@@ -81,7 +87,7 @@ watch(
   () => route.path,
   () => {
     isOpen.value = false;
-  },
+  }
 );
 </script>
 <template>
