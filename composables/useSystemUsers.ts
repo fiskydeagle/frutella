@@ -8,7 +8,6 @@ export const useSystemUsers = () => {
   const { user } = useAuthUser();
 
   const users = ref<User[]>();
-
   const getUsers = async () => {
     try {
       users.value = await $fetch("/api/user/all", {
@@ -312,6 +311,15 @@ export const useSystemUsers = () => {
     return true;
   };
 
+  const customers = ref<User[]>();
+  const getCustomers = async () => {
+    try {
+      customers.value = await $fetch("/api/user/customers", {
+        method: "GET",
+      });
+    } catch (error: any) {}
+  };
+
   return {
     users,
     getUsers,
@@ -323,5 +331,8 @@ export const useSystemUsers = () => {
     deleteUser,
     updateProfile,
     changePassword,
+
+    customers,
+    getCustomers,
   };
 };

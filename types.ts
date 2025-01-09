@@ -1,3 +1,5 @@
+import { number } from "yup";
+
 export type DataTableColumnsType = {
   key: string;
   label: string;
@@ -12,7 +14,7 @@ export enum UserRole {
 }
 
 export interface User {
-  id: number;
+  id: string | number;
   sort: number;
   company: string;
   firstName: string;
@@ -73,13 +75,6 @@ export enum UnitType {
   Box = "box",
 }
 
-export interface ProductsOrders {
-  productId: number;
-  orderId: number;
-  qty: number;
-  price: number;
-}
-
 export interface Product {
   id: number;
   name: string;
@@ -92,21 +87,68 @@ export interface Product {
   updatedBy: string;
   createdByUser?: User;
   updatedByUser?: User;
-  productsOrders?: ProductsOrders;
+}
+
+export enum OrderStatus {
+  Processing = "processing",
+  Done = "done",
+  Canceled = "canceled",
 }
 
 export interface Order {
   id: number;
   userId: number;
-  status: boolean;
-  payed: boolean;
+  productId: number;
+  status: OrderStatus;
+  orderQty: number;
+  qty: number;
+  price?: number;
+  salePrice?: number;
+  comment?: string;
+  date: string | number;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  updatedBy: string;
+  user: User;
+  product: Product;
+  createdByUser?: User;
+  updatedByUser?: User;
+  productName?: string;
+  productImage?: string;
+  productUnitType?: string;
+  createdByUserFirstName?: string;
+  createdByUserLastName?: string;
+  updatedByUserFirstName?: string;
+  updatedByUserLastName?: string;
+}
+
+export interface GroupedOrder {
+  date: string | number;
+  rows: Order[];
+  user: User;
+  status: OrderStatus;
+}
+
+export type OrderState = {
+  productId: number;
+  qty?: number;
+  orderId?: number;
+};
+
+export interface Purchase {
+  id: number;
+  productId: number;
+  qty: number;
+  price?: number;
+  supplierId: number;
+  date: string | number;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
   createdBy: string;
   updatedBy: string;
-  user: User;
-  products: Product[];
+  product: Product;
   createdByUser?: User;
   updatedByUser?: User;
 }

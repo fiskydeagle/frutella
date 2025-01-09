@@ -1,6 +1,8 @@
 common:
   load-more: "Listo më tepër"
   size: "Kapaciteti"
+  for: "për"
+  date: "datën"
 layout:
   account-not-verified: "Llogaria juaj nuk është aktive, ju lutemi prisni derisa një administrator të verifikojë llogarinë tuaj."
 pages:
@@ -43,6 +45,13 @@ pages:
       updated-password: "Fjalëkalimi është Ndrruar!"
   orders:
     orders: "Porositë"
+    order: "Porosit"
+    user: "Përdoruesi"
+    date: "Data"
+    status: "Statusi"
+    choose-user: "Zgjedh përdoruesin"
+    please-select-user: "Ju lutemi zgjidhni fillimisht një përdorues."
+    show-cart: "Shiko shportën"
   profile:
     profile: "Profili"
     company: "Kompania"
@@ -234,6 +243,20 @@ components:
         product-deactivated: "Produkti është Deaktivizuar!"
         product-restored: "Produkti është Kthyer!"
         product-deleted: "Produkti është Fshirë!"
+  order:
+    add:
+      order: "Porosit"
+      cancel: "Anulo"
+      update: "Përditëso"
+      toasts:
+        order-added: "Porosia u shtua/përditësua!"
+    cart:
+      cart: "Shporta"
+      close: "Mbylle"
+      status:
+        processing: "Në Proces"
+        done: "E Dorëzuar"
+        canceled: "E Anuluar"
 validations:
   user-not-found: "Përdoruesi nuk u gjet!"
   invalid-email-password: "Emaili i përdoruesit ose fjalëkalimi është gabim."

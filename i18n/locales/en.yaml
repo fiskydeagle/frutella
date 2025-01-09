@@ -1,6 +1,8 @@
 common:
   load-more: "Load more"
   size: "Size"
+  for: "for"
+  date: "date"
 layout:
   account-not-verified: "Your account is not active, please wait until an Admin verifies your account."
 pages:
@@ -43,6 +45,13 @@ pages:
       updated-password: "Password Changed!"
   orders:
     orders: "orders"
+    order: "order"
+    user: "User"
+    date: "Date"
+    status: "Status"
+    choose-user: "Choose user"
+    please-select-user: "Please select a User first."
+    show-cart: "Show Cart"
   profile:
     profile: "Profile"
     company: "Company"
@@ -234,6 +243,20 @@ components:
         product-deactivated: "Product Deactivated!"
         product-restored: "Product Restored!"
         product-deleted: "Product Deleted!"
+  order:
+    add:
+      order: "Order"
+      cancel: "Cancel"
+      update: "Update"
+      toasts:
+        order-added: "Order added/updated!"
+    cart:
+      cart: "Cart"
+      close: "Close"
+      status:
+        processing: "Processing"
+        done: "Done"
+        canceled: "Canceled"
 validations:
   user-not-found: "User not found!"
   invalid-email-password: "Invalid Email or password."

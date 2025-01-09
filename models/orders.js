@@ -13,10 +13,9 @@ export default (sequelize, DataTypes) => {
         foreignKey: "userId",
         as: "user",
       });
-      models["Orders"].belongsToMany(models["Products"], {
-        through: models["ProductsOrders"],
-        foreignKey: "orderId",
-        as: "products",
+      models["Orders"].belongsTo(models["Products"], {
+        foreignKey: "productId",
+        as: "product",
       });
       models["Orders"].belongsTo(models["Users"], {
         foreignKey: "createdBy",
@@ -32,13 +31,18 @@ export default (sequelize, DataTypes) => {
   Orders.init(
     {
       userId: DataTypes.INTEGER,
-      status: DataTypes.BOOLEAN,
-      payed: DataTypes.BOOLEAN,
+      productId: DataTypes.INTEGER,
+      status: DataTypes.STRING,
+      orderQty: DataTypes.INTEGER,
+      qty: DataTypes.INTEGER,
+      price: DataTypes.DOUBLE(10, 2),
+      salePrice: DataTypes.DOUBLE(10, 2),
+      comment: DataTypes.STRING,
+      date: DataTypes.DATEONLY,
     },
     {
       sequelize,
       modelName: "Orders",
-      paranoid: true,
     },
   );
   return Orders;
