@@ -29,20 +29,20 @@ export default defineEventHandler(async (event) => {
 
   const query: Payload = await getQuery(event);
 
+  let filename;
+  const dateNow = Date.now();
   const formData = await readMultipartFormData(event);
 
-  if (!formData) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "validations.something-wrong",
-    });
-  }
+  if (formData && formData.length) {
+    const uploadedImage = formData.find((file) => file.name === "image");
 
-  const uploadedImage = formData.find((file) => file.name === "image");
-  let fileName = null;
+    if (!uploadedImage || !uploadedImage.filename) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "validations.something-wrong",
+      });
+    }
 
-  if (uploadedImage && uploadedImage.filename) {
-    const dateNow = Date.now();
     const uploadDir = path.resolve(`${envPath}/suppliers/${dateNow}`);
     const filePath = path.join(uploadDir, uploadedImage.filename);
 
@@ -53,21 +53,35 @@ export default defineEventHandler(async (event) => {
 
     // Save the file
     fs.writeFileSync(filePath, uploadedImage.data);
-    fileName = `/${dateNow}/${uploadedImage.filename}`;
+    filename = uploadedImage.filename;
   }
 
   try {
-    return await db.Suppliers.create({
-      company: query.company,
-      image: fileName,
-      firstName: query.firstName,
-      lastName: query.lastName,
-      city: query.city,
-      address: query.address,
-      tel: query.tel,
-      createdBy: event.context.user.id,
-      updatedBy: event.context.user.id,
-    });
+    if (filename) {
+      return await db.Suppliers.create({
+        company: query.company,
+        image: `/suppliers/${dateNow}/${filename}`,
+        firstName: query.firstName,
+        lastName: query.lastName,
+        city: query.city,
+        address: query.address,
+        tel: query.tel,
+        createdBy: event.context.user.id,
+        updatedBy: event.context.user.id,
+      });
+    } else {
+      return await db.Suppliers.create({
+        company: query.company,
+        image: filename,
+        firstName: query.firstName,
+        lastName: query.lastName,
+        city: query.city,
+        address: query.address,
+        tel: query.tel,
+        createdBy: event.context.user.id,
+        updatedBy: event.context.user.id,
+      });
+    }
   } catch (error: any) {
     if (error instanceof Sequelize.ValidationError) {
       throw createError({

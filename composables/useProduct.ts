@@ -7,10 +7,13 @@ export const useProduct = () => {
 
   const products = ref<Product[]>();
 
-  const getProducts = async () => {
+  const getProducts = async (paranoid: boolean = false) => {
     try {
       products.value = await $fetch("/api/product/all", {
         method: "GET",
+        query: {
+          paranoid,
+        },
       });
     } catch (error: any) {}
   };

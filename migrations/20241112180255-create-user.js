@@ -63,6 +63,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
+      sellingPercentage: {
+        allowNull: false,
+        type: Sequelize.DOUBLE(10, 2),
+        defaultValue: 1.1,
+      },
       createdBy: {
         allowNull: true,
         type: Sequelize.INTEGER,

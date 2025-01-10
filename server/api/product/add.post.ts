@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
 
   const formData = await readMultipartFormData(event);
 
-  if (!formData) {
+  if (!formData || !formData.length) {
     throw createError({
       statusCode: 400,
       statusMessage: "validations.something-wrong",
@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const dateNow = Date.now();
-  const uploadDir = path.resolve(`${envPath}/${dateNow}`);
+  const uploadDir = path.resolve(`${envPath}/products/${dateNow}`);
   const filePath = path.join(uploadDir, uploadedImage.filename);
 
   // Ensure the directory exists
@@ -58,7 +58,7 @@ export default defineEventHandler(async (event) => {
   try {
     return await db.Products.create({
       name: query.name,
-      image: `/${dateNow}/${uploadedImage.filename}`,
+      image: `/products/${dateNow}/${uploadedImage.filename}`,
       unitType: query.unitType,
       createdBy: event.context.user.id,
       updatedBy: event.context.user.id,
