@@ -134,23 +134,6 @@ export type OrderState = {
   orderId?: number;
 };
 
-export interface Purchase {
-  id: number;
-  productId: number;
-  qty: number;
-  price?: number;
-  supplierId: number;
-  date: string | number;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
-  createdBy: string;
-  updatedBy: string;
-  product: Product;
-  createdByUser?: User;
-  updatedByUser?: User;
-}
-
 export interface Supplier {
   id: number;
   company: string;
@@ -167,4 +150,22 @@ export interface Supplier {
   updatedBy: string;
   createdByUser?: User;
   updatedByUser?: User;
+}
+
+export interface Purchase {
+  id: number;
+  productId: number;
+  qty: number;
+  price?: number;
+  supplierId: number;
+  date: string | number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  createdBy: string;
+  updatedBy: string;
+  product: Product;
+  createdByUser?: User;
+  updatedByUser?: User;
+  supplier?: Supplier;
 }

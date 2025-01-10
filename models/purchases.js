@@ -20,6 +20,10 @@ export default (sequelize, DataTypes) => {
         foreignKey: "updatedBy",
         as: "updatedByUser",
       });
+      models["Purchases"].belongsTo(models["Suppliers"], {
+        foreignKey: "supplierId",
+        as: "supplier",
+      });
     }
   }
 

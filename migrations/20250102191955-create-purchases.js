@@ -29,8 +29,14 @@ module.exports = {
         type: Sequelize.DOUBLE(10, 2),
       },
       supplierId: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.INTEGER,
+        references: {
+          model: "Suppliers",
+          key: "id",
+        },
+        onUpdate: "NO ACTION", // Do nothing on update
+        onDelete: "SET NULL",
       },
       date: {
         allowNull: false,
