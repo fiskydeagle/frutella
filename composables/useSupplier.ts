@@ -6,10 +6,13 @@ export const useSupplier = () => {
 
   const suppliers = ref<Supplier[]>();
 
-  const getSuppliers = async () => {
+  const getSuppliers = async (paranoid: boolean = false) => {
     try {
       suppliers.value = await $fetch("/api/supplier/all", {
         method: "GET",
+        query: {
+          paranoid,
+        },
       });
     } catch (error: any) {}
   };

@@ -134,6 +134,13 @@ pages:
     restore: "Rikthe"
     delete: "Fshije"
     add-supplier: "Shto Furnitorë"
+  purchases:
+    purchases: "Blerjet"
+    purchase: "Blejë"
+    date: "Data"
+    purchased-at: "Është Blere Më"
+    purchased-by: "Është Blere Nga"
+    show-purchases: "Shiko blerjet"
 components:
   left-navigation:
     home: "Ballina"
@@ -145,6 +152,7 @@ components:
     products: "Produktet"
     navigation: "Navigimi"
     suppliers: "Furnitorët"
+    purchases: "Blerjet"
   user:
     add:
       sort: "Numri rendor"
@@ -292,7 +300,7 @@ components:
       cancel: "Anulo"
       add: "Shto"
       toasts:
-        supplier-added: "Supplier added!"
+        supplier-added: "Furnitori u shtua!"
     update:
       company: "Kompania"
       image: "Fotografija"
@@ -311,6 +319,24 @@ components:
         supplier-deactivated: "Furnitori është Deaktivizuar!"
         supplier-restored: "Furnitori është Kthyer!"
         supplier-deleted: "Furnitori është Fshirë!"
+  purchase:
+    add:
+      purchase: "Blejë"
+      price: "Çmimi"
+      total-price: "Çmimi Total"
+      supplier: "Furnitori"
+      new-supplier: "Furnitor i ri"
+      select-supplier: "Zgjedhe furnitorin"
+      split: "Ndaj"
+      remove: "Largo"
+      cancel: "Anulo"
+      update: "Përditëso"
+      no-orders: "Nuk ka porosi per sot!"
+      toasts:
+        purchase-added: "Blerja u shtua/përditësua!"
+    cart:
+      purchases: "Blerjet"
+      close: "Mbylle"
 validations:
   user-not-found: "Përdoruesi nuk u gjet!"
   invalid-email-password: "Emaili i përdoruesit ose fjalëkalimi është gabim."
@@ -330,3 +356,4 @@ page-titles:
   users: "Përdoruesit"
   products: "Produktet"
   suppliers: "Furnitorët"
+  purchases: "Blerjet"
