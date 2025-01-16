@@ -38,7 +38,6 @@ export default (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Purchases",
-      paranoid: true,
     },
   );
   return Purchases;

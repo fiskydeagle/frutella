@@ -18,7 +18,7 @@ useHead(() => {
 });
 
 definePageMeta({
-  middleware: ["auth", "verified", "admin"],
+  middleware: ["auth", "verified", "employee"],
 });
 
 const {

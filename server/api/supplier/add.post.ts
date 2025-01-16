@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
   if (
     !event.context.user ||
     !event.context.user.role ||
-    event.context.user.role !== UserRole.ADMIN
+    ![UserRole.EMPLOYEE, UserRole.ADMIN].includes(event.context.user.role)
   ) {
     throw createError({
       statusCode: 403,

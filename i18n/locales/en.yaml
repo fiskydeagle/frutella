@@ -134,6 +134,13 @@ pages:
     restore: "Restore"
     delete: "Delete"
     add-supplier: "Add Supplier"
+  purchases:
+    purchases: "Purchases"
+    purchase: "Purchase"
+    date: "Date"
+    purchased-at: "Purchased At"
+    purchased-by: "Purchased By"
+    show-purchases: "Show purchases"
 components:
   left-navigation:
     home: "Home"
@@ -145,6 +152,7 @@ components:
     products: "Products"
     navigation: "Navigation"
     suppliers: "Suppliers"
+    purchases: "Purchases"
   user:
     add:
       sort: "Sort number"
@@ -311,6 +319,24 @@ components:
         supplier-deactivated: "Supplier Deactivated!"
         supplier-restored: "Supplier Restored!"
         supplier-deleted: "Supplier Deleted!"
+  purchase:
+    add:
+      purchase: "Purchase"
+      price: "Price"
+      total-price: "Total Price"
+      supplier: "supplier"
+      new-supplier: "New supplier"
+      select-supplier: "Select supplier"
+      split: "Split"
+      remove: "Remove"
+      cancel: "Cancel"
+      update: "Update"
+      no-orders: "No Orders for today!"
+      toasts:
+        purchase-added: "Purchase added/updated!"
+    cart:
+      purchases: "Purchases"
+      close: "Close"
 validations:
   user-not-found: "User not found!"
   invalid-email-password: "Invalid Email or password."
@@ -330,3 +356,4 @@ page-titles:
   users: "Users"
   products: "Products"
   suppliers: "Suppliers"
+  purchases: "Purchases"

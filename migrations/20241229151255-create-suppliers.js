@@ -12,6 +12,7 @@ module.exports = {
       company: {
         allowNull: false,
         type: Sequelize.STRING,
+        unique: true,
       },
       image: {
         allowNull: true,

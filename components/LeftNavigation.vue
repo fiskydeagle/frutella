@@ -8,13 +8,7 @@ const route = useRoute();
 
 const links = computed(() => {
   const links: any = [];
-  const topLinks = [
-    {
-      label: i18n.t("components.left-navigation.orders"),
-      icon: "ph:shopping-cart-duotone",
-      to: { name: "orders" },
-    },
-  ];
+  const topLinks = [];
 
   if (user.value && authToken.value) {
     const userLinks = [
@@ -40,12 +34,6 @@ const links = computed(() => {
       });
 
       topLinks.push({
-        label: i18n.t("components.left-navigation.suppliers"),
-        icon: "ph:truck-duotone",
-        to: { name: "suppliers" },
-      });
-
-      topLinks.push({
         label: i18n.t("components.left-navigation.users"),
         icon: "ph:users-three-duotone",
         to: { name: "users" },
@@ -58,7 +46,23 @@ const links = computed(() => {
         icon: "ph:chart-line-up-duotone",
         to: { name: "incoming" },
       });
+      topLinks.push({
+        label: i18n.t("components.left-navigation.suppliers"),
+        icon: "ph:truck-duotone",
+        to: { name: "suppliers" },
+      });
+      topLinks.push({
+        label: i18n.t("components.left-navigation.purchases"),
+        icon: "ph:money-wavy-duotone",
+        to: { name: "purchases" },
+      });
     }
+
+    topLinks.push({
+      label: i18n.t("components.left-navigation.orders"),
+      icon: "ph:shopping-cart-duotone",
+      to: { name: "orders" },
+    });
 
     links.push(topLinks);
     links.push(userLinks);
@@ -87,7 +91,7 @@ watch(
   () => route.path,
   () => {
     isOpen.value = false;
-  }
+  },
 );
 </script>
 <template>

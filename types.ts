@@ -128,11 +128,11 @@ export interface GroupedOrder {
   status: OrderStatus;
 }
 
-export type OrderState = {
+export interface OrderState {
   productId: number;
   qty?: number;
   orderId?: number;
-};
+}
 
 export interface Supplier {
   id: number;
@@ -153,19 +153,42 @@ export interface Supplier {
 }
 
 export interface Purchase {
-  id: number;
+  id: number | null;
   productId: number;
-  qty: number;
+  qty: number | null;
+  totalOrderQty: number;
   price?: number;
-  supplierId: number;
+  supplierId: number | null;
   date: string | number;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string | null;
   createdBy: string;
   updatedBy: string;
   product: Product;
   createdByUser?: User;
   updatedByUser?: User;
   supplier?: Supplier;
+  productName?: string;
+  productImage?: string;
+  productUnitType?: string;
+  supplierName?: string;
+  createdByUserFirstName?: string;
+  createdByUserLastName?: string;
+  updatedByUserFirstName?: string;
+  updatedByUserLastName?: string;
+  splitId?: number | string | null;
+}
+
+export interface GroupedPurchase {
+  date: string | number;
+  rows: Purchase[];
+  createdBy: User;
+}
+
+export interface PurchaseState {
+  productId: number;
+  qty?: number;
+  price?: number;
+  purchaseId?: number;
+  supplierName: string;
 }
