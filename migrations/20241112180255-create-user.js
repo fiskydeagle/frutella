@@ -48,7 +48,7 @@ module.exports = {
       },
       googleMap: {
         allowNull: true,
-        type: Sequelize.STRING,
+        type: DataTypes.TEXT,
       },
       role: {
         allowNull: false,
