@@ -118,7 +118,7 @@ const isOpen = computed({
                 type="number"
                 :min="0"
                 :disabled="true"
-                :model-value="order.qty || order.orderQty"
+                :model-value="order.qty || 0"
                 class="w-full sm:w-28"
               />
             </div>
