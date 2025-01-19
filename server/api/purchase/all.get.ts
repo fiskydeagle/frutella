@@ -62,6 +62,7 @@ export default defineEventHandler(async (event) => {
             '","updatedByUserLastName":"', COALESCE(updatedByUser.lastName, ''), 
             '"}'
           )
+          ORDER BY product.name ASC
         `),
           ),
           "rows",
