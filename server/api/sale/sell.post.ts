@@ -37,6 +37,10 @@ export default defineEventHandler(async (event) => {
     salePrice: sale.salePrice,
     status,
     updatedBy: event.context.user.id,
+    userId: 1,
+    productId: 1,
+    orderQty: 0,
+    date: "2025-01-01",
   }));
 
   try {
