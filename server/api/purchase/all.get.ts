@@ -15,6 +15,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
+    await db.sequelize.query("SET SESSION group_concat_max_len = 100000000;");
     const purchasesResponse = await db.Purchases.findAll({
       order: [["date", "DESC"]],
       include: [

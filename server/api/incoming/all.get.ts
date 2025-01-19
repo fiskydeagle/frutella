@@ -21,6 +21,7 @@ export default defineEventHandler(async (event) => {
   const query: Payload = getQuery(event);
 
   try {
+    await db.sequelize.query("SET SESSION group_concat_max_len = 100000000;");
     const { count, rows: incomings } = await db.Incomings.findAndCountAll({
       limit: +query.offset + +query.limit,
       order: [["createdAt", "DESC"]],

@@ -20,6 +20,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
+    await db.sequelize.query("SET SESSION group_concat_max_len = 100000000;");
     const ordersResponse = await db.Orders.findAll({
       order: [["date", "DESC"]],
       where: {
@@ -75,7 +76,7 @@ export default defineEventHandler(async (event) => {
         "status",
         [db.Sequelize.fn("DATE", db.Sequelize.col("Orders.date")), "date"],
       ],
-      group: ["date", "userId"],
+      group: ["date", "userId", "status"],
     });
     return ordersResponse.map((order) => {
       const rows = JSON.parse(`[${order.dataValues.rows}]`).map((row: any) => ({
