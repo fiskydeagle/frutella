@@ -117,6 +117,7 @@ const isOpen = computed({
               <UInput
                 type="number"
                 :min="0"
+                :disabled="true"
                 :model-value="order.qty || order.orderQty"
                 class="w-full sm:w-28"
               />
