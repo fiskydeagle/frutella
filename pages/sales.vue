@@ -219,7 +219,7 @@ const action = async (event: { event: string; row: any }) => {
         <template #user-data="{ row }">
           <div class="flex justify-start" v-if="row.image">
             <UPopover mode="hover">
-              <div class="flex gap-2 items-center">
+              <div class="flex justify-center flex-wrap gap-2 items-center">
                 <img
                   :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${row.image}`"
                   class="w-10 h-10 rounded object-cover border border-gray-300"
