@@ -1,47 +1,55 @@
-import type { GroupedOrder, Order, OrderState, User } from "~/types";
+import type {
+  GroupedOrder,
+  Order,
+  OrderState,
+  SaleInfo,
+  SaleState,
+  User,
+} from "~/types";
 
-export const useOrder = () => {
+export const useSale = () => {
   const toast = useToast();
   const i18n = useI18n();
 
+  const searchWord = ref<string>();
   const orderUser = ref<User | undefined>(undefined);
 
   const orders = ref<GroupedOrder[]>();
   const getOrders = async () => {
     try {
-      orders.value = await $fetch("/api/order/all-user", {
+      orders.value = await $fetch("/api/order/all", {
+        method: "GET",
+      });
+    } catch (error: any) {}
+  };
+
+  const salesInfo = ref<SaleInfo[]>();
+  const getSalesInfo = async (
+    userId: string | number,
+    date: string | number,
+  ) => {
+    try {
+      salesInfo.value = await $fetch("/api/sale/sales-info", {
         method: "GET",
         query: {
-          userId: orderUser.value?.id,
+          userId,
+          date,
         },
       });
     } catch (error: any) {}
   };
 
-  const currentOrders = ref<Order[]>();
-  const getCurrentOrders = async () => {
+  const sell = async (state: SaleState[]) => {
     try {
-      currentOrders.value = await $fetch("/api/order/current", {
-        method: "GET",
-        query: {
-          userId: orderUser.value?.id,
-        },
-      });
-    } catch (error: any) {}
-  };
-
-  const addOrder = async (state: OrderState[], userId: number | string) => {
-    try {
-      await $fetch("/api/order/add", {
+      await $fetch("/api/sale/sell", {
         method: "POST",
         body: {
-          orders: state,
-          userId,
+          sales: state,
         },
       });
 
       toast.add({
-        title: i18n.t("components.order.add.toasts.order-added"),
+        title: i18n.t("components.sales.sale.toasts.action-success"),
         color: "green",
         icon: "i-lucide-check-circle",
       });
@@ -61,11 +69,12 @@ export const useOrder = () => {
   };
 
   return {
+    searchWord,
     orderUser,
     orders,
     getOrders,
-    currentOrders,
-    getCurrentOrders,
-    addOrder,
+    getSalesInfo,
+    salesInfo,
+    sell,
   };
 };

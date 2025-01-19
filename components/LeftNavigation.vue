@@ -56,11 +56,16 @@ const links = computed(() => {
         icon: "ph:money-wavy-duotone",
         to: { name: "purchases" },
       });
+      topLinks.push({
+        label: i18n.t("components.left-navigation.sales"),
+        icon: "ph:handshake-duotone",
+        to: { name: "sales" },
+      });
     }
 
     topLinks.push({
       label: i18n.t("components.left-navigation.orders"),
-      icon: "ph:shopping-cart-duotone",
+      icon: "ph:shopping-cart-simple-duotone",
       to: { name: "orders" },
     });
 

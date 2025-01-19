@@ -46,8 +46,9 @@ pages:
   orders:
     orders: "orders"
     order: "order"
-    user: "User"
+    client: "Client"
     date: "Date"
+    total-price: "Total Price"
     status: "Status"
     choose-user: "Choose user"
     please-select-user: "Please select a User first."
@@ -138,9 +139,23 @@ pages:
     purchases: "Purchases"
     purchase: "Purchase"
     date: "Date"
+    total-price: "Total Price"
     purchased-at: "Purchased At"
     purchased-by: "Purchased By"
     show-purchases: "Show purchases"
+  sales:
+    sales: "Sales"
+    sale: "Sale"
+    client: "Client"
+    city: "City"
+    address: "Address"
+    google-map-link: "Map"
+    date: "Date"
+    total-price: "Total Price"
+    status: "Status"
+    action: "Action"
+    search: "Search"
+    show-sales: "Show Sales"
 components:
   left-navigation:
     home: "Home"
@@ -153,6 +168,7 @@ components:
     navigation: "Navigation"
     suppliers: "Suppliers"
     purchases: "Purchases"
+    sales: "Sales"
   user:
     add:
       sort: "Sort number"
@@ -280,6 +296,8 @@ components:
         order-added: "Order added/updated!"
     cart:
       cart: "Cart"
+      price: "Price"
+      total-price: "Total Price"
       close: "Close"
       status:
         processing: "Processing"
@@ -337,6 +355,18 @@ components:
     cart:
       purchases: "Purchases"
       close: "Close"
+  sales:
+    sale:
+      sale: "Sale"
+      price: "Price"
+      total-price: "Total Price"
+      comment: "comment"
+      close: "Close"
+      cancel: "Cancel"
+      finish: "Finish"
+      no-purchases: "No Purchases for today!"
+      toasts:
+        action-success: "Action as been done successfully."
 validations:
   user-not-found: "User not found!"
   invalid-email-password: "Invalid Email or password."
@@ -357,3 +387,4 @@ page-titles:
   products: "Products"
   suppliers: "Suppliers"
   purchases: "Purchases"
+  sales: "Sales"

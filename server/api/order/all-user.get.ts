@@ -1,39 +1,30 @@
 import db from "@/models/index.js";
-import { OrderStatus, UserRole } from "~/types";
+import { UserRole } from "~/types";
+
+interface Payload {
+  userId: number;
+}
 
 export default defineEventHandler(async (event) => {
-  if (
-    !event.context.user ||
-    !event.context.user.role ||
-    ![UserRole.EMPLOYEE, UserRole.ADMIN].includes(event.context.user.role)
-  ) {
+  if (!event.context.user) {
     throw createError({
       statusCode: 403,
       statusMessage: "validations.not-authorized",
     });
   }
 
-  const date = new Date();
-  const h = date.getHours();
-  if (h < 4) {
-    date.setDate(date.getDate() - 1);
+  const query: Payload = await getQuery(event);
+
+  if (![UserRole.EMPLOYEE, UserRole.ADMIN].includes(event.context.user.role)) {
+    query.userId = event.context.user.id;
   }
 
   try {
     const ordersResponse = await db.Orders.findAll({
+      order: [["date", "DESC"]],
       where: {
-        date: {
-          [db.Sequelize.Op.lte]: date,
-        },
+        userId: query.userId,
       },
-      order: [
-        [
-          db.Sequelize.literal(`Orders.status = "${OrderStatus.Processing}"`),
-          "DESC",
-        ],
-        ["date", "DESC"],
-        [{ model: db.Users, as: "user" }, "sort", "ASC"],
-      ],
       include: [
         "user",
         {

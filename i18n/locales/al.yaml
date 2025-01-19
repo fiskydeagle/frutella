@@ -46,8 +46,9 @@ pages:
   orders:
     orders: "Porositë"
     order: "Porosit"
-    user: "Përdoruesi"
+    client: "Klienti"
     date: "Data"
+    total-price: "Çmimi Total"
     status: "Statusi"
     choose-user: "Zgjedh përdoruesin"
     please-select-user: "Ju lutemi zgjidhni fillimisht një përdorues."
@@ -138,9 +139,23 @@ pages:
     purchases: "Blerjet"
     purchase: "Blejë"
     date: "Data"
+    total-price: "Çmimi Total"
     purchased-at: "Është Blere Më"
     purchased-by: "Është Blere Nga"
     show-purchases: "Shiko blerjet"
+  sales:
+    sales: "Shitjet"
+    sale: "Shitje"
+    client: "Klienti"
+    city: "Qyteti"
+    address: "Adresa"
+    google-map-link: "Map"
+    date: "Data"
+    total-price: "Çmimi Total"
+    status: "Statusi"
+    action: "Veprimi"
+    search: "Kërko"
+    show-sales: "Shiko shitjet"
 components:
   left-navigation:
     home: "Ballina"
@@ -153,6 +168,7 @@ components:
     navigation: "Navigimi"
     suppliers: "Furnitorët"
     purchases: "Blerjet"
+    sales: "Shitjet"
   user:
     add:
       sort: "Numri rendor"
@@ -280,6 +296,8 @@ components:
         order-added: "Porosia u shtua/përditësua!"
     cart:
       cart: "Shporta"
+      price: "Çmimi"
+      total-price: "Çmimi Total"
       close: "Mbylle"
       status:
         processing: "Në Proces"
@@ -337,6 +355,18 @@ components:
     cart:
       purchases: "Blerjet"
       close: "Mbylle"
+  sales:
+    sale:
+      sale: "Shitje"
+      price: "Çmimi"
+      total-price: "Çmimi Total"
+      comment: "Komenti"
+      close: "Mbylle"
+      cancel: "Anulo"
+      finish: "Përfundo"
+      no-purchases: "Nuk ka blerje per sot!"
+      toasts:
+        action-success: "Veprimi i kryer me sukses."
 validations:
   user-not-found: "Përdoruesi nuk u gjet!"
   invalid-email-password: "Emaili i përdoruesit ose fjalëkalimi është gabim."
@@ -357,3 +387,4 @@ page-titles:
   products: "Produktet"
   suppliers: "Furnitorët"
   purchases: "Blerjet"
+  sales: "Shitjet"

@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { type Order, OrderStatus, type User } from "~/types";
+import { type InferType, object, number, string } from "yup";
+import { type Order, type User, type SaleState, type Purchase } from "~/types";
+import type { FormSubmitEvent } from "#ui/types";
+import { useSale } from "~/composables/useSale";
+import { format } from "date-fns";
 
 const i18n = useI18n();
 
 type Props = {
   isModalOpen: boolean;
   currentOrders: Order[];
-  orderUser?: User;
   date: string | number;
   totalPrice?: string | number;
 };
@@ -30,7 +33,7 @@ const isOpen = computed({
   <UModal
     v-model="isOpen"
     :ui="{
-      width: 'w-full sm:max-w-lg',
+      width: 'w-full sm:max-w-3xl',
     }"
   >
     <UCard
@@ -44,14 +47,10 @@ const isOpen = computed({
           class="flex justify-between items-center text-lg font-normal leading-6"
         >
           <h6 class="text-xl">
-            {{ i18n.t("components.order.cart.cart") }}
+            {{ i18n.t("components.sales.sale.sale") }}
             {{ i18n.t("common.for") }}
             {{ i18n.t("common.date") }}:
             {{ date }}
-            <template v-if="orderUser">
-              {{ i18n.t("common.for") }}
-              <span class="font-medium">{{ orderUser.company }}</span>
-            </template>
           </h6>
           <UButton
             color="gray"
@@ -63,14 +62,21 @@ const isOpen = computed({
         </div>
       </template>
       <div
-        class="flex flex-col divide-y divide-gray-100 dark:divide-gray-800 -mt-2 -mb-3"
+        class="flex flex-col divide-y divide-gray-200 dark:divide-gray-800 -mt-2 -mb-3"
       >
+        <p
+          v-if="!currentOrders || !currentOrders.length"
+          class="text-xl text-center"
+        >
+          {{ i18n.t("components.sales.sale.no-purchases") }}
+        </p>
         <div
-          v-for="order in currentOrders"
-          :key="'order-' + order.id"
+          v-else
+          v-for="(order, index) in currentOrders"
+          :key="`order-${order.id}`"
           class="flex max-sm:flex-col gap-2 justify-between items-start pt-2 pb-3"
         >
-          <div class="flex shrink-0 items-center gap-2 w-full sm:w-1/4">
+          <div class="flex shrink-0 items-center gap-2 w-full sm:w-1/5">
             <UPopover mode="hover" class="flex shrink-0">
               <div>
                 <img
@@ -89,10 +95,9 @@ const isOpen = computed({
                 </div>
               </template>
             </UPopover>
-            <label
-              class="text-sm font-medium text-gray-700 dark:text-gray-200"
-              >{{ order.productName }}</label
-            >
+            <label class="text-lg font-medium text-gray-700 dark:text-gray-200">
+              {{ order.productName }}
+            </label>
           </div>
 
           <UFormGroup
@@ -108,11 +113,10 @@ const isOpen = computed({
             }"
             class="shrink w-full sm:w-1/5"
           >
-            <div class="flex flex-col items-end max">
+            <div class="flex flex-col items-end max relative group">
               <UInput
                 type="number"
                 :min="0"
-                :disabled="true"
                 :model-value="order.qty || order.orderQty"
                 class="w-full sm:w-28"
               />
@@ -120,9 +124,8 @@ const isOpen = computed({
           </UFormGroup>
 
           <UFormGroup
-            v-if="order.status !== OrderStatus.Processing"
             size="lg"
-            :label="i18n.t('components.order.cart.price')"
+            :label="i18n.t('components.sales.sale.price')"
             :name="`price-${order.id}`"
             :ui="{
               label: {
@@ -136,11 +139,11 @@ const isOpen = computed({
               {{ +(order.salePrice || 0).toFixed(2) }} €
             </p>
           </UFormGroup>
+
           <UFormGroup
-            v-if="order.status !== OrderStatus.Processing"
             size="lg"
-            :label="i18n.t('components.order.cart.total-price')"
-            :name="`price-${order.id}`"
+            :label="i18n.t('components.sales.sale.total-price')"
+            :name="`total-${order.id}`"
             :ui="{
               label: {
                 wrapper: 'justify-center',
@@ -152,6 +155,26 @@ const isOpen = computed({
             <p class="sm:text-center text-xl font-medium sm:pt-1">
               {{ +(+(order.salePrice || 0) * +(order.qty || 0)).toFixed(2) }} €
             </p>
+          </UFormGroup>
+
+          <UFormGroup
+            size="lg"
+            :label="i18n.t('components.sales.sale.comment')"
+            :name="`comment-${order.id}`"
+            :ui="{
+              container: 'sm:text-center',
+              label: {
+                wrapper: 'sm:justify-end',
+                base: 'pl-3 w-full',
+              },
+            }"
+            class="shrink w-full sm:w-1/4"
+          >
+            <div class="text-left">
+              <p class="block font-medium sm:pt-1">
+                {{ order.comment }}
+              </p>
+            </div>
           </UFormGroup>
         </div>
 
@@ -170,8 +193,13 @@ const isOpen = computed({
 
       <template #footer>
         <div class="flex items-center justify-end gap-2">
-          <UButton type="button" size="lg" @click="isOpen = false">
-            {{ i18n.t("components.order.cart.close") }}
+          <UButton
+            class="justify-center"
+            size="lg"
+            type="button"
+            @click="isOpen = false"
+          >
+            {{ i18n.t("components.sales.sale.close") }}
           </UButton>
         </div>
       </template>

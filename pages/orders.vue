@@ -2,7 +2,7 @@
 import { useAuthUser } from "~/composables/useAuthUser";
 import { useSystemUsers } from "~/composables/useSystemUsers";
 import { useOrder } from "~/composables/useOrder";
-import { type Order, type OrderState, UserRole } from "~/types";
+import { type Order, type OrderState, OrderStatus, UserRole } from "~/types";
 import { format } from "date-fns";
 
 const i18n = useI18n();
@@ -72,6 +72,12 @@ const columns = computed(() => {
       class: "max-w-xl",
     },
     {
+      key: "totalPrice",
+      label: i18n.t("pages.orders.total-price"),
+      isVisible: true,
+      class: "w-px",
+    },
+    {
       key: "status",
       label: i18n.t("pages.orders.status"),
       isVisible: true,
@@ -82,7 +88,7 @@ const columns = computed(() => {
   if (orderUserComputed.value) {
     columns.push({
       key: "user",
-      label: i18n.t("pages.orders.user"),
+      label: i18n.t("pages.orders.client"),
       isVisible: true,
       class: "w-px",
     });
@@ -101,10 +107,24 @@ const ordersRows = computed(() => {
       },
     ];
 
+    const totalPrice = order.rows.reduce(
+      (accumulator: number, currentValue) => {
+        return +(
+          accumulator +
+          +(currentValue.salePrice || 0) * +(currentValue.qty || 0)
+        );
+      },
+      0,
+    );
+
     return {
       date: format(new Date(order.date), "dd.MM.yyyy"),
       rawOrders: order.rows,
       orders: order.rows.map((row) => row.productName!).join(", "),
+      totalPrice:
+        order.status === OrderStatus.Processing
+          ? "-"
+          : totalPrice.toFixed(2) + " €",
       user: order.user.company,
       status: order.status,
       actions,
@@ -149,16 +169,19 @@ const addOrderClose = () => {
 };
 
 const cartModal = ref<boolean>(false);
+const totalPrice = ref<string | number>();
 const currentCartOrders = ref<Order[]>([]);
 const currentCartDate = ref<string | number>("");
 const cartOpenAction = (row: any) => {
   currentCartOrders.value = row.rawOrders;
+  totalPrice.value = row.totalPrice;
   currentCartDate.value = row.date;
   cartModal.value = true;
 };
 const cartClose = () => {
   cartModal.value = false;
   currentCartOrders.value = [];
+  totalPrice.value = "";
   currentCartDate.value = "";
 };
 
@@ -179,7 +202,7 @@ const action = async (event: { event: string; row: any }) => {
         <UFormGroup
           v-if="user && [UserRole.ADMIN, UserRole.EMPLOYEE].includes(user.role)"
           size="lg"
-          :label="i18n.t('pages.orders.user')"
+          :label="i18n.t('pages.orders.client')"
           name="unitType"
         >
           <USelectMenu
@@ -221,9 +244,19 @@ const action = async (event: { event: string; row: any }) => {
         </template>
 
         <template #status-data="{ row }">
-          <span class="capitalize">
-            {{ i18n.t("components.order.cart.status." + row.status) }}
-          </span>
+          <UBadge
+            :color="
+              row.status === OrderStatus.Processing
+                ? 'orange'
+                : row.status === OrderStatus.Done
+                  ? 'primary'
+                  : 'red'
+            "
+          >
+            <span class="capitalize">
+              {{ i18n.t("components.order.cart.status." + row.status) }}
+            </span>
+          </UBadge>
         </template>
       </DataTable>
     </ClientOnly>
@@ -243,6 +276,7 @@ const action = async (event: { event: string; row: any }) => {
     :current-orders="currentCartOrders || []"
     :date="currentCartDate || ''"
     :order-user="orderUserComputed"
+    :total-price="totalPrice"
     @on-close="cartClose"
   />
 </template>
