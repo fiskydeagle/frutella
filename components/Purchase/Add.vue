@@ -156,6 +156,21 @@ watch(
   },
 );
 
+const totalPrice = computed(() => {
+  let total = 0;
+  Object.keys(state.value).forEach((item) => {
+    if (item.includes("qty-")) {
+      const stateId = item.replace("qty-", "");
+
+      if (state.value[`qty-${stateId}`] && +state.value[`price-${stateId}`]) {
+        total +=
+          +state.value[`qty-${stateId}`] * +state.value[`price-${stateId}`];
+      }
+    }
+  });
+  return total;
+});
+
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
   const purchases: PurchaseState[] = [];
 
@@ -337,7 +352,13 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
                     ]
                   "
                   class="w-full sm:w-28"
-                />
+                >
+                  <template #trailing>
+                    <span class="text-gray-500 dark:text-gray-400 text-base">
+                      €
+                    </span>
+                  </template>
+                </UInput>
               </div>
             </UFormGroup>
 
@@ -355,7 +376,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
             >
               <p class="sm:text-center text-xl font-medium sm:pt-1">
                 {{
-                  +(
+                  (
                     +(
                       state[
                         `qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`
@@ -367,7 +388,8 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
                       ] || 0
                     )
                   ).toFixed(2)
-                }}€
+                }}
+                €
               </p>
             </UFormGroup>
 
@@ -440,6 +462,15 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
                 </UInputMenu>
               </div>
             </UFormGroup>
+          </div>
+
+          <div v-if="totalPrice" class="pt-2 pb-3 text-right">
+            <h6 class="text-3xl font-medium">
+              <span class="text-xl">
+                {{ i18n.t("components.purchase.add.total-price") }}:
+              </span>
+              {{ totalPrice.toFixed(2) }} €
+            </h6>
           </div>
         </div>
 

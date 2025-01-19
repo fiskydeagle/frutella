@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAuthUser } from "~/composables/useAuthUser";
 import { usePurchase } from "~/composables/usePurchase";
-import { type Purchase, type PurchaseState, UserRole } from "~/types";
+import { type Purchase, type PurchaseState } from "~/types";
 import { format } from "date-fns";
 
 const i18n = useI18n();
@@ -47,6 +47,12 @@ const columns = computed(() => {
       class: "max-w-xl",
     },
     {
+      key: "totalPrice",
+      label: i18n.t("pages.purchases.total-price"),
+      isVisible: true,
+      class: "w-px",
+    },
+    {
       key: "purchasedAt",
       label: i18n.t("pages.purchases.purchased-at"),
       isVisible: true,
@@ -83,12 +89,23 @@ const purchasesRows = computed(() => {
         ? `${purchase.rows[0].updatedByUserFirstName} ${purchase.rows[0].updatedByUserLastName}`
         : "-";
 
+    const totalPrice = purchase.rows.reduce(
+      (accumulator: number, currentValue) => {
+        return +(
+          accumulator +
+          +(currentValue.price || 0) * +(currentValue.qty || 0)
+        );
+      },
+      0,
+    );
+
     return {
       date: format(new Date(purchase.date), "dd.MM.yyyy"),
       rawOrders: purchase.rows,
       purchases: purchase.rows
         .map((row) => `${row.productName!} (${row.supplierName!})`)
         .join(", "),
+      totalPrice: totalPrice.toFixed(2) + " €",
       purchasedAt,
       purchasedBy,
       actions,
@@ -116,16 +133,19 @@ const addPurchaseClose = () => {
 };
 
 const cartModal = ref<boolean>(false);
+const totalPrice = ref<string | number>();
 const currentCartPurchases = ref<Purchase[]>([]);
 const currentCartDate = ref<string | number>("");
 const cartOpenAction = (row: any) => {
   currentCartPurchases.value = row.rawOrders;
+  totalPrice.value = row.totalPrice;
   currentCartDate.value = row.date;
   cartModal.value = true;
 };
 const cartClose = () => {
   cartModal.value = false;
   currentCartPurchases.value = [];
+  totalPrice.value = "";
   currentCartDate.value = "";
 };
 
@@ -162,12 +182,6 @@ const action = async (event: { event: string; row: any }) => {
         <template #purchases-data="{ row }">
           <p class="whitespace-normal">{{ row.purchases }}</p>
         </template>
-
-        <template #status-data="{ row }">
-          <span class="capitalize">
-            {{ i18n.t("components.order.cart.status." + row.status) }}
-          </span>
-        </template>
       </DataTable>
     </ClientOnly>
   </div>
@@ -184,6 +198,7 @@ const action = async (event: { event: string; row: any }) => {
     :is-modal-open="cartModal"
     :current-purchases="currentCartPurchases || []"
     :date="currentCartDate || ''"
+    :total-price="totalPrice"
     @on-close="cartClose"
   />
 </template>

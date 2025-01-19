@@ -7,6 +7,7 @@ type Props = {
   isModalOpen: boolean;
   currentPurchases: Purchase[];
   date: string | number;
+  totalPrice?: string | number;
 };
 
 type EmitType = {
@@ -133,7 +134,13 @@ const isOpen = computed({
                 v-model="purchase.price!"
                 :disabled="true"
                 class="w-full sm:w-28"
-              />
+              >
+                <template #trailing>
+                  <span class="text-gray-500 dark:text-gray-400 text-base">
+                    €
+                  </span>
+                </template>
+              </UInput>
             </div>
           </UFormGroup>
 
@@ -150,7 +157,8 @@ const isOpen = computed({
             class="shrink"
           >
             <p class="sm:text-center text-xl font-medium sm:pt-1">
-              {{ +(+(purchase.qty || 0) * +(purchase.price || 0)).toFixed(2) }}€
+              {{ (+(purchase.qty || 0) * +(purchase.price || 0)).toFixed(2) }}
+              €
             </p>
           </UFormGroup>
 
@@ -176,6 +184,15 @@ const isOpen = computed({
               />
             </div>
           </UFormGroup>
+        </div>
+
+        <div v-if="totalPrice" class="pt-2 pb-3 text-right">
+          <h6 class="text-3xl font-medium">
+            <span class="text-xl">
+              {{ i18n.t("components.purchase.add.total-price") }}:
+            </span>
+            {{ totalPrice }}
+          </h6>
         </div>
       </div>
 

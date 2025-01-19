@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
   try {
     const finalPurchases: Purchase[] = [];
     const ordersResponse = await db.Orders.findAll({
-      order: [[{ model: db.Products, as: "product" }, "name", "DESC"]],
+      order: [[{ model: db.Products, as: "product" }, "name", "ASC"]],
       where: {
         date: format(date, "yyyy-MM-dd"),
       },
