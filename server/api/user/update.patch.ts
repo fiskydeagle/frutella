@@ -69,7 +69,7 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    const uploadDir = path.resolve(`${envPath}/products/${dateNow}`);
+    const uploadDir = path.resolve(`${envPath}/users/${dateNow}`);
     const filePath = path.join(uploadDir, uploadedImage.filename);
 
     // Ensure the directory exists
@@ -121,7 +121,7 @@ export default defineEventHandler(async (event) => {
         firstName: query.firstName,
         lastName: query.lastName,
         role: query.role,
-        image: `/products/${dateNow}/${filename}`,
+        image: `/users/${dateNow}/${filename}`,
         city: query.city,
         address: query.address,
         tel: query.tel,

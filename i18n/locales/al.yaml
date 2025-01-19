@@ -1,6 +1,8 @@
 common:
   load-more: "Listo më tepër"
   size: "Kapaciteti"
+  for: "për"
+  date: "datën"
 layout:
   account-not-verified: "Llogaria juaj nuk është aktive, ju lutemi prisni derisa një administrator të verifikojë llogarinë tuaj."
 pages:
@@ -43,6 +45,14 @@ pages:
       updated-password: "Fjalëkalimi është Ndrruar!"
   orders:
     orders: "Porositë"
+    order: "Porosit"
+    client: "Klienti"
+    date: "Data"
+    total-price: "Çmimi Total"
+    status: "Statusi"
+    choose-user: "Zgjedh përdoruesin"
+    please-select-user: "Ju lutemi zgjidhni fillimisht një përdorues."
+    show-cart: "Shiko shportën"
   profile:
     profile: "Profili"
     company: "Kompania"
@@ -106,6 +116,46 @@ pages:
     restore: "Rikthe"
     delete: "Fshije"
     add-product: "Shto Produkt"
+  suppliers:
+    suppliers: "Furnitorët"
+    id: "ID"
+    company: "Kompania"
+    image: "Fotografija"
+    firstName: "Emri"
+    lastName: "Mbiemri"
+    city: "Qyteti"
+    address: "Address"
+    tel: "Telefoni"
+    created-at: "Krijuar Më"
+    updated-at: "Përditësuar Më"
+    created-by: "Krijuar Nga"
+    updated-by: "Përditësuar Nga"
+    update: "Përditëso"
+    deactivate: "Deaktivizo"
+    restore: "Rikthe"
+    delete: "Fshije"
+    add-supplier: "Shto Furnitorë"
+  purchases:
+    purchases: "Blerjet"
+    purchase: "Blejë"
+    date: "Data"
+    total-price: "Çmimi Total"
+    purchased-at: "Është Blere Më"
+    purchased-by: "Është Blere Nga"
+    show-purchases: "Shiko blerjet"
+  sales:
+    sales: "Shitjet"
+    sale: "Shitje"
+    client: "Klienti"
+    city: "Qyteti"
+    address: "Adresa"
+    google-map-link: "Map"
+    date: "Data"
+    total-price: "Çmimi Total"
+    status: "Statusi"
+    action: "Veprimi"
+    search: "Kërko"
+    show-sales: "Shiko shitjet"
 components:
   left-navigation:
     home: "Ballina"
@@ -116,6 +166,9 @@ components:
     users: "Përdoruesit"
     products: "Produktet"
     navigation: "Navigimi"
+    suppliers: "Furnitorët"
+    purchases: "Blerjet"
+    sales: "Shitjet"
   user:
     add:
       sort: "Numri rendor"
@@ -234,6 +287,86 @@ components:
         product-deactivated: "Produkti është Deaktivizuar!"
         product-restored: "Produkti është Kthyer!"
         product-deleted: "Produkti është Fshirë!"
+  order:
+    add:
+      order: "Porosit"
+      cancel: "Anulo"
+      update: "Përditëso"
+      toasts:
+        order-added: "Porosia u shtua/përditësua!"
+    cart:
+      cart: "Shporta"
+      price: "Çmimi"
+      total-price: "Çmimi Total"
+      close: "Mbylle"
+      status:
+        processing: "Në Proces"
+        done: "E Dorëzuar"
+        canceled: "E Anuluar"
+  supplier:
+    add:
+      company: "Kompania"
+      image: "Fotografija"
+      firstName: "Emri"
+      lastName: "Mbiemri"
+      city: "Qyteti"
+      search-city: "Kërko qytetin"
+      address: "Adresa"
+      tel: "Telefoni"
+      drop-or-click-upload: "Lësho foton këtu ose kliko per të ngarkuar."
+      add-supplier: "Shto Furnitorë"
+      cancel: "Anulo"
+      add: "Shto"
+      toasts:
+        supplier-added: "Furnitori u shtua!"
+    update:
+      company: "Kompania"
+      image: "Fotografija"
+      firstName: "Emri"
+      lastName: "Mbiemri"
+      city: "Qyteti"
+      search-city: "Kërko qytetin"
+      address: "Adresa"
+      tel: "Telefoni"
+      drop-or-click-upload: "Lësho foton këtu ose kliko per të ngarkuar."
+      update-supplier: "Përditëso Furnitorin"
+      cancel: "Anulo"
+      update: "Përditëso"
+      toasts:
+        supplier-updated: "Furnitori është Përditësuar!"
+        supplier-deactivated: "Furnitori është Deaktivizuar!"
+        supplier-restored: "Furnitori është Kthyer!"
+        supplier-deleted: "Furnitori është Fshirë!"
+  purchase:
+    add:
+      purchase: "Blejë"
+      price: "Çmimi"
+      total-price: "Çmimi Total"
+      supplier: "Furnitori"
+      new-supplier: "Furnitor i ri"
+      select-supplier: "Zgjedhe furnitorin"
+      split: "Ndaj"
+      remove: "Largo"
+      cancel: "Anulo"
+      update: "Përditëso"
+      no-orders: "Nuk ka porosi per sot!"
+      toasts:
+        purchase-added: "Blerja u shtua/përditësua!"
+    cart:
+      purchases: "Blerjet"
+      close: "Mbylle"
+  sales:
+    sale:
+      sale: "Shitje"
+      price: "Çmimi"
+      total-price: "Çmimi Total"
+      comment: "Komenti"
+      close: "Mbylle"
+      cancel: "Anulo"
+      finish: "Përfundo"
+      no-purchases: "Nuk ka blerje per sot!"
+      toasts:
+        action-success: "Veprimi i kryer me sukses."
 validations:
   user-not-found: "Përdoruesi nuk u gjet!"
   invalid-email-password: "Emaili i përdoruesit ose fjalëkalimi është gabim."
@@ -252,3 +385,6 @@ page-titles:
   register: "Regjistrohu"
   users: "Përdoruesit"
   products: "Produktet"
+  suppliers: "Furnitorët"
+  purchases: "Blerjet"
+  sales: "Shitjet"

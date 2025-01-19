@@ -26,15 +26,13 @@ export default defineEventHandler(async (event) => {
       order: [["createdAt", "DESC"]],
       include: [
         {
-          model: db.Users,
-          as: "createdByUser",
-          attributes: ["id"],
+          association: "createdByUser",
+          attributes: [], // Exclude createdByUser attributes
           required: false,
         },
         {
-          model: db.Users,
-          as: "updatedByUser",
-          attributes: ["id"],
+          association: "updatedByUser",
+          attributes: [], // Exclude updatedByUser attributes
           required: false,
         },
       ],
@@ -70,20 +68,8 @@ export default defineEventHandler(async (event) => {
           db.Sequelize.fn("DATE", db.Sequelize.col("Incoming.createdAt")),
           "createdAt",
         ],
-        [
-          db.Sequelize.fn("MAX", db.Sequelize.col("createdByUser.id")),
-          "createdByUserId",
-        ],
-        [
-          db.Sequelize.fn("MAX", db.Sequelize.col("updatedByUser.id")),
-          "updatedByUserId",
-        ],
       ],
-      group: [
-        db.Sequelize.fn("DATE", db.Sequelize.col("Incoming.createdAt")),
-        "createdByUser.id",
-        "updatedByUser.id",
-      ],
+      group: [db.Sequelize.fn("DATE", db.Sequelize.col("Incoming.createdAt"))],
     });
 
     return {

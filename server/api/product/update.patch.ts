@@ -60,7 +60,7 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    const uploadDir = path.resolve(`${envPath}/${dateNow}`);
+    const uploadDir = path.resolve(`${envPath}/products/${dateNow}`);
     const filePath = path.join(uploadDir, uploadedImage.filename);
 
     // Ensure the directory exists
@@ -76,7 +76,7 @@ export default defineEventHandler(async (event) => {
 
   const product = await db.Products.findOne({
     where: { id: query.id },
-    attributes: ["id", "name", "image", "unitType"],
+    attributes: ["id"],
     paranoid: false,
   });
 
@@ -91,7 +91,7 @@ export default defineEventHandler(async (event) => {
     if (filename) {
       return await product.update({
         name: query.name,
-        image: `/${dateNow}/${filename}`,
+        image: `/products/${dateNow}/${filename}`,
         unitType: query.unitType,
         updatedBy: event.context.user.id,
       });

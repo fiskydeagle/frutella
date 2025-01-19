@@ -1,6 +1,8 @@
 common:
   load-more: "Load more"
   size: "Size"
+  for: "for"
+  date: "date"
 layout:
   account-not-verified: "Your account is not active, please wait until an Admin verifies your account."
 pages:
@@ -43,6 +45,14 @@ pages:
       updated-password: "Password Changed!"
   orders:
     orders: "orders"
+    order: "order"
+    client: "Client"
+    date: "Date"
+    total-price: "Total Price"
+    status: "Status"
+    choose-user: "Choose user"
+    please-select-user: "Please select a User first."
+    show-cart: "Show Cart"
   profile:
     profile: "Profile"
     company: "Company"
@@ -106,6 +116,46 @@ pages:
     restore: "Restore"
     delete: "Delete"
     add-product: "Add Product"
+  suppliers:
+    suppliers: "Suppliers"
+    id: "ID"
+    company: "Company"
+    image: "Image"
+    firstName: "First name"
+    lastName: "Last name"
+    city: "City"
+    address: "Address"
+    tel: "Phone"
+    created-at: "Created At"
+    updated-at: "Updated At"
+    created-by: "Created By"
+    updated-by: "Updated By"
+    update: "Update"
+    deactivate: "Deactivate"
+    restore: "Restore"
+    delete: "Delete"
+    add-supplier: "Add Supplier"
+  purchases:
+    purchases: "Purchases"
+    purchase: "Purchase"
+    date: "Date"
+    total-price: "Total Price"
+    purchased-at: "Purchased At"
+    purchased-by: "Purchased By"
+    show-purchases: "Show purchases"
+  sales:
+    sales: "Sales"
+    sale: "Sale"
+    client: "Client"
+    city: "City"
+    address: "Address"
+    google-map-link: "Map"
+    date: "Date"
+    total-price: "Total Price"
+    status: "Status"
+    action: "Action"
+    search: "Search"
+    show-sales: "Show Sales"
 components:
   left-navigation:
     home: "Home"
@@ -116,6 +166,9 @@ components:
     users: "Users"
     products: "Products"
     navigation: "Navigation"
+    suppliers: "Suppliers"
+    purchases: "Purchases"
+    sales: "Sales"
   user:
     add:
       sort: "Sort number"
@@ -234,6 +287,86 @@ components:
         product-deactivated: "Product Deactivated!"
         product-restored: "Product Restored!"
         product-deleted: "Product Deleted!"
+  order:
+    add:
+      order: "Order"
+      cancel: "Cancel"
+      update: "Update"
+      toasts:
+        order-added: "Order added/updated!"
+    cart:
+      cart: "Cart"
+      price: "Price"
+      total-price: "Total Price"
+      close: "Close"
+      status:
+        processing: "Processing"
+        done: "Done"
+        canceled: "Canceled"
+  supplier:
+    add:
+      company: "Company"
+      image: "Image"
+      firstName: "First name"
+      lastName: "Last name"
+      city: "City"
+      search-city: "Search city"
+      address: "Address"
+      tel: "Phone"
+      drop-or-click-upload: "Drop files here or click to upload."
+      add-supplier: "Add Supplier"
+      cancel: "Cancel"
+      add: "Add"
+      toasts:
+        supplier-added: "Supplier added!"
+    update:
+      company: "Company"
+      image: "Image"
+      firstName: "First name"
+      lastName: "Last name"
+      city: "City"
+      search-city: "Search city"
+      address: "Address"
+      tel: "Phone"
+      drop-or-click-upload: "Drop files here or click to upload."
+      update-supplier: "Update Supplier"
+      cancel: "Cancel"
+      update: "Update"
+      toasts:
+        supplier-updated: "Supplier Updated!",
+        supplier-deactivated: "Supplier Deactivated!"
+        supplier-restored: "Supplier Restored!"
+        supplier-deleted: "Supplier Deleted!"
+  purchase:
+    add:
+      purchase: "Purchase"
+      price: "Price"
+      total-price: "Total Price"
+      supplier: "supplier"
+      new-supplier: "New supplier"
+      select-supplier: "Select supplier"
+      split: "Split"
+      remove: "Remove"
+      cancel: "Cancel"
+      update: "Update"
+      no-orders: "No Orders for today!"
+      toasts:
+        purchase-added: "Purchase added/updated!"
+    cart:
+      purchases: "Purchases"
+      close: "Close"
+  sales:
+    sale:
+      sale: "Sale"
+      price: "Price"
+      total-price: "Total Price"
+      comment: "comment"
+      close: "Close"
+      cancel: "Cancel"
+      finish: "Finish"
+      no-purchases: "No Purchases for today!"
+      toasts:
+        action-success: "Action as been done successfully."
 validations:
   user-not-found: "User not found!"
   invalid-email-password: "Invalid Email or password."
@@ -252,3 +385,6 @@ page-titles:
   register: "Register"
   users: "Users"
   products: "Products"
+  suppliers: "Suppliers"
+  purchases: "Purchases"
+  sales: "Sales"
