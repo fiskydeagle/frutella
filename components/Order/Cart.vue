@@ -113,7 +113,11 @@ const isOpen = computed({
                 type="number"
                 :min="0"
                 :disabled="true"
-                :model-value="order.qty || order.orderQty"
+                :model-value="
+                  order.status !== OrderStatus.Processing
+                    ? order.qty
+                    : order.orderQty
+                "
                 class="w-full sm:w-28"
               />
             </div>
@@ -133,9 +137,27 @@ const isOpen = computed({
             class="shrink"
           >
             <p class="sm:text-center text-xl font-medium sm:pt-1">
-              {{ +(order.salePrice || 0).toFixed(2) }} €
+              {{ (order.salePrice || 0).toFixed(2) }} €
             </p>
           </UFormGroup>
+          <UFormGroup
+            v-else-if="order.prepareSalePrice"
+            size="lg"
+            :label="i18n.t('components.order.cart.price')"
+            :name="`price-${order.id}`"
+            :ui="{
+              label: {
+                wrapper: 'justify-center',
+                base: 'px-3 whitespace-nowrap',
+              },
+            }"
+            class="shrink"
+          >
+            <p class="sm:text-center text-xl font-medium sm:pt-1">
+              {{ (order.prepareSalePrice || 0).toFixed(2) }} €
+            </p>
+          </UFormGroup>
+
           <UFormGroup
             v-if="order.status !== OrderStatus.Processing"
             size="lg"
@@ -150,7 +172,29 @@ const isOpen = computed({
             class="shrink"
           >
             <p class="sm:text-center text-xl font-medium sm:pt-1">
-              {{ +(+(order.salePrice || 0) * +(order.qty || 0)).toFixed(2) }} €
+              {{ (+(order.salePrice || 0) * +(order.qty || 0)).toFixed(2) }} €
+            </p>
+          </UFormGroup>
+          <UFormGroup
+            v-else-if="order.prepareSalePrice"
+            size="lg"
+            :label="i18n.t('components.order.cart.total-price')"
+            :name="`price-${order.id}`"
+            :ui="{
+              label: {
+                wrapper: 'justify-center',
+                base: 'px-3 whitespace-nowrap',
+              },
+            }"
+            class="shrink"
+          >
+            <p class="sm:text-center text-xl font-medium sm:pt-1">
+              {{
+                (
+                  +(order.prepareSalePrice || 0) * +(order.orderQty || 0)
+                ).toFixed(2)
+              }}
+              €
             </p>
           </UFormGroup>
         </div>
@@ -163,7 +207,7 @@ const isOpen = computed({
             <span class="text-xl">
               {{ i18n.t("components.purchase.add.total-price") }}:
             </span>
-            {{ totalPrice }}
+            {{ (+totalPrice).toFixed(2) }} €
           </h6>
         </div>
       </div>

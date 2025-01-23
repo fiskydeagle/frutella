@@ -321,7 +321,7 @@ const onCancel = () => {
             >
               <p class="sm:text-center text-xl font-medium sm:pt-1">
                 {{
-                  +(
+                  (
                     +(state[`qty-${order.id}`] || 0) *
                     (+(orderUser?.sellingPercentage || 0) *
                       getSalesInfoByProduct(order.productId).averagePrice)

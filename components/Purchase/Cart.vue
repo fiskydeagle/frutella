@@ -157,8 +157,7 @@ const isOpen = computed({
             class="shrink"
           >
             <p class="sm:text-center text-xl font-medium sm:pt-1">
-              {{ (+(purchase.qty || 0) * +(purchase.price || 0)).toFixed(2) }}
-              €
+              {{ (+(purchase.qty || 0) * +(purchase.price || 0)).toFixed(2) }} €
             </p>
           </UFormGroup>
 
@@ -191,7 +190,7 @@ const isOpen = computed({
             <span class="text-xl">
               {{ i18n.t("components.purchase.add.total-price") }}:
             </span>
-            {{ (+totalPrice).toFixed(2) }}
+            {{ (+totalPrice).toFixed(2) }} €
           </h6>
         </div>
       </div>

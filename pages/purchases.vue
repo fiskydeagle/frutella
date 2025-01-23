@@ -236,7 +236,9 @@ const action = async (event: { event: string; row: any }) => {
         </template>
 
         <template #totalPrice-data="{ row }">
-          {{ row.totalPrice.toFixed(2) }} €
+          <span class="block text-right">
+            {{ row.totalPrice.toFixed(2) }} €
+          </span>
         </template>
 
         <template #purchasedAt-data="{ row }">
