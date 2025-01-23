@@ -137,7 +137,7 @@ const isOpen = computed({
             class="shrink"
           >
             <p class="sm:text-center text-xl font-medium sm:pt-1">
-              {{ +(order.salePrice || 0).toFixed(2) }} €
+              {{ (order.salePrice || 0).toFixed(2) }} €
             </p>
           </UFormGroup>
 
@@ -154,7 +154,7 @@ const isOpen = computed({
             class="shrink"
           >
             <p class="sm:text-center text-xl font-medium sm:pt-1">
-              {{ +(+(order.salePrice || 0) * +(order.qty || 0)).toFixed(2) }} €
+              {{ (+(order.salePrice || 0) * +(order.qty || 0)).toFixed(2) }} €
             </p>
           </UFormGroup>
 

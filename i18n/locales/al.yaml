@@ -3,6 +3,7 @@ common:
   size: "Kapaciteti"
   for: "për"
   date: "datën"
+  search: "Kërko"
 layout:
   account-not-verified: "Llogaria juaj nuk është aktive, ju lutemi prisni derisa një administrator të verifikojë llogarinë tuaj."
 pages:
@@ -121,6 +122,7 @@ pages:
     id: "ID"
     company: "Kompania"
     image: "Fotografija"
+    name: "Emri"
     firstName: "Emri"
     lastName: "Mbiemri"
     city: "Qyteti"
@@ -149,12 +151,12 @@ pages:
     client: "Klienti"
     city: "Qyteti"
     address: "Adresa"
+    tel: "Telefoni"
     google-map-link: "Map"
     date: "Data"
     total-price: "Çmimi Total"
     status: "Statusi"
     action: "Veprimi"
-    search: "Kërko"
     show-sales: "Shiko shitjet"
 components:
   left-navigation:
