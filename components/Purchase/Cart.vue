@@ -191,7 +191,7 @@ const isOpen = computed({
             <span class="text-xl">
               {{ i18n.t("components.purchase.add.total-price") }}:
             </span>
-            {{ totalPrice }}
+            {{ (+totalPrice).toFixed(2) }}
           </h6>
         </div>
       </div>

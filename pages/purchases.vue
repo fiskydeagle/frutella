@@ -39,6 +39,7 @@ const columns = computed(() => {
       label: i18n.t("pages.purchases.date"),
       isVisible: true,
       class: "w-px",
+      sortable: true,
     },
     {
       key: "purchases",
@@ -51,66 +52,100 @@ const columns = computed(() => {
       label: i18n.t("pages.purchases.total-price"),
       isVisible: true,
       class: "w-px",
+      sortable: true,
     },
     {
       key: "purchasedAt",
       label: i18n.t("pages.purchases.purchased-at"),
       isVisible: true,
+      sortable: true,
     },
     {
       key: "purchasedBy",
       label: i18n.t("pages.purchases.purchased-by"),
       isVisible: true,
+      sortable: true,
     },
   ];
 
   return columns;
 });
 
+const searchWord = ref<string>();
+
 const purchasesRows = computed(() => {
-  return purchases.value?.map((purchase) => {
-    const actions = [
-      {
-        event: "show-cart",
-        label: i18n.t("pages.purchases.show-purchases"),
-        icon: "ph:shopping-cart-simple-duotone",
-      },
-    ];
+  return purchases.value
+    ?.map((purchase) => {
+      const actions = [
+        {
+          event: "show-cart",
+          label: i18n.t("pages.purchases.show-purchases"),
+          icon: "ph:shopping-cart-simple-duotone",
+        },
+      ];
 
-    const purchasedAt =
-      purchase.rows && purchase.rows.length
-        ? format(new Date(purchase.rows[0].updatedAt), "dd.MM.yyyy HH:mm")
-        : "-";
+      const purchasedAt =
+        purchase.rows && purchase.rows.length
+          ? new Date(purchase.rows[0].updatedAt).getTime()
+          : "-";
 
-    const purchasedBy =
-      purchase.rows &&
-      purchase.rows.length &&
-      purchase.rows[0].updatedByUserFirstName
-        ? `${purchase.rows[0].updatedByUserFirstName} ${purchase.rows[0].updatedByUserLastName}`
-        : "-";
+      const purchasedAtDate =
+        purchase.rows && purchase.rows.length
+          ? format(new Date(purchase.rows[0].updatedAt), "dd.MM.yyyy HH:mm")
+          : "-";
 
-    const totalPrice = purchase.rows.reduce(
-      (accumulator: number, currentValue) => {
-        return +(
-          accumulator +
-          +(currentValue.price || 0) * +(currentValue.qty || 0)
-        );
-      },
-      0,
-    );
+      const purchasedBy =
+        purchase.rows &&
+        purchase.rows.length &&
+        purchase.rows[0].updatedByUserFirstName
+          ? `${purchase.rows[0].updatedByUserFirstName} ${purchase.rows[0].updatedByUserLastName}`
+          : "-";
 
-    return {
-      date: format(new Date(purchase.date), "dd.MM.yyyy"),
-      rawOrders: purchase.rows,
-      purchases: purchase.rows
-        .map((row) => `${row.productName!} (${row.supplierName!})`)
-        .join(", "),
-      totalPrice: totalPrice.toFixed(2) + " €",
-      purchasedAt,
-      purchasedBy,
-      actions,
-    };
-  });
+      const totalPrice = purchase.rows.reduce(
+        (accumulator: number, currentValue) => {
+          return +(
+            accumulator +
+            +(currentValue.price || 0) * +(currentValue.qty || 0)
+          );
+        },
+        0,
+      );
+
+      return {
+        date: new Date(purchase.date).getTime(),
+        dateDate: format(new Date(purchase.date), "dd.MM.yyyy"),
+        rawOrders: purchase.rows,
+        purchases: purchase.rows
+          .map((row) => `${row.productName!} (${row.supplierName!})`)
+          .join(", "),
+        totalPrice: +totalPrice.toFixed(2),
+        purchasedAt,
+        purchasedAtDate,
+        purchasedBy,
+        actions,
+      };
+    })
+    .filter((order) => {
+      if (!searchWord.value) return true;
+      return (
+        order.dateDate
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.purchases
+          .toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.totalPrice
+          .toString()
+          .toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.purchasedAtDate
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.purchasedBy
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase())
+      );
+    });
 });
 
 const purchaseAddModal = ref<boolean>(false);
@@ -139,7 +174,7 @@ const currentCartDate = ref<string | number>("");
 const cartOpenAction = (row: any) => {
   currentCartPurchases.value = row.rawOrders;
   totalPrice.value = row.totalPrice;
-  currentCartDate.value = row.date;
+  currentCartDate.value = row.dateDate;
   cartModal.value = true;
 };
 const cartClose = () => {
@@ -152,7 +187,15 @@ const cartClose = () => {
 const action = async (event: { event: string; row: any }) => {
   switch (event.event) {
     case "show-cart":
-      cartOpenAction(event.row);
+      const date = new Date(event.row.purchasedAt);
+      const today = new Date();
+      today.setHours(1, 0, 0);
+
+      if (date < today) {
+        cartOpenAction(event.row);
+      } else {
+        await addPurchaseAction();
+      }
       break;
   }
 };
@@ -164,7 +207,11 @@ const action = async (event: { event: string; row: any }) => {
       {{ i18n.t("pages.purchases.purchases") }}
     </h1>
     <div class="px-3 pb-3 border-b border-gray-200 dark:border-gray-700">
-      <div class="flex flex-wrap justify-end items-end gap-2">
+      <div class="flex flex-wrap justify-between items-end gap-2">
+        <UFormGroup size="lg" :label="i18n.t('common.search')">
+          <UInput v-model="searchWord" />
+        </UFormGroup>
+
         <UButton size="lg" type="button" @click="addPurchaseAction">
           {{ i18n.t("pages.purchases.purchase") }}
         </UButton>
@@ -178,9 +225,22 @@ const action = async (event: { event: string; row: any }) => {
         :columns="columns"
         :rows="purchasesRows"
         @on-action-click="action"
+        @select="action({ event: 'show-cart', row: $event })"
       >
+        <template #date-data="{ row }">
+          {{ row.dateDate }}
+        </template>
+
         <template #purchases-data="{ row }">
           <p class="whitespace-normal">{{ row.purchases }}</p>
+        </template>
+
+        <template #totalPrice-data="{ row }">
+          {{ row.totalPrice.toFixed(2) }} €
+        </template>
+
+        <template #purchasedAt-data="{ row }">
+          {{ row.purchasedAtDate }}
         </template>
       </DataTable>
     </ClientOnly>
