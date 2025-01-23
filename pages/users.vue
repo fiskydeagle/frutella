@@ -40,16 +40,19 @@ const columns = [
     key: "id",
     label: i18n.t("pages.users.id"),
     isVisible: false,
+    sortable: true,
   },
   {
     key: "sort",
     label: i18n.t("pages.users.sort"),
     isVisible: false,
+    sortable: true,
   },
   {
     key: "company",
     label: i18n.t("pages.users.company"),
     isVisible: true,
+    sortable: true,
   },
   {
     key: "image",
@@ -60,6 +63,7 @@ const columns = [
     key: "name",
     label: i18n.t("pages.users.name"),
     isVisible: true,
+    sortable: true,
   },
   {
     key: "email",
@@ -67,19 +71,22 @@ const columns = [
     isVisible: true,
   },
   {
-    key: "role",
+    key: "roleCol",
     label: i18n.t("pages.users.role"),
     isVisible: true,
+    sortable: true,
   },
   {
-    key: "city",
+    key: "cityCol",
     label: i18n.t("pages.users.city"),
     isVisible: false,
+    sortable: true,
   },
   {
     key: "address",
     label: i18n.t("pages.users.address"),
     isVisible: false,
+    sortable: true,
   },
   {
     key: "tel",
@@ -95,21 +102,25 @@ const columns = [
     key: "createdAt",
     label: i18n.t("pages.users.created-at"),
     isVisible: true,
+    sortable: true,
   },
   {
     key: "updatedAt",
     label: i18n.t("pages.users.updated-at"),
     isVisible: false,
+    sortable: true,
   },
   {
     key: "createdBy",
     label: i18n.t("pages.users.created-by"),
     isVisible: false,
+    sortable: true,
   },
   {
     key: "updatedBy",
     label: i18n.t("pages.users.updated-by"),
     isVisible: false,
+    sortable: true,
   },
   {
     label: "",
@@ -119,75 +130,110 @@ const columns = [
   },
 ];
 
+const searchWord = ref<string>();
+
 const usersRows = computed(() => {
-  return users.value?.map((user) => {
-    const actions = [
-      {
-        event: "update",
-        label: i18n.t("pages.users.update"),
-        icon: "ph:pencil-duotone",
-      },
-    ];
+  return users.value
+    ?.map((user) => {
+      const actions = [
+        {
+          event: "update",
+          label: i18n.t("pages.users.update"),
+          icon: "ph:pencil-duotone",
+        },
+      ];
 
-    if (!user.verified) {
-      actions.push({
-        event: "verify",
-        label: i18n.t("pages.users.verify"),
-        icon: "ph:shield-check-duotone",
-      });
-    } else if (!user.deletedAt) {
-      actions.push({
-        event: "deactivate",
-        label: i18n.t("pages.users.deactivate"),
-        icon: "ph:user-circle-minus-duotone",
-      });
-    } else {
-      actions.push({
-        event: "restore",
-        label: i18n.t("pages.users.restore"),
-        icon: "ph:user-circle-plus-duotone",
-      });
-    }
+      if (!user.verified) {
+        actions.push({
+          event: "verify",
+          label: i18n.t("pages.users.verify"),
+          icon: "ph:shield-check-duotone",
+        });
+      } else if (!user.deletedAt) {
+        actions.push({
+          event: "deactivate",
+          label: i18n.t("pages.users.deactivate"),
+          icon: "ph:user-circle-minus-duotone",
+        });
+      } else {
+        actions.push({
+          event: "restore",
+          label: i18n.t("pages.users.restore"),
+          icon: "ph:user-circle-plus-duotone",
+        });
+      }
 
-    actions.push({
-      event: "delete",
-      label: i18n.t("pages.users.delete"),
-      icon: "ph:trash-duotone",
+      actions.push({
+        event: "delete",
+        label: i18n.t("pages.users.delete"),
+        icon: "ph:trash-duotone",
+      });
+
+      const cssClass = user.deletedAt
+        ? "bg-red-500 bg-opacity-20"
+        : !user.verified
+          ? "bg-orange-500 bg-opacity-20"
+          : "";
+
+      return {
+        id: user.id,
+        sort: user.sort,
+        company: user.company,
+        image: user.image,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        name: `${user.firstName} ${user.lastName}`,
+        email: user.email,
+        role: user.role,
+        roleCol: i18n.t("components.user.add." + user.role),
+        city: user.city,
+        cityCol: kosovoCities.find((city) => city.code === user.city)?.name,
+        address: user.address,
+        tel: user.tel,
+        googleMap: user.googleMap,
+        createdAt: new Date(user.createdAt).getTime(),
+        createdAtDate: format(new Date(user.createdAt).getTime(), "dd.MM.yyyy"),
+        updatedAt: new Date(user.updatedAt).getTime(),
+        updatedAtDate: format(new Date(user.updatedAt), "dd.MM.yyyy"),
+        createdBy: user.createdByUser
+          ? `${user.createdByUser.firstName} ${user.createdByUser.lastName}`
+          : "-",
+        updatedBy: user.updatedByUser
+          ? `${user.updatedByUser.firstName} ${user.updatedByUser.lastName}`
+          : "-",
+        deletedAt: user.deletedAt,
+        class: cssClass,
+        actions,
+      };
+    })
+    .filter((order) => {
+      if (!searchWord.value) return true;
+      return (
+        order.company
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.name.toLowerCase().includes(searchWord.value?.toLowerCase()) ||
+        order.email.toLowerCase().includes(searchWord.value?.toLowerCase()) ||
+        order.roleCol.toLowerCase().includes(searchWord.value?.toLowerCase()) ||
+        order.cityCol
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.address
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.tel?.toLowerCase().includes(searchWord.value?.toLowerCase()) ||
+        order.createdAtDate
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.updatedAtDate
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.createdBy
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.updatedBy?.toLowerCase().includes(searchWord.value?.toLowerCase())
+      );
     });
-
-    const cssClass = user.deletedAt
-      ? "bg-red-500 bg-opacity-20"
-      : !user.verified
-        ? "bg-orange-500 bg-opacity-20"
-        : "";
-
-    return {
-      id: user.id,
-      sort: user.sort,
-      company: user.company,
-      image: user.image,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      name: `${user.firstName} ${user.lastName}`,
-      email: user.email,
-      role: user.role,
-      city: user.city,
-      address: user.address,
-      tel: user.tel,
-      googleMap: user.googleMap,
-      createdAt: format(new Date(user.createdAt), "dd.MM.yyyy"),
-      updatedAt: format(new Date(user.updatedAt), "dd.MM.yyyy"),
-      createdBy: user.createdByUser
-        ? `${user.createdByUser.firstName} ${user.createdByUser.lastName}`
-        : "-",
-      updatedBy: user.updatedByUser
-        ? `${user.updatedByUser.firstName} ${user.updatedByUser.lastName}`
-        : "-",
-      deletedAt: user.deletedAt,
-      class: cssClass,
-      actions,
-    };
-  });
 });
 
 const userAddModal = ref<boolean>(false);
@@ -256,7 +302,11 @@ const action = async (event: { event: string; row: any }) => {
   <div>
     <h1 class="text-3xl text-center mb-6">{{ i18n.t("pages.users.users") }}</h1>
     <div class="px-3 pb-3 border-b border-gray-200 dark:border-gray-700">
-      <div class="flex justify-end">
+      <div class="flex flex-wrap justify-between items-end gap-2">
+        <UFormGroup size="lg" :label="i18n.t('common.search')">
+          <UInput v-model="searchWord" />
+        </UFormGroup>
+
         <UButton size="lg" type="button" @click="addUserAction">
           {{ i18n.t("pages.users.add-user") }}
         </UButton>
@@ -270,13 +320,8 @@ const action = async (event: { event: string; row: any }) => {
         :columns="columns"
         :rows="usersRows"
         @on-action-click="action"
+        @select="action({ event: 'update', row: $event })"
       >
-        <template #role-data="{ row }">
-          <span class="capitalize">
-            {{ i18n.t("components.user.add." + row.role) }}
-          </span>
-        </template>
-
         <template #image-data="{ row }">
           <div class="flex justify-start" v-if="row.image">
             <UPopover mode="hover" class="">
@@ -298,10 +343,6 @@ const action = async (event: { event: string; row: any }) => {
           </div>
         </template>
 
-        <template #city-data="{ row }">
-          {{ kosovoCities.find((city) => city.code === row.city)?.name }}
-        </template>
-
         <template #tel-data="{ row }">
           <a v-if="row.tel" :href="`tel:${row.tel}`">{{ row.tel }}</a>
         </template>
@@ -310,6 +351,14 @@ const action = async (event: { event: string; row: any }) => {
           <a v-if="row.googleMap" :href="row.googleMap" target="_blank">
             <UIcon name="ph:map-pin-duotone" size="30" />
           </a>
+        </template>
+
+        <template #createdAt-data="{ row }">
+          {{ row.createdAtDate }}
+        </template>
+
+        <template #updatedAt-data="{ row }">
+          {{ row.updatedAtDate }}
         </template>
       </DataTable>
     </ClientOnly>

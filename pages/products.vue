@@ -51,7 +51,7 @@ const columns = [
     isVisible: true,
   },
   {
-    key: "unitType",
+    key: "unitTypeCol",
     label: i18n.t("pages.products.unit-type"),
     isVisible: true,
     sortable: true,
@@ -127,7 +127,8 @@ const productsRows = computed(() => {
         id: product.id,
         name: product.name,
         image: product.image,
-        unitType: i18n.t("components.product.add." + product.unitType),
+        unitType: product.unitType,
+        unitTypeCol: i18n.t("components.product.add." + product.unitType),
         createdAt: new Date(product.createdAt).getTime(),
         createdAtDate: format(new Date(product.createdAt), "dd.MM.yyyy"),
         updatedAt: new Date(product.updatedAt).getTime(),
@@ -147,7 +148,7 @@ const productsRows = computed(() => {
       if (!searchWord.value) return true;
       return (
         order.name.toLowerCase().includes(searchWord.value?.toLowerCase()) ||
-        order.unitType
+        order.unitTypeCol
           ?.toLowerCase()
           .includes(searchWord.value?.toLowerCase()) ||
         order.createdAtDate
