@@ -3,6 +3,7 @@ common:
   size: "Size"
   for: "for"
   date: "date"
+  search: "Search"
 layout:
   account-not-verified: "Your account is not active, please wait until an Admin verifies your account."
 pages:
@@ -154,7 +155,6 @@ pages:
     total-price: "Total Price"
     status: "Status"
     action: "Action"
-    search: "Search"
     show-sales: "Show Sales"
 components:
   left-navigation:

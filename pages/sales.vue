@@ -202,7 +202,7 @@ const action = async (event: { event: string; row: any }) => {
     </h1>
     <div class="px-3 pb-3 border-b border-gray-200 dark:border-gray-700">
       <div class="flex flex-wrap justify-between items-end gap-2">
-        <UFormGroup size="lg" :label="i18n.t('pages.sales.search')">
+        <UFormGroup size="lg" :label="i18n.t('common.search')">
           <UInput v-model="searchWord" />
         </UFormGroup>
       </div>
