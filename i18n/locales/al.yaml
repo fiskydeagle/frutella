@@ -122,6 +122,7 @@ pages:
     id: "ID"
     company: "Kompania"
     image: "Fotografija"
+    name: "Emri"
     firstName: "Emri"
     lastName: "Mbiemri"
     city: "Qyteti"

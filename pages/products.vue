@@ -121,7 +121,7 @@ const productsRows = computed(() => {
         icon: "ph:trash-duotone",
       });
 
-      const cssClass = product.deletedAt ? "bg-red-500 bg-opacity-20" : "";
+      const cssClass = product.deletedAt ? "!bg-red-500 !bg-opacity-20" : "";
 
       return {
         id: product.id,

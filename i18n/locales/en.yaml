@@ -122,6 +122,7 @@ pages:
     id: "ID"
     company: "Company"
     image: "Image"
+    name: "Name"
     firstName: "First name"
     lastName: "Last name"
     city: "City"

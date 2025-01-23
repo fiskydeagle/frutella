@@ -170,7 +170,7 @@ const usersRows = computed(() => {
       });
 
       const cssClass = user.deletedAt
-        ? "bg-red-500 bg-opacity-20"
+        ? "!bg-red-500 !bg-opacity-20"
         : !user.verified
           ? "bg-orange-500 bg-opacity-20"
           : "";
@@ -344,11 +344,24 @@ const action = async (event: { event: string; row: any }) => {
         </template>
 
         <template #tel-data="{ row }">
-          <a v-if="row.tel" :href="`tel:${row.tel}`">{{ row.tel }}</a>
+          <a
+            v-if="row.tel"
+            @click.stop
+            class="p-3 -m-3"
+            :href="`tel:${row.tel}`"
+          >
+            {{ row.tel }}
+          </a>
         </template>
 
         <template #googleMap-data="{ row }">
-          <a v-if="row.googleMap" :href="row.googleMap" target="_blank">
+          <a
+            v-if="row.googleMap"
+            @click.stop
+            class="inline-flex p-3 -m-3"
+            :href="row.googleMap"
+            target="_blank"
+          >
             <UIcon name="ph:map-pin-duotone" size="30" />
           </a>
         </template>

@@ -211,7 +211,7 @@ const action = async (event: { event: string; row: any }) => {
     <ClientOnly>
       <DataTable
         :dynamic-columns="true"
-        :identifier="'data-table-orders'"
+        :identifier="'data-table-sales'"
         :columns="columns"
         :rows="ordersRows"
         @on-action-click="action"
@@ -258,7 +258,13 @@ const action = async (event: { event: string; row: any }) => {
         </template>
 
         <template #googleMap-data="{ row }">
-          <a v-if="row.googleMap" :href="row.googleMap" target="_blank">
+          <a
+            v-if="row.googleMap"
+            @click.stop
+            class="inline-flex p-3 -m-3"
+            :href="row.googleMap"
+            target="_blank"
+          >
             <UIcon name="ph:map-pin-duotone" size="30" />
           </a>
         </template>

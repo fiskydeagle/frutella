@@ -174,7 +174,7 @@ const action = async (event: { event: string; row: any }) => {
     <ClientOnly>
       <DataTable
         :dynamic-columns="true"
-        :identifier="'data-table-orders'"
+        :identifier="'data-table-purchases'"
         :columns="columns"
         :rows="purchasesRows"
         @on-action-click="action"
