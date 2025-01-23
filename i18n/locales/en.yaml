@@ -151,6 +151,7 @@ pages:
     client: "Client"
     city: "City"
     address: "Address"
+    tel: "Phone"
     google-map-link: "Map"
     date: "Date"
     total-price: "Total Price"

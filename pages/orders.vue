@@ -305,7 +305,7 @@ const action = async (event: { event: string; row: any }) => {
           <span class="block text-right" v-if="row.totalPrice !== '-'">
             {{ row.totalPrice.toFixed(2) }} €
           </span>
-          <span v-else>-</span>
+          <span class="block text-right" v-else>-</span>
         </template>
 
         <template #status-data="{ row }">
