@@ -1,5 +1,6 @@
 import db from "@/models/index.js";
 import { UserRole } from "~/types";
+import { format } from "date-fns";
 
 interface Payload {
   userId: number;
@@ -20,6 +21,15 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
+    const purchasesResponse = await db.Purchases.findAll({
+      attributes: [
+        [db.sequelize.literal("SUM(price * qty) / SUM(qty)"), "averagePrice"],
+        "productId",
+        "date",
+      ],
+      group: ["productId", "date"],
+    });
+
     await db.sequelize.query("SET SESSION group_concat_max_len = 100000000;");
     const ordersResponse = await db.Orders.findAll({
       order: [["date", "DESC"]],
@@ -79,16 +89,29 @@ export default defineEventHandler(async (event) => {
       ],
       group: ["date", "userId", "status"],
     });
+
     return ordersResponse.map((order) => {
-      const rows = JSON.parse(`[${order.dataValues.rows}]`).map((row: any) => ({
-        ...row,
-        id: +row.id,
-        orderQty: +row.orderQty,
-        qty: +row.qty,
-        price: +row.price,
-        salePrice: +row.salePrice,
-        productId: +row.productId,
-      }));
+      const rows = JSON.parse(`[${order.dataValues.rows}]`).map((row: any) => {
+        const foundPurchase = purchasesResponse.find(
+          (item) =>
+            +item.dataValues.productId === +row.productId &&
+            item.dataValues.date === row.date,
+        );
+
+        return {
+          ...row,
+          id: +row.id,
+          orderQty: +row.orderQty,
+          qty: +row.qty,
+          price: +row.price,
+          salePrice: +row.salePrice,
+          prepareSalePrice: foundPurchase
+            ? foundPurchase.dataValues.averagePrice *
+              +(order.dataValues.user.sellingPercentage || 0)
+            : 0,
+          productId: +row.productId,
+        };
+      });
       return {
         ...order.dataValues,
         rows,

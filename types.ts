@@ -103,6 +103,7 @@ export interface Order {
   qty: number;
   price?: number;
   salePrice?: number;
+  prepareSalePrice?: number;
   comment?: string;
   date: string | number;
   createdAt: string;

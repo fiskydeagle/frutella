@@ -37,11 +37,13 @@ const columns = [
     key: "id",
     label: i18n.t("pages.products.id"),
     isVisible: false,
+    sortable: true,
   },
   {
     key: "name",
     label: i18n.t("pages.products.name"),
     isVisible: true,
+    sortable: true,
   },
   {
     key: "image",
@@ -49,29 +51,34 @@ const columns = [
     isVisible: true,
   },
   {
-    key: "unitType",
+    key: "unitTypeCol",
     label: i18n.t("pages.products.unit-type"),
     isVisible: true,
+    sortable: true,
   },
   {
     key: "createdAt",
     label: i18n.t("pages.products.created-at"),
     isVisible: true,
+    sortable: true,
   },
   {
     key: "updatedAt",
     label: i18n.t("pages.products.updated-at"),
     isVisible: false,
+    sortable: true,
   },
   {
     key: "createdBy",
     label: i18n.t("pages.products.created-by"),
     isVisible: false,
+    sortable: true,
   },
   {
     key: "updatedBy",
     label: i18n.t("pages.products.updated-by"),
     isVisible: false,
+    sortable: true,
   },
   {
     label: "",
@@ -81,56 +88,81 @@ const columns = [
   },
 ];
 
+const searchWord = ref<string>();
+
 const productsRows = computed(() => {
-  return products.value?.map((product) => {
-    const actions = [
-      {
-        event: "update",
-        label: i18n.t("pages.products.update"),
-        icon: "ph:pencil-duotone",
-      },
-    ];
+  return products.value
+    ?.map((product) => {
+      const actions = [
+        {
+          event: "update",
+          label: i18n.t("pages.products.update"),
+          icon: "ph:pencil-duotone",
+        },
+      ];
 
-    if (!product.deletedAt) {
-      actions.push({
-        event: "deactivate",
-        label: i18n.t("pages.products.deactivate"),
-        icon: "ph:eye-slash-duotone",
-      });
-    } else {
-      actions.push({
-        event: "restore",
-        label: i18n.t("pages.products.restore"),
-        icon: "ph:eye-duotone",
-      });
-    }
+      if (!product.deletedAt) {
+        actions.push({
+          event: "deactivate",
+          label: i18n.t("pages.products.deactivate"),
+          icon: "ph:eye-slash-duotone",
+        });
+      } else {
+        actions.push({
+          event: "restore",
+          label: i18n.t("pages.products.restore"),
+          icon: "ph:eye-duotone",
+        });
+      }
 
-    actions.push({
-      event: "delete",
-      label: i18n.t("pages.products.delete"),
-      icon: "ph:trash-duotone",
+      actions.push({
+        event: "delete",
+        label: i18n.t("pages.products.delete"),
+        icon: "ph:trash-duotone",
+      });
+
+      const cssClass = product.deletedAt ? "!bg-red-500 !bg-opacity-20" : "";
+
+      return {
+        id: product.id,
+        name: product.name,
+        image: product.image,
+        unitType: product.unitType,
+        unitTypeCol: i18n.t("components.product.add." + product.unitType),
+        createdAt: new Date(product.createdAt).getTime(),
+        createdAtDate: format(new Date(product.createdAt), "dd.MM.yyyy"),
+        updatedAt: new Date(product.updatedAt).getTime(),
+        updatedAtDate: format(new Date(product.updatedAt), "dd.MM.yyyy"),
+        createdBy: product.createdByUser
+          ? `${product.createdByUser.firstName} ${product.createdByUser.lastName}`
+          : "-",
+        updatedBy: product.updatedByUser
+          ? `${product.updatedByUser.firstName} ${product.updatedByUser.lastName}`
+          : "-",
+        deletedAt: product.deletedAt,
+        class: cssClass,
+        actions,
+      };
+    })
+    .filter((order) => {
+      if (!searchWord.value) return true;
+      return (
+        order.name.toLowerCase().includes(searchWord.value?.toLowerCase()) ||
+        order.unitTypeCol
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.createdAtDate
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.updatedAtDate
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.createdBy
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.updatedBy?.toLowerCase().includes(searchWord.value?.toLowerCase())
+      );
     });
-
-    const cssClass = product.deletedAt ? "bg-red-500 bg-opacity-20" : "";
-
-    return {
-      id: product.id,
-      name: product.name,
-      image: product.image,
-      unitType: product.unitType,
-      createdAt: format(new Date(product.createdAt), "dd.MM.yyyy"),
-      updatedAt: format(new Date(product.updatedAt), "dd.MM.yyyy"),
-      createdBy: product.createdByUser
-        ? `${product.createdByUser.firstName} ${product.createdByUser.lastName}`
-        : "-",
-      updatedBy: product.updatedByUser
-        ? `${product.updatedByUser.firstName} ${product.updatedByUser.lastName}`
-        : "-",
-      deletedAt: product.deletedAt,
-      class: cssClass,
-      actions,
-    };
-  });
 });
 
 const productAddModal = ref<boolean>(false);
@@ -198,7 +230,11 @@ const action = async (event: { event: string; row: any }) => {
       {{ i18n.t("pages.products.products") }}
     </h1>
     <div class="px-3 pb-3 border-b border-gray-200 dark:border-gray-700">
-      <div class="flex justify-end">
+      <div class="flex flex-wrap justify-between items-end gap-2">
+        <UFormGroup size="lg" :label="i18n.t('common.search')">
+          <UInput v-model="searchWord" />
+        </UFormGroup>
+
         <UButton size="lg" type="button" @click="addProductAction">
           {{ i18n.t("pages.products.add-product") }}
         </UButton>
@@ -212,13 +248,8 @@ const action = async (event: { event: string; row: any }) => {
         :columns="columns"
         :rows="productsRows"
         @on-action-click="action"
+        @select="action({ event: 'update', row: $event })"
       >
-        <template #unitType-data="{ row }">
-          <span class="capitalize">
-            {{ i18n.t("components.product.add." + row.unitType) }}
-          </span>
-        </template>
-
         <template #image-data="{ row }">
           <div class="flex justify-start" v-if="row.image">
             <UPopover mode="hover" class="">
@@ -238,6 +269,14 @@ const action = async (event: { event: string; row: any }) => {
               </template>
             </UPopover>
           </div>
+        </template>
+
+        <template #createdAt-data="{ row }">
+          {{ row.createdAtDate }}
+        </template>
+
+        <template #updatedAt-data="{ row }">
+          {{ row.updatedAtDate }}
         </template>
       </DataTable>
     </ClientOnly>

@@ -40,11 +40,13 @@ const columns = [
     key: "id",
     label: i18n.t("pages.suppliers.id"),
     isVisible: false,
+    sortable: true,
   },
   {
     key: "company",
     label: i18n.t("pages.suppliers.company"),
     isVisible: true,
+    sortable: true,
   },
   {
     key: "image",
@@ -52,24 +54,22 @@ const columns = [
     isVisible: true,
   },
   {
-    key: "firstName",
-    label: i18n.t("pages.suppliers.firstName"),
+    key: "name",
+    label: i18n.t("pages.suppliers.name"),
     isVisible: true,
+    sortable: true,
   },
   {
-    key: "lastName",
-    label: i18n.t("pages.suppliers.lastName"),
-    isVisible: true,
-  },
-  {
-    key: "city",
+    key: "cityCol",
     label: i18n.t("pages.suppliers.city"),
     isVisible: true,
+    sortable: true,
   },
   {
     key: "address",
     label: i18n.t("pages.suppliers.address"),
     isVisible: true,
+    sortable: true,
   },
   {
     key: "tel",
@@ -80,21 +80,25 @@ const columns = [
     key: "createdAt",
     label: i18n.t("pages.suppliers.created-at"),
     isVisible: true,
+    sortable: true,
   },
   {
     key: "updatedAt",
     label: i18n.t("pages.suppliers.updated-at"),
     isVisible: false,
+    sortable: true,
   },
   {
     key: "createdBy",
     label: i18n.t("pages.suppliers.created-by"),
     isVisible: false,
+    sortable: true,
   },
   {
     key: "updatedBy",
     label: i18n.t("pages.suppliers.updated-by"),
     isVisible: false,
+    sortable: true,
   },
   {
     label: "",
@@ -104,60 +108,96 @@ const columns = [
   },
 ];
 
+const searchWord = ref<string>();
+
 const suppliersRows = computed(() => {
-  return suppliers.value?.map((supplier) => {
-    const actions = [
-      {
-        event: "update",
-        label: i18n.t("pages.suppliers.update"),
-        icon: "ph:pencil-duotone",
-      },
-    ];
+  return suppliers.value
+    ?.map((supplier) => {
+      const actions = [
+        {
+          event: "update",
+          label: i18n.t("pages.suppliers.update"),
+          icon: "ph:pencil-duotone",
+        },
+      ];
 
-    if (!supplier.deletedAt) {
-      actions.push({
-        event: "deactivate",
-        label: i18n.t("pages.suppliers.deactivate"),
-        icon: "ph:eye-slash-duotone",
-      });
-    } else {
-      actions.push({
-        event: "restore",
-        label: i18n.t("pages.suppliers.restore"),
-        icon: "ph:eye-duotone",
-      });
-    }
+      if (!supplier.deletedAt) {
+        actions.push({
+          event: "deactivate",
+          label: i18n.t("pages.suppliers.deactivate"),
+          icon: "ph:eye-slash-duotone",
+        });
+      } else {
+        actions.push({
+          event: "restore",
+          label: i18n.t("pages.suppliers.restore"),
+          icon: "ph:eye-duotone",
+        });
+      }
 
-    actions.push({
-      event: "delete",
-      label: i18n.t("pages.suppliers.delete"),
-      icon: "ph:trash-duotone",
+      actions.push({
+        event: "delete",
+        label: i18n.t("pages.suppliers.delete"),
+        icon: "ph:trash-duotone",
+      });
+
+      const cssClass = supplier.deletedAt ? "!bg-red-500 !bg-opacity-20" : "";
+
+      return {
+        id: supplier.id,
+        company: supplier.company,
+        image: supplier.image,
+        firstName: supplier.firstName,
+        lastName: supplier.lastName,
+        name:
+          supplier.firstName || supplier.lastName
+            ? `${supplier.firstName || ""} ${supplier.lastName || ""}`
+            : "",
+        city: supplier.city,
+        cityCol: kosovoCities.find((city) => city.code === supplier.city)?.name,
+        address: supplier.address,
+        tel: supplier.tel,
+        createdAt: new Date(supplier.createdAt).getTime(),
+        createdAtDate: format(new Date(supplier.createdAt), "dd.MM.yyyy"),
+        updatedAt: new Date(supplier.updatedAt).getTime(),
+        updatedAtDate: format(new Date(supplier.updatedAt), "dd.MM.yyyy"),
+        createdBy: supplier.createdByUser
+          ? `${supplier.createdByUser.firstName} ${supplier.createdByUser.lastName}`
+          : "-",
+        updatedBy: supplier.updatedByUser
+          ? `${supplier.updatedByUser.firstName} ${supplier.updatedByUser.lastName}`
+          : "-",
+        deletedAt: supplier.deletedAt,
+        class: cssClass,
+        actions,
+      };
+    })
+    .filter((order) => {
+      if (!searchWord.value) return true;
+      return (
+        order.company
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.name.toLowerCase().includes(searchWord.value?.toLowerCase()) ||
+        order.cityCol
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.address
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.tel?.toLowerCase().includes(searchWord.value?.toLowerCase()) ||
+        order.createdAtDate
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.updatedAtDate
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.createdBy
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.updatedBy?.toLowerCase().includes(searchWord.value?.toLowerCase())
+      );
     });
-
-    const cssClass = supplier.deletedAt ? "bg-red-500 bg-opacity-20" : "";
-
-    return {
-      id: supplier.id,
-      company: supplier.company,
-      image: supplier.image,
-      firstName: supplier.firstName,
-      lastName: supplier.lastName,
-      city: supplier.city,
-      address: supplier.address,
-      tel: supplier.tel,
-      createdAt: format(new Date(supplier.createdAt), "dd.MM.yyyy"),
-      updatedAt: format(new Date(supplier.updatedAt), "dd.MM.yyyy"),
-      createdBy: supplier.createdByUser
-        ? `${supplier.createdByUser.firstName} ${supplier.createdByUser.lastName}`
-        : "-",
-      updatedBy: supplier.updatedByUser
-        ? `${supplier.updatedByUser.firstName} ${supplier.updatedByUser.lastName}`
-        : "-",
-      deletedAt: supplier.deletedAt,
-      class: cssClass,
-      actions,
-    };
-  });
 });
 
 const supplierAddModal = ref<boolean>(false);
@@ -227,7 +267,11 @@ const action = async (event: { event: string; row: any }) => {
       {{ i18n.t("pages.suppliers.suppliers") }}
     </h1>
     <div class="px-3 pb-3 border-b border-gray-200 dark:border-gray-700">
-      <div class="flex justify-end">
+      <div class="flex flex-wrap justify-between items-end gap-2">
+        <UFormGroup size="lg" :label="i18n.t('common.search')">
+          <UInput v-model="searchWord" />
+        </UFormGroup>
+
         <UButton size="lg" type="button" @click="addSupplierAction">
           {{ i18n.t("pages.suppliers.add-supplier") }}
         </UButton>
@@ -241,6 +285,7 @@ const action = async (event: { event: string; row: any }) => {
         :columns="columns"
         :rows="suppliersRows"
         @on-action-click="action"
+        @select="action({ event: 'update', row: $event })"
       >
         <template #image-data="{ row }">
           <div class="flex justify-start" v-if="row.image">
@@ -263,8 +308,23 @@ const action = async (event: { event: string; row: any }) => {
           </div>
         </template>
 
-        <template #city-data="{ row }">
-          {{ kosovoCities.find((city) => city.code === row.city)?.name }}
+        <template #tel-data="{ row }">
+          <a
+            v-if="row.tel"
+            @click.stop
+            class="p-3 -m-3"
+            :href="`tel:${row.tel}`"
+          >
+            {{ row.tel }}
+          </a>
+        </template>
+
+        <template #createdAt-data="{ row }">
+          {{ row.createdAtDate }}
+        </template>
+
+        <template #updatedAt-data="{ row }">
+          {{ row.updatedAtDate }}
         </template>
       </DataTable>
     </ClientOnly>

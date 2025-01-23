@@ -70,6 +70,14 @@ const isOpen = computed({
   },
 });
 
+const hasQty = (productId: number) => {
+  const currentOrder = props.currentOrders.find(
+    (item) => item.productId === productId,
+  );
+
+  return currentOrder && currentOrder.orderQty;
+};
+
 watch(
   () => isOpen.value,
   async (isOpen) => {
@@ -133,7 +141,8 @@ watch(
           <div
             v-for="(product, index) in products"
             :key="'product-' + product.id"
-            class="flex gap-2 justify-between items-end pt-2 pb-3"
+            class="flex gap-2 justify-between items-end pt-2 pb-3 order-1"
+            :class="hasQty(product.id) ? 'order-1' : 'order-2'"
           >
             <div class="flex shrink-0 items-center gap-2">
               <UPopover mode="hover" class="flex shrink-0">

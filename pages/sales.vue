@@ -32,15 +32,23 @@ const columns = computed(() => {
       key: "user",
       label: i18n.t("pages.sales.client"),
       isVisible: true,
+      sortable: true,
     },
     {
       key: "city",
       label: i18n.t("pages.sales.city"),
       isVisible: true,
+      sortable: true,
     },
     {
       key: "address",
       label: i18n.t("pages.sales.address"),
+      isVisible: true,
+      sortable: true,
+    },
+    {
+      key: "tel",
+      label: i18n.t("pages.sales.tel"),
       isVisible: true,
     },
     {
@@ -53,24 +61,21 @@ const columns = computed(() => {
       label: i18n.t("pages.sales.date"),
       isVisible: true,
       class: "w-px",
+      sortable: true,
     },
     {
       key: "totalPrice",
       label: i18n.t("pages.sales.total-price"),
       isVisible: true,
       class: "w-px",
+      sortable: true,
     },
     {
       key: "status",
       label: i18n.t("pages.sales.status"),
       isVisible: true,
       class: "w-px",
-    },
-    {
-      key: "action",
-      label: i18n.t("pages.sales.action"),
-      isVisible: true,
-      class: "w-px",
+      sortable: true,
     },
   ];
 
@@ -111,13 +116,16 @@ const ordersRows = computed(() => {
         user: order.user.company,
         city: kosovoCities.find((city) => city.code === order.user.city)?.name,
         address: order.user.address,
+        tel: order.user.tel,
         googleMap: order.user.googleMap,
-        date: format(new Date(order.date), "dd.MM.yyyy"),
+        date: new Date(order.date).getTime(),
+        dateDate: format(new Date(order.date), "dd.MM.yyyy"),
         totalPrice:
           order.status === OrderStatus.Processing
             ? "-"
-            : totalPrice.toFixed(2) + " €",
+            : +totalPrice.toFixed(2),
         status: order.status,
+        statusCol: i18n.t("components.order.cart.status." + order.status),
         rawOrders: order.rows,
         rawUser: order.user,
         rawDate: order.date,
@@ -129,7 +137,17 @@ const ordersRows = computed(() => {
       return (
         order.user.toLowerCase().includes(searchWord.value?.toLowerCase()) ||
         order.city?.toLowerCase().includes(searchWord.value?.toLowerCase()) ||
-        order.address?.toLowerCase().includes(searchWord.value?.toLowerCase())
+        order.address
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.dateDate
+          ?.toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.totalPrice
+          .toString()
+          .toLowerCase()
+          .includes(searchWord.value?.toLowerCase()) ||
+        order.statusCol?.toLowerCase().includes(searchWord.value?.toLowerCase())
       );
     });
 });
@@ -173,7 +191,7 @@ const currentCartDate = ref<string | number>("");
 const cartOpenAction = (row: any) => {
   currentCartOrders.value = row.rawOrders;
   totalPrice.value = row.totalPrice;
-  currentCartDate.value = row.date;
+  currentCartDate.value = row.dateDate;
   cartModal.value = true;
 };
 const cartClose = () => {
@@ -186,7 +204,9 @@ const cartClose = () => {
 const action = async (event: { event: string; row: any }) => {
   switch (event.event) {
     case "sell":
-      sellOpenAction(event.row);
+      if (event.row.status === OrderStatus.Processing)
+        sellOpenAction(event.row);
+      else cartOpenAction(event.row);
       break;
     case "show-sales":
       cartOpenAction(event.row);
@@ -202,7 +222,7 @@ const action = async (event: { event: string; row: any }) => {
     </h1>
     <div class="px-3 pb-3 border-b border-gray-200 dark:border-gray-700">
       <div class="flex flex-wrap justify-between items-end gap-2">
-        <UFormGroup size="lg" :label="i18n.t('pages.sales.search')">
+        <UFormGroup size="lg" :label="i18n.t('common.search')">
           <UInput v-model="searchWord" />
         </UFormGroup>
       </div>
@@ -211,22 +231,27 @@ const action = async (event: { event: string; row: any }) => {
     <ClientOnly>
       <DataTable
         :dynamic-columns="true"
-        :identifier="'data-table-orders'"
+        :identifier="'data-table-sales'"
         :columns="columns"
         :rows="ordersRows"
         @on-action-click="action"
+        @select="action({ event: 'sell', row: $event })"
       >
+        <template #date-data="{ row }">
+          {{ row.dateDate }}
+        </template>
+
         <template #user-data="{ row }">
-          <div class="flex justify-start" v-if="row.image">
-            <UPopover mode="hover">
-              <div class="flex justify-center flex-wrap gap-2 items-center">
-                <img
-                  :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${row.image}`"
-                  class="w-10 h-10 rounded object-cover border border-gray-300"
-                  alt="product image"
-                />
-                <p>{{ row.user }}</p>
-              </div>
+          <div
+            class="flex justify-start flex-wrap gap-x-2 gap-y-1 items-center"
+            v-if="row.image"
+          >
+            <UPopover mode="hover" class="flex">
+              <img
+                :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${row.image}`"
+                class="w-10 h-10 rounded object-cover border border-gray-300 block"
+                alt="product image"
+              />
               <template #panel>
                 <div class="p-2">
                   <img
@@ -237,8 +262,16 @@ const action = async (event: { event: string; row: any }) => {
                 </div>
               </template>
             </UPopover>
+            <p>{{ row.user }}</p>
           </div>
           <span v-else>{{ row.user }}</span>
+        </template>
+
+        <template #totalPrice-data="{ row }">
+          <span class="block text-right" v-if="row.totalPrice !== '-'">
+            {{ row.totalPrice.toFixed(2) }} €
+          </span>
+          <span class="block text-right" v-else>-</span>
         </template>
 
         <template #status-data="{ row }">
@@ -257,23 +290,27 @@ const action = async (event: { event: string; row: any }) => {
           </UBadge>
         </template>
 
-        <template #googleMap-data="{ row }">
-          <a v-if="row.googleMap" :href="row.googleMap" target="_blank">
-            <UIcon name="ph:map-pin-duotone" size="30" />
+        <template #tel-data="{ row }">
+          <a
+            v-if="row.tel"
+            @click.stop
+            class="p-3 -m-3"
+            :href="`tel:${row.tel}`"
+          >
+            {{ row.tel }}
           </a>
         </template>
 
-        <template #action-data="{ row }">
-          <UButton
-            v-for="(ac, index) in row.actions"
-            :key="'action-' + index"
-            color="gray"
-            variant="solid"
-            :icon="ac.icon"
-            :label="ac.label"
-            size="xs"
-            @click="action({ event: ac.event, row })"
-          />
+        <template #googleMap-data="{ row }">
+          <a
+            v-if="row.googleMap"
+            @click.stop
+            class="inline-flex p-3 -m-3"
+            :href="row.googleMap"
+            target="_blank"
+          >
+            <UIcon name="ph:map-pin-duotone" size="30" />
+          </a>
         </template>
       </DataTable>
     </ClientOnly>
