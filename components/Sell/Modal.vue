@@ -206,7 +206,7 @@ const onCancel = () => {
           </div>
         </template>
         <div
-          class="flex flex-col divide-y divide-gray-200 dark:divide-gray-800 -mt-2 -mb-3"
+          class="flex flex-col sm:divide-y max-sm:gap-3.5 divide-gray-200 dark:divide-gray-800 -mt-2 -mb-3"
         >
           <p
             v-if="!currentOrders || !currentOrders.length"
@@ -218,14 +218,16 @@ const onCancel = () => {
             v-else
             v-for="(order, index) in currentOrders"
             :key="`order-${order.id}`"
-            class="flex max-sm:flex-col gap-2 justify-between items-start pt-2 pb-3"
+            class="flex max-sm:grid max-sm:grid-cols-2 gap-3 justify-between items-start pt-2 pb-3 max-sm:bg-neutral-100 max-sm:border !border-neutral-200 max-sm:p-3.5 max-sm:rounded-md"
           >
-            <div class="flex shrink-0 items-center gap-2 w-full sm:w-1/5">
+            <div
+              class="flex shrink-0 items-center gap-2 col-span-2 w-full sm:w-1/5"
+            >
               <UPopover mode="hover" class="flex shrink-0">
-                <div>
+                <div class="bg-white mt-1 border border-gray-300 rounded p-1">
                   <img
                     :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${order.productImage}`"
-                    class="w-14 h-14 rounded object-cover border border-gray-300 mt-1"
+                    class="w-14 h-14 object-cover"
                     alt="product image"
                   />
                 </div>
@@ -263,7 +265,7 @@ const onCancel = () => {
                   base: 'pl-3 sm:w-28',
                 },
               }"
-              class="shrink w-full sm:w-1/5"
+              class="shrink w-full sm:w-1/5 col-span-2"
             >
               <div class="flex flex-col items-end max relative group">
                 <UInput
@@ -290,13 +292,13 @@ const onCancel = () => {
               :name="`price-${order.id}`"
               :ui="{
                 label: {
-                  wrapper: 'justify-center',
+                  wrapper: 'sm:justify-center',
                   base: 'px-3 whitespace-nowrap',
                 },
               }"
               class="shrink"
             >
-              <p class="sm:text-center text-xl font-medium sm:pt-1">
+              <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
                 {{
                   (
                     +(orderUser?.sellingPercentage || 0) *
@@ -313,13 +315,13 @@ const onCancel = () => {
               :name="`total-${order.id}`"
               :ui="{
                 label: {
-                  wrapper: 'justify-center',
+                  wrapper: 'sm:justify-center',
                   base: 'px-3 whitespace-nowrap',
                 },
               }"
               class="shrink"
             >
-              <p class="sm:text-center text-xl font-medium sm:pt-1">
+              <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
                 {{
                   (
                     +(state[`qty-${order.id}`] || 0) *
@@ -342,7 +344,7 @@ const onCancel = () => {
                   base: 'pl-3 w-full',
                 },
               }"
-              class="shrink w-full sm:w-1/4"
+              class="shrink w-full sm:w-1/4 col-span-2"
             >
               <div class="flex flex-col items-end max">
                 <UInput

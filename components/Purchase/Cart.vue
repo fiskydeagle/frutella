@@ -58,19 +58,21 @@ const isOpen = computed({
         </div>
       </template>
       <div
-        class="flex flex-col divide-y divide-gray-100 dark:divide-gray-800 -mt-2 -mb-3"
+        class="flex flex-col sm:divide-y max-sm:gap-3.5 divide-gray-100 dark:divide-gray-800 -mt-2 -mb-3"
       >
         <div
           v-for="purchase in currentPurchases"
           :key="'purchase-' + purchase.id"
-          class="flex max-sm:flex-col gap-2 justify-between items-start pt-2 pb-3"
+          class="flex max-sm:grid max-sm:grid-cols-2 gap-3 justify-between items-start pt-2 pb-3 max-sm:bg-neutral-100 max-sm:border !border-neutral-200 max-sm:p-3.5 max-sm:rounded-md"
         >
-          <div class="flex shrink-0 items-center gap-2 w-full sm:w-1/5">
+          <div
+            class="flex shrink-0 items-center gap-2 col-span-2 w-full sm:w-1/5"
+          >
             <UPopover mode="hover" class="flex shrink-0">
-              <div>
+              <div class="bg-white mt-1 border border-gray-300 rounded p-1">
                 <img
                   :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${purchase.productImage}`"
-                  class="w-14 h-14 rounded object-cover border border-gray-300 mt-1"
+                  class="w-14 h-14 object-cover"
                   alt="product image"
                 />
               </div>
@@ -150,13 +152,13 @@ const isOpen = computed({
             :name="`total-${purchase.productId}-${purchase.id}`"
             :ui="{
               label: {
-                wrapper: 'justify-center',
+                wrapper: 'sm:justify-center',
                 base: 'px-3 whitespace-nowrap',
               },
             }"
             class="shrink"
           >
-            <p class="sm:text-center text-xl font-medium sm:pt-1">
+            <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
               {{ (+(purchase.qty || 0) * +(purchase.price || 0)).toFixed(2) }} €
             </p>
           </UFormGroup>

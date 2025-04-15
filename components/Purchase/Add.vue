@@ -27,43 +27,41 @@ const schema = computed(() => {
 
   if (props.currentPurchases) {
     for (const purchases of props.currentPurchases) {
-      ob[`qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`] =
-        number()
-          .transform((value, originalValue) => {
-            return originalValue === "" ? null : value; //
-          })
-          .integer("Quantity must be an integer")
-          .nullable()
-          .optional()
-          .moreThan(-1, "Quantity must be greater or equal to 0");
-      ob[`price-${purchases.productId}-${purchases.id}-${purchases.splitId}`] =
-        number()
-          .transform((value, originalValue) => {
-            // Transform empty string to null for easier validation
-            return originalValue === "" ? null : value;
-          })
-          .when(
-            `qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`,
-            {
-              is: (value: any) => !!value,
-              then: (schema: any) =>
-                schema
-                  .required("Required")
-                  .moreThan(0, "The number must be greater than 0"),
-              otherwise: (schema: any) => schema.nullable(),
-            },
-          );
+      const qtyKey = `qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`;
+      const priceKey = `price-${purchases.productId}-${purchases.id}-${purchases.splitId}`;
+      const supplierKey = `supplier-${purchases.productId}-${purchases.id}-${purchases.splitId}`;
 
-      ob[
-        `supplier-${purchases.productId}-${purchases.id}-${purchases.splitId}`
-      ] = string().when(
-        `qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`,
-        {
-          is: (value: any) => !!value,
-          then: (schema: any) => schema.required("Required"),
-          otherwise: (schema: any) => schema.nullable(),
-        },
-      );
+      ob[qtyKey] = number()
+        .transform((value, originalValue) => {
+          return originalValue === "" ? null : value; //
+        })
+        .integer("Quantity must be an integer")
+        .nullable()
+        .optional()
+        .moreThan(-1, "Quantity must be greater or equal to 0");
+
+      ob[priceKey] = number()
+        .transform((value, originalValue) =>
+          originalValue === "" ? null : value,
+        )
+        .nullable()
+        .optional()
+        .moreThan(0, "Price must be greater than 0");
+
+      ob[supplierKey] = string()
+        .nullable()
+        .test("supplier-required", "Required", function (value) {
+          const qty = this.parent[qtyKey];
+          const price = this.parent[priceKey];
+          const hasQty = qty !== null && qty !== undefined && qty !== 0;
+          const hasPrice = price !== null && price !== undefined && price !== 0;
+
+          if (hasQty && hasPrice) {
+            return value !== null && value !== undefined && value.trim() !== "";
+          }
+
+          return true; // Not required if both qty and price are empty
+        });
     }
   }
 
@@ -184,7 +182,9 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
           ? +ids[1]
           : undefined,
         productId: +ids[0],
-        qty: +state.value[`qty-${stateId}`] || undefined,
+        qty: state.value[`price-${stateId}`]
+          ? +state.value[`qty-${stateId}`] || undefined
+          : undefined,
         price: +state.value[`price-${stateId}`] || undefined,
         supplierName: state.value[`supplier-${stateId}`] || undefined,
       });
@@ -226,7 +226,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
           </div>
         </template>
         <div
-          class="flex flex-col divide-y divide-gray-200 dark:divide-gray-800 -mt-2 -mb-3"
+          class="flex flex-col sm:divide-y max-sm:gap-3.5 divide-gray-200 dark:divide-gray-800 -mt-2 -mb-3"
         >
           <p
             v-if="!currentPurchases || !currentPurchases.length"
@@ -238,14 +238,14 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
             v-else
             v-for="(purchases, index) in currentPurchases"
             :key="`purchases-${purchases.productId}-${purchases.id}-${purchases.splitId}`"
-            class="flex max-sm:flex-col gap-2 justify-between items-start pt-2 pb-3"
+            class="flex max-sm:grid max-sm:grid-cols-2 gap-3 justify-between items-start pt-2 pb-3 max-sm:bg-neutral-100 max-sm:border !border-neutral-200 max-sm:p-3.5 max-sm:rounded-md"
           >
-            <div class="flex shrink-0 items-center gap-2 w-full sm:w-1/5">
+            <div class="flex shrink-0 items-center gap-2 col-span-2 sm:w-1/5">
               <UPopover mode="hover" class="flex shrink-0">
-                <div>
+                <div class="bg-white mt-1 border border-gray-300 rounded p-1">
                   <img
                     :src="`${useRuntimeConfig().public.PUBLIC_FILES_URL}${purchases.product.image}`"
-                    class="w-14 h-14 rounded object-cover border border-gray-300 mt-1"
+                    class="w-14 h-14 object-cover"
                     alt="product image"
                   />
                 </div>
@@ -346,6 +346,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
               <div class="flex flex-col items-end max">
                 <UInput
                   type="number"
+                  :min="0"
                   v-model="
                     state[
                       `price-${purchases.productId}-${purchases.id}-${purchases.splitId}`
@@ -368,13 +369,13 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
               :name="`total-${purchases.productId}-${purchases.id}-${purchases.splitId}`"
               :ui="{
                 label: {
-                  wrapper: 'justify-center',
+                  wrapper: 'sm:justify-center',
                   base: 'px-3 whitespace-nowrap',
                 },
               }"
               class="shrink"
             >
-              <p class="sm:text-center text-xl font-medium sm:pt-1">
+              <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
                 {{
                   (
                     +(
