@@ -27,43 +27,43 @@ const schema = computed(() => {
 
   if (props.currentPurchases) {
     for (const purchases of props.currentPurchases) {
-      ob[`qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`] =
-        number()
-          .transform((value, originalValue) => {
-            return originalValue === "" ? null : value; //
-          })
-          .integer("Quantity must be an integer")
-          .nullable()
-          .optional()
-          .moreThan(-1, "Quantity must be greater or equal to 0");
-      ob[`price-${purchases.productId}-${purchases.id}-${purchases.splitId}`] =
-        number()
-          .transform((value, originalValue) => {
-            // Transform empty string to null for easier validation
-            return originalValue === "" ? null : value;
-          })
-          .when(
-            `qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`,
-            {
-              is: (value: any) => !!value,
-              then: (schema: any) =>
-                schema
-                  .required("Required")
-                  .moreThan(0, "The number must be greater than 0"),
-              otherwise: (schema: any) => schema.nullable(),
-            },
-          );
+      const qtyKey = `qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`;
+      const priceKey = `price-${purchases.productId}-${purchases.id}-${purchases.splitId}`;
+      const supplierKey = `supplier-${purchases.productId}-${purchases.id}-${purchases.splitId}`;
 
-      ob[
-        `supplier-${purchases.productId}-${purchases.id}-${purchases.splitId}`
-      ] = string().when(
-        `qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`,
-        {
-          is: (value: any) => !!value,
-          then: (schema: any) => schema.required("Required"),
-          otherwise: (schema: any) => schema.nullable(),
-        },
-      );
+      ob[qtyKey] = number()
+        .transform((value, originalValue) => {
+          return originalValue === "" ? null : value; //
+        })
+        .integer("Quantity must be an integer")
+        .nullable()
+        .optional()
+        .moreThan(-1, "Quantity must be greater or equal to 0");
+
+      ob[priceKey] = number()
+        .transform((value, originalValue) =>
+          originalValue === "" ? null : value,
+        )
+        .nullable()
+        .optional()
+        .moreThan(0, "Price must be greater than 0");
+
+      ob[supplierKey] = string()
+        .nullable()
+        .test("supplier-required", "Required", function (value) {
+          const qty = this.parent[qtyKey];
+          const price = this.parent[priceKey];
+          console.log("fisky qty", qty);
+          console.log("fisky price", price);
+          const hasQty = qty !== null && qty !== undefined && qty !== 0;
+          const hasPrice = price !== null && price !== undefined && price !== 0;
+
+          if (hasQty && hasPrice) {
+            return value !== null && value !== undefined && value.trim() !== "";
+          }
+
+          return true; // Not required if both qty and price are empty
+        });
     }
   }
 
@@ -184,7 +184,9 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
           ? +ids[1]
           : undefined,
         productId: +ids[0],
-        qty: +state.value[`qty-${stateId}`] || undefined,
+        qty: state.value[`price-${stateId}`]
+          ? +state.value[`qty-${stateId}`] || undefined
+          : undefined,
         price: +state.value[`price-${stateId}`] || undefined,
         supplierName: state.value[`supplier-${stateId}`] || undefined,
       });
@@ -346,6 +348,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
               <div class="flex flex-col items-end max">
                 <UInput
                   type="number"
+                  :min="0"
                   v-model="
                     state[
                       `price-${purchases.productId}-${purchases.id}-${purchases.splitId}`
