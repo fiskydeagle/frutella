@@ -53,8 +53,6 @@ const schema = computed(() => {
         .test("supplier-required", "Required", function (value) {
           const qty = this.parent[qtyKey];
           const price = this.parent[priceKey];
-          console.log("fisky qty", qty);
-          console.log("fisky price", price);
           const hasQty = qty !== null && qty !== undefined && qty !== 0;
           const hasPrice = price !== null && price !== undefined && price !== 0;
 
