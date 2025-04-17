@@ -6,6 +6,7 @@ import { type Order, type OrderState, OrderStatus, UserRole } from "~/types";
 import { format } from "date-fns";
 
 const i18n = useI18n();
+const route = useRoute();
 
 useHead(() => {
   return {
@@ -238,6 +239,12 @@ const action = async (event: { event: string; row: any }) => {
       break;
   }
 };
+
+onMounted(() => {
+  if (route.query.modal && orderUser.value) {
+    addOrderAction();
+  }
+});
 </script>
 
 <template>
