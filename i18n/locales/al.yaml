@@ -24,6 +24,11 @@ pages:
     delete: "Fshije"
   index:
     home: "Ballina"
+    new-order: "Porosi e re"
+    buy: "Blejë"
+    sales: "Shitjet"
+    add-supplier: "Shto furnitorë"
+    add-product: "Shto produkt"
   login:
     login: "Kyçu"
     email: "Email"

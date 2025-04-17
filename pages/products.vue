@@ -4,6 +4,7 @@ import { useProduct } from "~/composables/useProduct";
 import { type Product } from "~/types";
 
 const i18n = useI18n();
+const route = useRoute();
 
 useHead(() => {
   return {
@@ -222,6 +223,12 @@ const action = async (event: { event: string; row: any }) => {
       break;
   }
 };
+
+onMounted(() => {
+  if (route.query.modal) {
+    addProductAction();
+  }
+});
 </script>
 
 <template>

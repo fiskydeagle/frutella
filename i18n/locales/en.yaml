@@ -24,6 +24,11 @@ pages:
     delete: "Delete"
   index:
     home: "Home"
+    new-order: "New Order"
+    buy: "Buy"
+    sales: "Sale"
+    add-supplier: "Add supplier"
+    add-product: "Add product"
   login:
     login: "Login"
     email: "Email"

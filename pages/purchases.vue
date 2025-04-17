@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useAuthUser } from "~/composables/useAuthUser";
 import { usePurchase } from "~/composables/usePurchase";
 import { type Purchase, type PurchaseState } from "~/types";
 import { format } from "date-fns";
 
 const i18n = useI18n();
+const route = useRoute();
 
 useHead(() => {
   return {
@@ -22,7 +22,6 @@ definePageMeta({
   middleware: ["auth", "verified", "employee"],
 });
 
-const { user } = useAuthUser();
 const {
   purchases,
   getPurchases,
@@ -199,6 +198,12 @@ const action = async (event: { event: string; row: any }) => {
       break;
   }
 };
+
+onMounted(() => {
+  if (route.query.modal) {
+    addPurchaseAction();
+  }
+});
 </script>
 
 <template>
