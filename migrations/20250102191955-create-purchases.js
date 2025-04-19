@@ -28,6 +28,10 @@ module.exports = {
         allowNull: true,
         type: Sequelize.DOUBLE(10, 2),
       },
+      sellingPrice: {
+        allowNull: true,
+        type: Sequelize.DOUBLE(10, 2),
+      },
       supplierId: {
         allowNull: true,
         type: Sequelize.INTEGER,

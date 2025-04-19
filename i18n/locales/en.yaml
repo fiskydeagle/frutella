@@ -348,6 +348,8 @@ components:
     add:
       purchase: "Purchase"
       price: "Price"
+      selling-price: "Selling Price"
+      percentage: "Percentage"
       total-price: "Total Price"
       supplier: "supplier"
       new-supplier: "New supplier"
