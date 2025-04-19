@@ -24,6 +24,10 @@ export default defineEventHandler(async (event) => {
     const purchasesResponse = await db.Purchases.findAll({
       attributes: [
         [db.sequelize.literal("SUM(price * qty) / SUM(qty)"), "averagePrice"],
+        [
+          db.sequelize.literal("SUM(sellingPrice * qty) / SUM(qty)"),
+          "averageSellingPrice",
+        ],
         "productId",
         "date",
       ],
@@ -106,8 +110,9 @@ export default defineEventHandler(async (event) => {
           price: +row.price,
           salePrice: +row.salePrice,
           prepareSalePrice: foundPurchase
-            ? foundPurchase.dataValues.averagePrice *
-              +(order.dataValues.user.sellingPercentage || 0)
+            ? order.dataValues.user.inOwnership
+              ? foundPurchase.dataValues.averagePrice
+              : foundPurchase.dataValues.averageSellingPrice
             : 0,
           productId: +row.productId,
         };

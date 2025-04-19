@@ -70,6 +70,10 @@ export default defineEventHandler(async (event) => {
       attributes: [
         [db.sequelize.literal("SUM(qty)"), "totalQty"],
         [db.sequelize.literal("SUM(price * qty) / SUM(qty)"), "averagePrice"],
+        [
+          db.sequelize.literal("SUM(sellingPrice * qty) / SUM(qty)"),
+          "averageSellingPrice",
+        ],
         "productId",
       ],
       group: ["productId"],

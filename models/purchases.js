@@ -32,6 +32,7 @@ export default (sequelize, DataTypes) => {
       productId: DataTypes.INTEGER,
       qty: DataTypes.INTEGER,
       price: DataTypes.DOUBLE(10, 2),
+      sellingPrice: DataTypes.DOUBLE(10, 2),
       supplierId: DataTypes.INTEGER,
       date: DataTypes.DATEONLY,
     },

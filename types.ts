@@ -26,7 +26,7 @@ export interface User {
   role: UserRole;
   verified: boolean;
   password: string | null | undefined;
-  sellingPercentage: number;
+  inOwnership: boolean;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
@@ -160,6 +160,7 @@ export interface Purchase {
   qty: number | null;
   totalOrderQty: number;
   price?: number;
+  sellingPrice?: number;
   supplierId: number | null;
   date: string | number;
   createdAt: string;
@@ -191,6 +192,7 @@ export interface PurchaseState {
   productId: number;
   qty?: number;
   price?: number;
+  sellingPrice?: number;
   purchaseId?: number;
   supplierName: string;
 }
@@ -207,6 +209,7 @@ export interface SaleInfo {
   productId: number;
   totalQty: number;
   averagePrice: number;
+  averageSellingPrice: number;
   qty: number;
   maxQty: number;
   percentage: number;

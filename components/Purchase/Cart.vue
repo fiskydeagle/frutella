@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { type Purchase, type User } from "~/types";
+import { useUtils } from "~/composables/useUtils";
 
 const i18n = useI18n();
 
@@ -16,6 +17,8 @@ type EmitType = {
 
 const props = defineProps<Props>();
 const emits = defineEmits<EmitType>();
+
+const { findPercentage } = useUtils();
 
 const isOpen = computed({
   get: () => props.isModalOpen,
@@ -104,7 +107,7 @@ const isOpen = computed({
                 base: 'pl-3 sm:w-28',
               },
             }"
-            class="shrink w-full sm:w-1/5"
+            class="shrink w-full sm:w-1/5 col-span-2"
           >
             <div class="flex flex-col items-end max relative group">
               <UInput
@@ -144,23 +147,73 @@ const isOpen = computed({
                 </template>
               </UInput>
             </div>
+
+            <template #help>
+              <p
+                class="text-xs text-orange-500 -mt-1 font-medium text-right pr-3"
+              >
+                {{ i18n.t("components.purchase.add.total-price") }}:
+                <span class="inline-block">
+                  {{
+                    (+(purchase.qty || 0) * +(purchase.price || 0)).toFixed(2)
+                  }}
+                  €
+                </span>
+              </p>
+            </template>
           </UFormGroup>
 
           <UFormGroup
             size="lg"
-            :label="i18n.t('components.purchase.add.total-price')"
-            :name="`total-${purchase.productId}-${purchase.id}`"
+            :label="i18n.t('components.purchase.add.selling-price')"
+            :name="`sellingPrice-${purchase.productId}-${purchase.id}`"
             :ui="{
+              container: 'sm:text-center',
               label: {
-                wrapper: 'sm:justify-center',
-                base: 'px-3 whitespace-nowrap',
+                wrapper: 'sm:justify-end',
+                base: 'pl-3 sm:w-28',
               },
             }"
-            class="shrink"
+            class="shrink w-full sm:w-1/5"
           >
-            <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
-              {{ (+(purchase.qty || 0) * +(purchase.price || 0)).toFixed(2) }} €
-            </p>
+            <div class="flex flex-col items-end max">
+              <UInput
+                type="number"
+                v-model="purchase.sellingPrice!"
+                :disabled="true"
+                class="w-full sm:w-28"
+              >
+                <template #trailing>
+                  <span class="text-gray-500 dark:text-gray-400 text-base">
+                    €
+                  </span>
+                </template>
+              </UInput>
+            </div>
+            <template #help>
+              <p
+                v-if="
+                  findPercentage(
+                    purchase.price || 0,
+                    purchase.sellingPrice || 0,
+                  )
+                "
+                class="text-xs text-orange-500 -mt-1 font-medium text-right pr-3"
+              >
+                {{ i18n.t("components.purchase.add.percentage") }}:
+                <span class="inline-block">
+                  {{
+                    (
+                      findPercentage(
+                        purchase.price || 0,
+                        purchase.sellingPrice || 0,
+                      ) - 100
+                    ).toFixed(2)
+                  }}
+                  %
+                </span>
+              </p>
+            </template>
           </UFormGroup>
 
           <UFormGroup
@@ -174,7 +227,7 @@ const isOpen = computed({
                 base: 'pl-3 w-full',
               },
             }"
-            class="shrink w-full sm:w-1/4"
+            class="shrink w-full sm:w-1/4 col-span-2"
           >
             <div class="flex flex-col items-end max">
               <UInput

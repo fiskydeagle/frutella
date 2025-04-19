@@ -348,6 +348,8 @@ components:
     add:
       purchase: "Blejë"
       price: "Çmimi"
+      selling-price: "Çmimi i shitjes"
+      percentage: "Përqindja"
       total-price: "Çmimi Total"
       supplier: "Furnitori"
       new-supplier: "Furnitor i ri"
