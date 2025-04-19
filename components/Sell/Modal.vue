@@ -33,6 +33,7 @@ const getSalesInfoByProduct = (productId: number) => {
   return {
     totalQty: 0,
     averagePrice: 0,
+    averageSellingPrice: 0,
     productId: 0,
     qty: 0,
     maxQty: 0,
@@ -112,8 +113,10 @@ const totalPrice = computed(() => {
 
       total +=
         +state.value[`qty-${stateId}`] *
-        (getSalesInfoByProduct(currentOrder?.productId || -1).averagePrice *
-          +(props.orderUser?.sellingPercentage || 0));
+        (!!props.orderUser?.inOwnership
+          ? getSalesInfoByProduct(currentOrder?.productId || -1).averagePrice
+          : getSalesInfoByProduct(currentOrder?.productId || -1)
+              .averageSellingPrice);
     }
   });
   return total;
@@ -134,9 +137,10 @@ const onSubmit = (event: FormSubmitEvent<Schema>) => {
         qty: +state.value[`qty-${stateId}`],
         price: getSalesInfoByProduct(currentOrder?.productId || -1)
           .averagePrice,
-        salePrice:
-          getSalesInfoByProduct(currentOrder?.productId || -1).averagePrice *
-          +(props.orderUser?.sellingPercentage || 0),
+        salePrice: !!props.orderUser?.inOwnership
+          ? getSalesInfoByProduct(currentOrder?.productId || -1).averagePrice
+          : getSalesInfoByProduct(currentOrder?.productId || -1)
+              .averageSellingPrice,
         comment: state.value[`comment-${stateId}`] || undefined,
       });
     }
@@ -160,9 +164,10 @@ const onCancel = () => {
         qty: 0,
         price: getSalesInfoByProduct(currentOrder?.productId || -1)
           .averagePrice,
-        salePrice:
-          getSalesInfoByProduct(currentOrder?.productId || -1).averagePrice *
-          +(props.orderUser?.sellingPercentage || 0),
+        salePrice: !!props.orderUser?.inOwnership
+          ? getSalesInfoByProduct(currentOrder?.productId || -1).averagePrice
+          : getSalesInfoByProduct(currentOrder?.productId || -1)
+              .averageSellingPrice,
         comment: state.value[`comment-${stateId}`] || undefined,
       });
     }
@@ -300,10 +305,10 @@ const onCancel = () => {
             >
               <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
                 {{
-                  (
-                    +(orderUser?.sellingPercentage || 0) *
-                    getSalesInfoByProduct(order.productId).averagePrice
-                  ).toFixed(2)
+                  (+(!!orderUser?.inOwnership
+                    ? getSalesInfoByProduct(order.productId).averagePrice
+                    : getSalesInfoByProduct(order.productId)
+                        .averageSellingPrice)).toFixed(2)
                 }}
                 €
               </p>
@@ -325,8 +330,10 @@ const onCancel = () => {
                 {{
                   (
                     +(state[`qty-${order.id}`] || 0) *
-                    (+(orderUser?.sellingPercentage || 0) *
-                      getSalesInfoByProduct(order.productId).averagePrice)
+                    +(!!orderUser?.inOwnership
+                      ? getSalesInfoByProduct(order.productId).averagePrice
+                      : getSalesInfoByProduct(order.productId)
+                          .averageSellingPrice)
                   ).toFixed(2)
                 }}
                 €

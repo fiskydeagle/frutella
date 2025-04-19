@@ -89,6 +89,7 @@ export default defineEventHandler(async (event) => {
     productId: purchase.productId,
     qty: purchase.qty,
     price: purchase.price,
+    sellingPrice: purchase.sellingPrice,
     supplierId:
       suppliers.find((supplier) => supplier.company === purchase.supplierName)!
         .id || null,
@@ -107,7 +108,13 @@ export default defineEventHandler(async (event) => {
     });
 
     return await db.Purchases.bulkCreate(rows, {
-      updateOnDuplicate: ["qty", "price", "supplierId", "updatedBy"],
+      updateOnDuplicate: [
+        "qty",
+        "price",
+        "sellingPrice",
+        "supplierId",
+        "updatedBy",
+      ],
     });
   } catch (error: any) {
     if (error instanceof Sequelize.ValidationError) {

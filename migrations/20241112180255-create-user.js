@@ -63,10 +63,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      sellingPercentage: {
+      inOwnership: {
         allowNull: false,
-        type: Sequelize.DOUBLE(10, 2),
-        defaultValue: 1.1,
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       createdBy: {
         allowNull: true,

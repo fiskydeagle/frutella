@@ -121,6 +121,13 @@ export const useUtils = () => {
     return (difference / oldValue) * 100;
   };
 
+  const findPercentage = (a: number, b: number) => {
+    if (b === 0 || a === 0) {
+      return 0; // or throw an error if division by zero is not allowed
+    }
+    return (b / a) * 100;
+  };
+
   const stripHtmlTags = (content: string | undefined | null) => {
     if (typeof content !== "string") return content || "";
     return content.replace(/<[^>]+>/g, "");
@@ -175,6 +182,7 @@ export const useUtils = () => {
     base64ToFile,
     uuidToColor,
     differenceInPercentage,
+    findPercentage,
     stripHtmlTags,
     formatNumber,
     kosovoCities,

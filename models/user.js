@@ -40,7 +40,7 @@ export default (sequelize, DataTypes) => {
       googleMap: DataTypes.STRING,
       role: DataTypes.STRING,
       verified: DataTypes.BOOLEAN,
-      sellingPercentage: DataTypes.DOUBLE(10, 2),
+      inOwnership: DataTypes.BOOLEAN,
       password: {
         type: DataTypes.STRING,
         get() {
