@@ -5,6 +5,7 @@ import { UserRole } from "~/types";
 
 interface Payload {
   company: string;
+  userTypeId: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -19,6 +20,7 @@ export default defineEventHandler(async (event) => {
   try {
     return await db.Users.create({
       company: body.company,
+      userTypeId: body.userTypeId,
       firstName: body.firstName,
       lastName: body.lastName,
       email: body.email,

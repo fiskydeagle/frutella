@@ -77,6 +77,12 @@ const columns = [
     sortable: true,
   },
   {
+    key: "type",
+    label: i18n.t("pages.users.type"),
+    isVisible: true,
+    sortable: true,
+  },
+  {
     key: "cityCol",
     label: i18n.t("pages.users.city"),
     isVisible: false,
@@ -186,6 +192,8 @@ const usersRows = computed(() => {
         email: user.email,
         role: user.role,
         roleCol: i18n.t("components.user.add." + user.role),
+        userTypeId: user.userType?.id,
+        type: user.userType?.name,
         city: user.city,
         cityCol: kosovoCities.find((city) => city.code === user.city)?.name,
         address: user.address,

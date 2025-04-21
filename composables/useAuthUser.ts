@@ -9,6 +9,7 @@ export const useAuthUser = () => {
   const user = useCookie<User | undefined>("user");
 
   const register = async (state: {
+    userTypeId: number | undefined;
     company: string | undefined;
     firstName: string | undefined;
     lastName: string | undefined;
@@ -23,6 +24,7 @@ export const useAuthUser = () => {
       });
 
       Object.assign(state, {
+        userTypeId: undefined,
         company: undefined,
         firstName: undefined,
         lastName: undefined,

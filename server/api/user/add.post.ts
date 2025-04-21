@@ -12,6 +12,7 @@ interface Payload {
   lastName: string;
   email: string;
   role: UserRole;
+  userTypeId: number;
   password: string;
   city: string;
   address: string;
@@ -72,6 +73,7 @@ export default defineEventHandler(async (event) => {
         lastName: query.lastName,
         email: query.email,
         role: query.role,
+        userTypeId: query.userTypeId,
         password: hashedPassword,
         image: `/users/${dateNow}/${filename}`,
         city: query.city,
@@ -89,6 +91,7 @@ export default defineEventHandler(async (event) => {
         lastName: query.lastName,
         email: query.email,
         role: query.role,
+        userTypeId: query.userTypeId,
         password: hashedPassword,
         city: query.city,
         address: query.address,

@@ -11,6 +11,7 @@ interface Payload {
   firstName: string;
   lastName: string;
   role: UserRole;
+  userTypeId: number;
   imageLink: string;
   deleteImage: string | boolean;
   city: string;
@@ -121,6 +122,7 @@ export default defineEventHandler(async (event) => {
         firstName: query.firstName,
         lastName: query.lastName,
         role: query.role,
+        userTypeId: query.userTypeId,
         image: `/users/${dateNow}/${filename}`,
         city: query.city,
         address: query.address,
@@ -135,6 +137,7 @@ export default defineEventHandler(async (event) => {
         firstName: query.firstName,
         lastName: query.lastName,
         role: query.role,
+        userTypeId: query.userTypeId,
         image: query.deleteImage ? null : user.dataValues.image,
         city: query.city,
         address: query.address,
