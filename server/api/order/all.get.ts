@@ -36,7 +36,14 @@ export default defineEventHandler(async (event) => {
         [{ model: db.Users, as: "user" }, "sort", "ASC"],
       ],
       include: [
-        "user",
+        {
+          association: "user",
+          include: [
+            {
+              association: "userType", // nested relation inside 'user'
+            },
+          ],
+        },
         {
           association: "product",
           attributes: [], // Exclude product attributes

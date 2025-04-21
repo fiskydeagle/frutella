@@ -111,12 +111,18 @@ const totalPrice = computed(() => {
         (item) => item.id === +stateId,
       );
 
+      const percentage =
+        props.orderUser?.userType && props.orderUser?.userType.percentage
+          ? props.orderUser.userType.percentage
+          : 0;
+
       total +=
         +state.value[`qty-${stateId}`] *
-        (!!props.orderUser?.inOwnership
+        (percentage === 0
           ? getSalesInfoByProduct(currentOrder?.productId || -1).averagePrice
           : getSalesInfoByProduct(currentOrder?.productId || -1)
-              .averageSellingPrice);
+              .averageSellingPrice *
+            (1 + percentage / 100));
     }
   });
   return total;
@@ -132,15 +138,22 @@ const onSubmit = (event: FormSubmitEvent<Schema>) => {
         (item) => item.id === +stateId,
       );
 
+      const percentage =
+        props.orderUser?.userType && props.orderUser?.userType.percentage
+          ? props.orderUser.userType.percentage
+          : 0;
+
       sales.push({
         id: +stateId,
         qty: +state.value[`qty-${stateId}`],
         price: getSalesInfoByProduct(currentOrder?.productId || -1)
           .averagePrice,
-        salePrice: !!props.orderUser?.inOwnership
-          ? getSalesInfoByProduct(currentOrder?.productId || -1).averagePrice
-          : getSalesInfoByProduct(currentOrder?.productId || -1)
-              .averageSellingPrice,
+        salePrice:
+          percentage === 0
+            ? getSalesInfoByProduct(currentOrder?.productId || -1).averagePrice
+            : getSalesInfoByProduct(currentOrder?.productId || -1)
+                .averageSellingPrice *
+              (1 + percentage / 100),
         comment: state.value[`comment-${stateId}`] || undefined,
       });
     }
@@ -159,15 +172,22 @@ const onCancel = () => {
         (item) => item.id === +stateId,
       );
 
+      const percentage =
+        props.orderUser?.userType && props.orderUser?.userType.percentage
+          ? props.orderUser.userType.percentage
+          : 0;
+
       sales.push({
         id: +stateId,
         qty: 0,
         price: getSalesInfoByProduct(currentOrder?.productId || -1)
           .averagePrice,
-        salePrice: !!props.orderUser?.inOwnership
-          ? getSalesInfoByProduct(currentOrder?.productId || -1).averagePrice
-          : getSalesInfoByProduct(currentOrder?.productId || -1)
-              .averageSellingPrice,
+        salePrice:
+          percentage === 0
+            ? getSalesInfoByProduct(currentOrder?.productId || -1).averagePrice
+            : getSalesInfoByProduct(currentOrder?.productId || -1)
+                .averageSellingPrice *
+              (1 + percentage / 100),
         comment: state.value[`comment-${stateId}`] || undefined,
       });
     }
@@ -305,10 +325,12 @@ const onCancel = () => {
             >
               <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
                 {{
-                  (+(!!orderUser?.inOwnership
+                  (+(!orderUser?.userType ||
+                  orderUser?.userType.percentage === 0
                     ? getSalesInfoByProduct(order.productId).averagePrice
                     : getSalesInfoByProduct(order.productId)
-                        .averageSellingPrice)).toFixed(2)
+                        .averageSellingPrice *
+                      (1 + +orderUser?.userType.percentage / 100))).toFixed(2)
                 }}
                 €
               </p>
@@ -330,10 +352,12 @@ const onCancel = () => {
                 {{
                   (
                     +(state[`qty-${order.id}`] || 0) *
-                    +(!!orderUser?.inOwnership
+                    +(!orderUser?.userType ||
+                    orderUser?.userType.percentage === 0
                       ? getSalesInfoByProduct(order.productId).averagePrice
                       : getSalesInfoByProduct(order.productId)
-                          .averageSellingPrice)
+                          .averageSellingPrice *
+                        (1 + +orderUser?.userType.percentage / 100))
                   ).toFixed(2)
                 }}
                 €
