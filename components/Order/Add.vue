@@ -105,7 +105,7 @@ watch(
   <UModal
     v-model="isOpen"
     :ui="{
-      width: 'w-full sm:max-w-md',
+      width: 'w-full sm:max-w-3xl',
     }"
   >
     <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
@@ -136,12 +136,12 @@ watch(
           </div>
         </template>
         <div
-          class="flex flex-col sm:divide-y max-sm:gap-3.5 divide-gray-100 dark:divide-gray-800 -mt-2 -mb-3"
+          class="max-sm:flex max-sm:flex-col grid grid-cols-2 sm:divide-y gap-x-5 gap-y-3.5 divide-gray-100 dark:divide-gray-800 -mt-2 -mb-3"
         >
           <div
             v-for="(product, index) in products"
             :key="'product-' + product.id"
-            class="flex max-sm:grid max-sm:grid-cols-2 gap-3 justify-between items-end pt-2 pb-3 order-1 max-sm:bg-neutral-100 max-sm:border !border-neutral-200 max-sm:p-3.5 max-sm:rounded-md"
+            class="flex max-sm:grid max-sm:grid-cols-2 gap-3 justify-between items-end pt-2 max-sm:!pb-4 order-1 max-sm:bg-neutral-100 max-sm:border !border-neutral-200 [&:nth-child(2)]:!border-t-0 max-sm:p-3.5 max-sm:rounded-md"
             :class="hasQty(product.id) ? 'order-1' : 'order-2'"
           >
             <div class="flex shrink-0 items-center gap-2">
