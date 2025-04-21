@@ -30,7 +30,7 @@ const isOpen = computed({
   <UModal
     v-model="isOpen"
     :ui="{
-      width: 'w-full sm:max-w-lg',
+      width: 'w-full sm:max-w-2xl',
     }"
   >
     <UCard

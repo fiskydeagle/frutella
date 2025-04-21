@@ -382,6 +382,14 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
                     ]
                   "
                   class="w-full sm:w-28"
+                  @keyup="
+                    state[
+                      `sellingPrice-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                    ] =
+                      state[
+                        `price-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                      ]
+                  "
                 >
                   <template #trailing>
                     <span class="text-gray-500 dark:text-gray-400 text-base">
