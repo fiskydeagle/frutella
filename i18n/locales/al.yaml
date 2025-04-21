@@ -77,6 +77,7 @@ pages:
     update-password: "Përditëso fjalëkalimin"
     update: "Përditëso"
   register:
+    user-type: "Tipi i përdoruesit"
     company: "Kompania"
     register: "Regjistrohu"
     first-name: "Emri"
@@ -93,6 +94,7 @@ pages:
     name: "Emri"
     email: "Email"
     role: "Roli"
+    type: "Tipi"
     city: "Qyteti"
     address: "Adresa"
     tel: "Telefoni"
@@ -184,6 +186,7 @@ components:
       last-name: "Mbiemri"
       email: "Email"
       role: "Roli"
+      type: "Tipi"
       password: "Fjalëkalimi"
       image: "Fotografija"
       drop-or-click-upload: "Lësho foton këtu ose kliko per të ngarkuar."
@@ -206,6 +209,7 @@ components:
       first-name: "Emri"
       last-name: "Mbiemri"
       role: "Roli"
+      type: "Tipi"
       image: "Fotografija"
       drop-or-click-upload: "Lësho foton këtu ose kliko per të ngarkuar."
       city: "Qyteti"
@@ -376,6 +380,20 @@ components:
       no-purchases: "Nuk ka blerje per sot!"
       toasts:
         action-success: "Veprimi i kryer me sukses."
+  user-type:
+    add:
+      name: "Emri"
+      percentage: "Përqindja"
+      is-visible: "Shfaqe ne regjistrim"
+      toasts:
+        user-type-added: "Tipi i përdoruesit u shtua!"
+    update:
+      name: "Emri"
+      percentage: "Përqindja"
+      is-visible: "Shfaqe ne regjistrim"
+      toasts:
+        user-type-updated: "Tipi i përdoruesit u përditësua!"
+        user-type-deleted: "Tipi i përdoruesit u fshi!"
 validations:
   user-not-found: "Përdoruesi nuk u gjet!"
   invalid-email-password: "Emaili i përdoruesit ose fjalëkalimi është gabim."

@@ -1,6 +1,5 @@
 import db from "@/models/index.js";
-import { UserRole } from "~/types";
-import { format } from "date-fns";
+import { OrderStatus, UserRole } from "~/types";
 
 interface Payload {
   userId: number;
@@ -41,7 +40,14 @@ export default defineEventHandler(async (event) => {
         userId: query.userId,
       },
       include: [
-        "user",
+        {
+          association: "user",
+          include: [
+            {
+              association: "userType", // nested relation inside 'user'
+            },
+          ],
+        },
         {
           association: "product",
           attributes: [], // Exclude product attributes
@@ -102,6 +108,12 @@ export default defineEventHandler(async (event) => {
             item.dataValues.date === row.date,
         );
 
+        const percentage =
+          order.dataValues.user.userType &&
+          order.dataValues.user.userType.percentage
+            ? order.dataValues.user.userType.percentage
+            : 0;
+
         return {
           ...row,
           id: +row.id,
@@ -110,9 +122,10 @@ export default defineEventHandler(async (event) => {
           price: +row.price,
           salePrice: +row.salePrice,
           prepareSalePrice: foundPurchase
-            ? order.dataValues.user.inOwnership
+            ? percentage === 0
               ? foundPurchase.dataValues.averagePrice
-              : foundPurchase.dataValues.averageSellingPrice
+              : foundPurchase.dataValues.averageSellingPrice *
+                (1 + percentage / 100)
             : 0,
           productId: +row.productId,
         };

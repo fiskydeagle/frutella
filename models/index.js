@@ -10,6 +10,7 @@ import Products from "./products.js";
 import Orders from "./orders.js";
 import Purchases from "./purchases.js";
 import Suppliers from "./suppliers.js";
+import UserTypes from "./userTypes.js";
 
 const env = process.env.NODE_ENV || "development";
 const config = allConfig[env];
@@ -34,6 +35,7 @@ db["Products"] = Products(sequelize, DataTypes);
 db["Orders"] = Orders(sequelize, DataTypes);
 db["Purchases"] = Purchases(sequelize, DataTypes);
 db["Suppliers"] = Suppliers(sequelize, DataTypes);
+db["UserTypes"] = UserTypes(sequelize, DataTypes);
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
