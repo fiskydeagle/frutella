@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { object, string, type InferType } from "yup";
+import { object, string, type InferType, number } from "yup";
 import type { FormSubmitEvent } from "#ui/types";
 import { useAuthUser } from "~/composables/useAuthUser";
 
@@ -17,9 +17,12 @@ useHead(() => {
   };
 });
 
+const { userTypes, getUserTypes } = useUserType();
+getUserTypes(true);
 const { register } = useAuthUser();
 
 const schema = object({
+  userTypeId: number().required("Required"),
   company: string().required("Required"),
   firstName: string().required("Required"),
   lastName: string().required("Required"),
@@ -33,6 +36,7 @@ const schema = object({
 type Schema = InferType<typeof schema>;
 
 const state = reactive({
+  userTypeId: undefined,
   company: undefined,
   firstName: undefined,
   lastName: undefined,
@@ -58,6 +62,20 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
         </template>
 
         <div class="flex flex-col gap-4">
+          <UFormGroup
+            v-if="userTypes && userTypes.length"
+            size="lg"
+            :label="i18n.t('pages.register.user-type')"
+            name="userTypeId"
+          >
+            <URadioGroup
+              v-model="state.userTypeId"
+              value-attribute="id"
+              option-attribute="name"
+              :options="userTypes"
+            />
+          </UFormGroup>
+
           <UFormGroup
             size="lg"
             :label="i18n.t('pages.register.company')"

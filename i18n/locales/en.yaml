@@ -77,6 +77,7 @@ pages:
     update-password: "Update password"
     update: "Update"
   register:
+    user-type: "User Type"
     register: "Register"
     company: "Company"
     first-name: "First Name"
