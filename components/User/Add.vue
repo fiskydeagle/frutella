@@ -19,6 +19,7 @@ const props = defineProps<Props>();
 const emits = defineEmits<EmitType>();
 
 const { kosovoCities } = useUtils();
+const { userTypes, getUserTypes } = useUserType();
 
 const googleMapsLinkRegex =
   /^https?:\/\/(www\.)?google\.(com|[a-z]{2})\/maps(\?q=[^&]+|\/search\/|\/place\/|\/@[^,]+,[^,]+,)/;
@@ -39,6 +40,11 @@ const schema = object({
     .min(8, "Must be at least 8 characters")
     .required("Required"),
   role: string().required("Required"),
+  userTypeId: number().when("role", {
+    is: (role: UserRole) => role === UserRole.CUSTOMER,
+    then: (schema) => schema.required("Required"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
   image: mixed()
     .test("image", "Only images are allowed (jpg, png, jpeg)", (value: any) => {
       if (!value || !value.length) return true;
@@ -73,6 +79,7 @@ const state = reactive({
   lastName: undefined,
   email: undefined,
   role: undefined,
+  userTypeId: undefined,
   password: undefined,
   image: [] as File[],
   city: "vu",
@@ -103,6 +110,7 @@ watch(
         lastName: undefined,
         email: undefined,
         role: undefined,
+        userTypeId: undefined,
         password: undefined,
         image: [] as File[],
         city: "vu",
@@ -110,7 +118,10 @@ watch(
         tel: undefined,
         googleMap: undefined,
       });
-    }
+    } else getUserTypes();
+  },
+  {
+    immediate: true,
   },
 );
 </script>
@@ -164,6 +175,46 @@ watch(
 
             <UFormGroup
               size="lg"
+              :label="i18n.t('components.user.add.role')"
+              name="role"
+            >
+              <USelectMenu
+                v-model="state.role"
+                :options="[
+                  {
+                    id: UserRole.ADMIN,
+                    label: i18n.t('components.user.add.admin'),
+                  },
+                  {
+                    id: UserRole.EMPLOYEE,
+                    label: i18n.t('components.user.add.employee'),
+                  },
+                  {
+                    id: UserRole.CUSTOMER,
+                    label: i18n.t('components.user.add.customer'),
+                  },
+                ]"
+                value-attribute="id"
+                :placeholder="i18n.t('components.user.add.role')"
+              />
+            </UFormGroup>
+
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.user.add.type')"
+              name="userTypeId"
+            >
+              <USelectMenu
+                v-model="state.userTypeId"
+                :options="userTypes"
+                value-attribute="id"
+                option-attribute="name"
+                :placeholder="i18n.t('components.user.add.type')"
+              />
+            </UFormGroup>
+
+            <UFormGroup
+              size="lg"
               :label="i18n.t('components.user.add.company')"
               name="company"
             >
@@ -192,32 +243,6 @@ watch(
               name="email"
             >
               <UInput v-model="state.email" />
-            </UFormGroup>
-
-            <UFormGroup
-              size="lg"
-              :label="i18n.t('components.user.add.role')"
-              name="role"
-            >
-              <USelectMenu
-                v-model="state.role"
-                :options="[
-                  {
-                    id: UserRole.ADMIN,
-                    label: i18n.t('components.user.add.admin'),
-                  },
-                  {
-                    id: UserRole.EMPLOYEE,
-                    label: i18n.t('components.user.add.employee'),
-                  },
-                  {
-                    id: UserRole.CUSTOMER,
-                    label: i18n.t('components.user.add.customer'),
-                  },
-                ]"
-                value-attribute="id"
-                :placeholder="i18n.t('components.user.add.role')"
-              />
             </UFormGroup>
 
             <UFormGroup

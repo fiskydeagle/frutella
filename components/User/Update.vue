@@ -20,6 +20,7 @@ const props = defineProps<Props>();
 const emits = defineEmits<EmitType>();
 
 const { kosovoCities } = useUtils();
+const { userTypes, getUserTypes } = useUserType();
 
 const googleMapsLinkRegex =
   /^https?:\/\/(www\.)?google\.(com|[a-z]{2})\/maps(\?q=[^&]+|\/search\/|\/place\/|\/@[^,]+,[^,]+,)/;
@@ -36,6 +37,11 @@ const schema = object({
   firstName: string().required("Required"),
   lastName: string().required("Required"),
   role: string().required("Required"),
+  userTypeId: number().when("role", {
+    is: (role: UserRole) => role === UserRole.CUSTOMER,
+    then: (schema) => schema.required("Required"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
   image: mixed()
     .test("image", "Only images are allowed (jpg, png, jpeg)", (value: any) => {
       if (!value || !value.length) return true;
@@ -71,6 +77,7 @@ const state = reactive({
   firstName: props.user.firstName,
   lastName: props.user.lastName,
   role: props.user.role,
+  userTypeId: props.user.userTypeId,
   image: [] as File[],
   imageLink: props.user.image,
   deleteImage: false,
@@ -103,6 +110,7 @@ watch(
   () => isOpen.value,
   (isOpen) => {
     if (isOpen) {
+      getUserTypes();
       editImage.value = !props.user.image;
       Object.assign(state, {
         id: props.user.id,
@@ -111,6 +119,7 @@ watch(
         firstName: props.user.firstName,
         lastName: props.user.lastName,
         role: props.user.role,
+        userTypeId: props.user.userTypeId,
         image: [] as File[],
         imageLink: props.user.image,
         deleteImage: false,
@@ -120,6 +129,9 @@ watch(
         googleMap: props.user.googleMap || "",
       });
     }
+  },
+  {
+    immediate: true,
   },
 );
 </script>
@@ -173,30 +185,6 @@ watch(
 
             <UFormGroup
               size="lg"
-              :label="i18n.t('components.user.update.company')"
-              name="company"
-            >
-              <UInput v-model="state.company" />
-            </UFormGroup>
-
-            <UFormGroup
-              size="lg"
-              :label="i18n.t('components.user.update.first-name')"
-              name="firstName"
-            >
-              <UInput v-model="state.firstName" />
-            </UFormGroup>
-
-            <UFormGroup
-              size="lg"
-              :label="i18n.t('components.user.update.last-name')"
-              name="lastName"
-            >
-              <UInput v-model="state.lastName" />
-            </UFormGroup>
-
-            <UFormGroup
-              size="lg"
               :label="i18n.t('components.user.update.role')"
               name="role"
             >
@@ -219,6 +207,44 @@ watch(
                 value-attribute="id"
                 placeholder="Role"
               />
+            </UFormGroup>
+
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.user.update.type')"
+              name="userTypeId"
+            >
+              <USelectMenu
+                v-model="state.userTypeId"
+                :options="userTypes"
+                value-attribute="id"
+                option-attribute="name"
+                :placeholder="i18n.t('components.user.update.type')"
+              />
+            </UFormGroup>
+
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.user.update.company')"
+              name="company"
+            >
+              <UInput v-model="state.company" />
+            </UFormGroup>
+
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.user.update.first-name')"
+              name="firstName"
+            >
+              <UInput v-model="state.firstName" />
+            </UFormGroup>
+
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.user.update.last-name')"
+              name="lastName"
+            >
+              <UInput v-model="state.lastName" />
             </UFormGroup>
           </div>
           <div class="w-full flex flex-col gap-4">

@@ -17,6 +17,10 @@ export default (sequelize, DataTypes) => {
         foreignKey: "updatedBy",
         as: "updatedByUser",
       });
+      models["Users"].belongsTo(models["UserTypes"], {
+        foreignKey: "userTypeId",
+        as: "userType",
+      });
     }
   }
 
@@ -40,7 +44,7 @@ export default (sequelize, DataTypes) => {
       googleMap: DataTypes.STRING,
       role: DataTypes.STRING,
       verified: DataTypes.BOOLEAN,
-      inOwnership: DataTypes.BOOLEAN,
+      userTypeId: DataTypes.INTEGER,
       password: {
         type: DataTypes.STRING,
         get() {

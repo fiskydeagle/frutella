@@ -93,6 +93,7 @@ pages:
     name: "Name"
     email: "Email"
     role: "Role"
+    type: "Type"
     city: "City"
     address: "Address"
     tel: "Phone"
@@ -184,6 +185,7 @@ components:
       last-name: "Last Name"
       email: "Email"
       role: "Role"
+      type: "Type"
       password: "Password"
       image: "Image"
       drop-or-click-upload: "Drop files here or click to upload."
@@ -206,6 +208,7 @@ components:
       first-name: "First Name"
       last-name: "Last Name"
       role: "Role"
+      type: "Type"
       image: "Image"
       drop-or-click-upload: "Drop files here or click to upload."
       city: "City"
@@ -376,6 +379,20 @@ components:
       no-purchases: "No Purchases for today!"
       toasts:
         action-success: "Action as been done successfully."
+  user-type:
+    add:
+      name: "Name"
+      percentage: "Percentage"
+      is-visible: "Is Visible"
+      toasts:
+        user-type-added: "User Type added!"
+    update:
+      name: "Name"
+      percentage: "Percentage"
+      is-visible: "Is Visible"
+      toasts:
+        user-type-updated: "User Type Updated!",
+        user-type-deleted: "User Type Deleted!"
 validations:
   user-not-found: "User not found!"
   invalid-email-password: "Invalid Email or password."

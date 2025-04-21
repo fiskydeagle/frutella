@@ -11,6 +11,17 @@ export enum UserRole {
   CUSTOMER = "customer",
 }
 
+export interface UserType {
+  id: number;
+  name: string;
+  percentage: number;
+  isVisible: boolean;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  updatedBy: string;
+}
+
 export interface User {
   id: string | number;
   sort: number;
@@ -26,7 +37,7 @@ export interface User {
   role: UserRole;
   verified: boolean;
   password: string | null | undefined;
-  inOwnership: boolean;
+  userTypeId: number;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
@@ -34,6 +45,7 @@ export interface User {
   updatedBy: string;
   createdByUser?: User;
   updatedByUser?: User;
+  userType?: UserType;
 }
 
 export enum IncomingType {
