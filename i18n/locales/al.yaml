@@ -391,7 +391,7 @@ components:
       percentage: "Përqindja"
       is-visible: "Shfaqe ne regjistrim"
       toasts:
-        user-type-updated: "Tipi i përdoruesit u përditësua!",
+        user-type-updated: "Tipi i përdoruesit u përditësua!"
         user-type-deleted: "Tipi i përdoruesit u fshi!"
 validations:
   user-not-found: "Përdoruesi nuk u gjet!"
