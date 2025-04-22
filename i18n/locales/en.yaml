@@ -6,6 +6,7 @@ common:
   search: "Search"
 layout:
   account-not-verified: "Your account is not active, please wait until an Admin verifies your account."
+  footer: "For orders please contact this number <a href='tel:+38348624252'>+383 48 62 42 52</a>. <br/>© 2025 All rights reserved Frutellafarm."
 pages:
   incoming:
     title: "Incoming"

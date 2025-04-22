@@ -6,6 +6,7 @@ common:
   search: "Kërko"
 layout:
   account-not-verified: "Llogaria juaj nuk është aktive, ju lutemi prisni derisa një administrator të verifikojë llogarinë tuaj."
+  footer: "Për porosi ju lutemi kontaktoni në këtë numër <a href='tel:+38348624252'>+383 48 62 42 52</a>. <br/>© 2025 Të gjitha të drejtat e rezervuara Frutellafarm."
 pages:
   incoming:
     title: "Të Hyrat"
