@@ -209,10 +209,7 @@ const currentCartOrders = ref<Order[]>([]);
 const currentCartDate = ref<string | number>("");
 const cartOpenAction = (row: any) => {
   currentCartOrders.value = row.rawOrders;
-  totalPrice.value =
-    row.status === OrderStatus.Processing
-      ? row.prepareTotalPrice
-      : row.totalPrice;
+  totalPrice.value = row.status !== OrderStatus.Processing ? row.totalPrice : 0;
   currentCartDate.value = row.dateDate;
   cartModal.value = true;
 };

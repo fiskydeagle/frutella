@@ -270,6 +270,7 @@ components:
       name: "Name"
       image: "Image"
       drop-or-click-upload: "Drop files here or click to upload."
+      base-unit: "Base unit"
       unit-type: "Unit type"
       add-product: "Add Product"
       cancel: "Cancel"

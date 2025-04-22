@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { type InferType, object, number, string } from "yup";
-import { type Order, type User, type SaleState, type Purchase } from "~/types";
+import { type InferType, object, number } from "yup";
+import { type Order, type User, type SaleState } from "~/types";
 import type { FormSubmitEvent } from "#ui/types";
 import { useSale } from "~/composables/useSale";
 import { format } from "date-fns";
@@ -31,13 +31,18 @@ const getSalesInfoByProduct = (productId: number) => {
   );
   if (foundInfo) return foundInfo;
   return {
+    productId: 0,
+    totalOrderQty: 0,
     totalQty: 0,
     averagePrice: 0,
     averageSellingPrice: 0,
-    productId: 0,
+    orderQty: 0,
+    maxOrderQty: 0,
     qty: 0,
     maxQty: 0,
+    orderPercentage: 0,
     percentage: 0,
+    recommendedOrderQty: 0,
     recommendedQty: 0,
   };
 };
@@ -48,18 +53,40 @@ const schema = computed(() => {
   if (props.currentOrders) {
     for (const order of props.currentOrders) {
       const info = getSalesInfoByProduct(order.productId);
-      ob[`qty-${order.id}`] = number()
+      ob[`orderQty-${order.id}`] = number()
         .transform((value, originalValue) => {
           return originalValue === "" ? null : value; //
         })
-        .integer("Quantity must be an integer")
         .nullable()
         .optional()
         .moreThan(-1, "Quantity must be greater or equal to 0")
         .lessThan(
-          info.maxQty + 1,
-          "Quantity must be lower or equal to " + info.maxQty,
+          +info.maxOrderQty.toFixed(2) + 0.01,
+          "Quantity must be lower or equal to " + +info.maxOrderQty.toFixed(2),
         );
+
+      ob[`qty-${order.id}`] = number()
+        .transform((value, originalValue) => {
+          return originalValue === "" ? null : value; //
+        })
+        .nullable()
+        .optional()
+        .moreThan(-1, "Quantity must be greater or equal to 0")
+        .lessThan(
+          +info.maxQty.toFixed(2) + 0.01,
+          "Quantity must be lower or equal to " + +info.maxQty.toFixed(2),
+        )
+        .test("qty-required", "Required", function (value) {
+          const orderQty = this.parent[`orderQty-${order.id}`];
+          const hasOrderQty =
+            orderQty !== null && orderQty !== undefined && orderQty !== 0;
+
+          if (hasOrderQty) {
+            return value !== null && value !== undefined && value !== 0;
+          }
+
+          return true;
+        });
     }
   }
 
@@ -76,8 +103,17 @@ const fillState = () => {
   if (props.currentOrders) {
     for (const order of props.currentOrders) {
       const info = getSalesInfoByProduct(order.productId);
+      state.value[`orderQty-${order.id}`] = ref(
+        info.maxOrderQty < info.recommendedOrderQty
+          ? info.maxOrderQty
+          : info.recommendedOrderQty,
+      );
       state.value[`qty-${order.id}`] = ref(
-        info.maxQty < info.recommendedQty ? info.maxQty : info.recommendedQty,
+        info.maxQty < info.recommendedQty
+          ? info.maxQty
+          : info.recommendedQty
+            ? info.recommendedQty
+            : info.recommendedOrderQty,
       );
     }
   }
@@ -145,6 +181,7 @@ const onSubmit = (event: FormSubmitEvent<Schema>) => {
 
       sales.push({
         id: +stateId,
+        orderQty: +state.value[`orderQty-${stateId}`],
         qty: +state.value[`qty-${stateId}`],
         price: getSalesInfoByProduct(currentOrder?.productId || -1)
           .averagePrice,
@@ -179,6 +216,7 @@ const onCancel = () => {
 
       sales.push({
         id: +stateId,
+        orderQty: 0,
         qty: 0,
         price: getSalesInfoByProduct(currentOrder?.productId || -1)
           .averagePrice,
@@ -243,7 +281,7 @@ const onCancel = () => {
             v-else
             v-for="(order, index) in currentOrders"
             :key="`order-${order.id}`"
-            class="flex max-sm:grid max-sm:grid-cols-2 gap-3 justify-between items-start pt-2 pb-3 max-sm:bg-neutral-100 max-sm:border !border-neutral-200 max-sm:p-3.5 max-sm:rounded-md"
+            class="flex max-sm:grid max-sm:grid-cols-2 gap-3 justify-between pt-2 pb-3 max-sm:bg-neutral-100 max-sm:border !border-neutral-200 max-sm:p-3.5 max-sm:rounded-md"
           >
             <div
               class="flex shrink-0 items-center gap-2 col-span-2 w-full sm:w-1/5"
@@ -279,90 +317,140 @@ const onCancel = () => {
               </label>
             </div>
 
-            <UFormGroup
-              size="lg"
-              :label="i18n.t('components.product.add.' + order.productUnitType)"
-              :name="`qty-${order.id}`"
-              :ui="{
-                container: 'sm:text-center',
-                label: {
-                  wrapper: 'sm:justify-end',
-                  base: 'pl-3 sm:w-28',
-                },
-              }"
-              class="shrink w-full sm:w-1/5 col-span-2"
-            >
-              <div class="flex flex-col items-end max relative group">
-                <UInput
-                  type="number"
-                  :min="0"
-                  v-model="state[`qty-${order.id}`]"
-                  class="w-full sm:w-28"
-                />
-              </div>
-              <template #help>
+            <div class="flex flex-col justify-between gap-2">
+              <UFormGroup
+                size="lg"
+                :label="
+                  i18n.t('components.product.add.' + order.productUnitType)
+                "
+                :name="`orderQty-${order.id}`"
+                :ui="{
+                  container: 'sm:text-center',
+                  label: {
+                    wrapper: 'sm:justify-end',
+                    base: 'pl-3 sm:w-28',
+                  },
+                }"
+                class="shrink w-full sm:w-36"
+              >
+                <div class="flex flex-col items-end max relative group">
+                  <UInput
+                    type="number"
+                    :min="0"
+                    :step="0.01"
+                    v-model="state[`orderQty-${order.id}`]"
+                    class="w-full sm:w-28"
+                    @keyup="
+                      state[`qty-${order.id}`] = state[`orderQty-${order.id}`]
+                    "
+                    @change="
+                      state[`qty-${order.id}`] = state[`orderQty-${order.id}`]
+                    "
+                  />
+                </div>
+                <template #help>
+                  <p
+                    class="text-xs text-orange-500 -mt-1 font-medium text-right pr-3"
+                  >
+                    {{
+                      `MAX: ${+getSalesInfoByProduct(order.productId).maxOrderQty.toFixed(2)} ${i18n.t("components.product.add." + order.productUnitType)}`
+                    }}
+                  </p>
+                </template>
+              </UFormGroup>
+
+              <UFormGroup
+                size="lg"
+                :label="i18n.t('components.product.add.base-unit')"
+                :name="`qty-${order.id}`"
+                :ui="{
+                  container: 'sm:text-center',
+                  label: {
+                    wrapper: 'sm:justify-end',
+                    base: 'pl-3 sm:w-28',
+                  },
+                }"
+                class="shrink w-full sm:w-36"
+              >
+                <div class="flex flex-col items-end max relative group">
+                  <UInput
+                    type="number"
+                    :min="0"
+                    :step="0.01"
+                    v-model="state[`qty-${order.id}`]"
+                    class="w-full sm:w-28"
+                  />
+                </div>
+                <template #help>
+                  <p
+                    class="text-xs text-orange-500 -mt-1 font-medium text-right pr-3"
+                  >
+                    {{
+                      `MAX: ${+getSalesInfoByProduct(order.productId).maxQty.toFixed(2)} ${i18n.t("components.product.add.base-unit")}`
+                    }}
+                  </p>
+                </template>
+              </UFormGroup>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <UFormGroup
+                size="lg"
+                :label="i18n.t('components.sales.sale.price')"
+                :name="`price-${order.id}`"
+                :ui="{
+                  label: {
+                    wrapper: 'sm:justify-center',
+                    base: 'px-3 whitespace-nowrap',
+                  },
+                }"
+                class=""
+              >
                 <p
-                  class="text-xs text-orange-500 -mt-1 font-medium text-right pr-3"
+                  class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1"
                 >
                   {{
-                    `MAX: ${getSalesInfoByProduct(order.productId).maxQty} ${i18n.t("components.product.add." + order.productUnitType)}`
-                  }}
-                </p>
-              </template>
-            </UFormGroup>
-
-            <UFormGroup
-              size="lg"
-              :label="i18n.t('components.sales.sale.price')"
-              :name="`price-${order.id}`"
-              :ui="{
-                label: {
-                  wrapper: 'sm:justify-center',
-                  base: 'px-3 whitespace-nowrap',
-                },
-              }"
-              class="shrink"
-            >
-              <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
-                {{
-                  (+(!orderUser?.userType ||
-                  orderUser?.userType.percentage === 0
-                    ? getSalesInfoByProduct(order.productId).averagePrice
-                    : getSalesInfoByProduct(order.productId)
-                        .averageSellingPrice *
-                      (1 + +orderUser?.userType.percentage / 100))).toFixed(2)
-                }}
-                €
-              </p>
-            </UFormGroup>
-
-            <UFormGroup
-              size="lg"
-              :label="i18n.t('components.sales.sale.total-price')"
-              :name="`total-${order.id}`"
-              :ui="{
-                label: {
-                  wrapper: 'sm:justify-center',
-                  base: 'px-3 whitespace-nowrap',
-                },
-              }"
-              class="shrink"
-            >
-              <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
-                {{
-                  (
-                    +(state[`qty-${order.id}`] || 0) *
-                    +(!orderUser?.userType ||
+                    (+(!orderUser?.userType ||
                     orderUser?.userType.percentage === 0
                       ? getSalesInfoByProduct(order.productId).averagePrice
                       : getSalesInfoByProduct(order.productId)
                           .averageSellingPrice *
-                        (1 + +orderUser?.userType.percentage / 100))
-                  ).toFixed(2)
-                }}
-                €
-              </p>
-            </UFormGroup>
+                        (1 + +orderUser?.userType.percentage / 100))).toFixed(2)
+                  }}
+                  €
+                </p>
+              </UFormGroup>
+
+              <UFormGroup
+                size="lg"
+                :label="i18n.t('components.sales.sale.total-price')"
+                :name="`total-${order.id}`"
+                :ui="{
+                  label: {
+                    wrapper: 'sm:justify-center',
+                    base: 'px-3 whitespace-nowrap',
+                  },
+                }"
+                class="mt-9"
+              >
+                <p
+                  class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1"
+                >
+                  {{
+                    (
+                      +(state[`qty-${order.id}`] || 0) *
+                      +(!orderUser?.userType ||
+                      orderUser?.userType.percentage === 0
+                        ? getSalesInfoByProduct(order.productId).averagePrice
+                        : getSalesInfoByProduct(order.productId)
+                            .averageSellingPrice *
+                          (1 + +orderUser?.userType.percentage / 100))
+                    ).toFixed(2)
+                  }}
+                  €
+                </p>
+              </UFormGroup>
+            </div>
 
             <UFormGroup
               size="lg"
@@ -375,7 +463,7 @@ const onCancel = () => {
                   base: 'pl-3 w-full',
                 },
               }"
-              class="shrink w-full sm:w-1/4 col-span-2"
+              class="shrink w-full sm:w-1/4 col-span-2 self-center"
             >
               <div class="flex flex-col items-end max">
                 <UInput

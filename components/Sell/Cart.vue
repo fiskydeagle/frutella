@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import { type InferType, object, number, string } from "yup";
-import { type Order, type User, type SaleState, type Purchase } from "~/types";
-import type { FormSubmitEvent } from "#ui/types";
-import { useSale } from "~/composables/useSale";
-import { format } from "date-fns";
+import { type Order } from "~/types";
 
 const i18n = useI18n();
 
@@ -74,7 +70,7 @@ const isOpen = computed({
           v-else
           v-for="(order, index) in currentOrders"
           :key="`order-${order.id}`"
-          class="flex max-sm:grid max-sm:grid-cols-2 gap-3 justify-between items-start pt-2 pb-3 max-sm:bg-neutral-100 max-sm:border !border-neutral-200 max-sm:p-3.5 max-sm:rounded-md"
+          class="flex max-sm:grid max-sm:grid-cols-2 gap-3 justify-between pt-2 pb-3 max-sm:bg-neutral-100 max-sm:border !border-neutral-200 max-sm:p-3.5 max-sm:rounded-md"
         >
           <div
             class="flex shrink-0 items-center gap-2 col-span-2 w-full sm:w-1/5"
@@ -102,63 +98,93 @@ const isOpen = computed({
             </label>
           </div>
 
-          <UFormGroup
-            size="lg"
-            :label="i18n.t('components.product.add.' + order.productUnitType)"
-            :name="`qty-${order.id}`"
-            :ui="{
-              container: 'sm:text-center',
-              label: {
-                wrapper: 'sm:justify-end',
-                base: 'pl-3 sm:w-28',
-              },
-            }"
-            class="shrink w-full sm:w-1/5 col-span-2"
-          >
-            <div class="flex flex-col items-end max relative group">
-              <UInput
-                type="number"
-                :min="0"
-                :disabled="true"
-                :model-value="order.qty || 0"
-                class="w-full sm:w-28"
-              />
-            </div>
-          </UFormGroup>
+          <div class="flex flex-col justify-between gap-2">
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.product.add.' + order.productUnitType)"
+              :name="`orderQty-${order.id}`"
+              :ui="{
+                container: 'sm:text-center',
+                label: {
+                  wrapper: 'sm:justify-end',
+                  base: 'pl-3 sm:w-28',
+                },
+              }"
+              class="shrink w-full sm:w-36"
+            >
+              <div class="flex flex-col items-end max relative group">
+                <UInput
+                  type="number"
+                  :min="0"
+                  :step="0.01"
+                  :disabled="true"
+                  :model-value="order.orderQty || 0"
+                  class="w-full sm:w-28"
+                />
+              </div>
+            </UFormGroup>
 
-          <UFormGroup
-            size="lg"
-            :label="i18n.t('components.sales.sale.price')"
-            :name="`price-${order.id}`"
-            :ui="{
-              label: {
-                wrapper: 'sm:justify-center',
-                base: 'px-3 whitespace-nowrap',
-              },
-            }"
-            class="shrink"
-          >
-            <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
-              {{ (order.salePrice || 0).toFixed(2) }} €
-            </p>
-          </UFormGroup>
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.product.add.base-unit')"
+              :name="`qty-${order.id}`"
+              :ui="{
+                container: 'sm:text-center',
+                label: {
+                  wrapper: 'sm:justify-end',
+                  base: 'pl-3 sm:w-28',
+                },
+              }"
+              class="shrink w-full sm:w-36"
+            >
+              <div class="flex flex-col items-end max relative group">
+                <UInput
+                  type="number"
+                  :min="0"
+                  :step="0.01"
+                  :disabled="true"
+                  :model-value="order.qty || 0"
+                  class="w-full sm:w-28"
+                />
+              </div>
+            </UFormGroup>
+          </div>
 
-          <UFormGroup
-            size="lg"
-            :label="i18n.t('components.sales.sale.total-price')"
-            :name="`total-${order.id}`"
-            :ui="{
-              label: {
-                wrapper: 'sm:justify-center',
-                base: 'px-3 whitespace-nowrap',
-              },
-            }"
-            class="shrink"
-          >
-            <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
-              {{ (+(order.salePrice || 0) * +(order.qty || 0)).toFixed(2) }} €
-            </p>
-          </UFormGroup>
+          <div class="flex flex-col gap-2">
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.sales.sale.price')"
+              :name="`price-${order.id}`"
+              :ui="{
+                label: {
+                  wrapper: 'sm:justify-center',
+                  base: 'px-3 whitespace-nowrap',
+                },
+              }"
+              class=""
+            >
+              <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
+                {{ (order.salePrice || 0).toFixed(2) }} €
+              </p>
+            </UFormGroup>
+
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.sales.sale.total-price')"
+              :name="`total-${order.id}`"
+              :ui="{
+                label: {
+                  wrapper: 'sm:justify-center',
+                  base: 'px-3 whitespace-nowrap',
+                },
+              }"
+              class="mt-3"
+            >
+              <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
+                {{ (+(order.salePrice || 0) * +(order.qty || 0)).toFixed(2) }} €
+              </p>
+            </UFormGroup>
+          </div>
 
           <UFormGroup
             size="lg"
@@ -171,7 +197,7 @@ const isOpen = computed({
                 base: 'pl-3 w-full',
               },
             }"
-            class="shrink w-full sm:w-1/4 col-span-2"
+            class="shrink w-full sm:w-1/4 col-span-2 self-center"
           >
             <div class="max-sm:px-3 text-left">
               <p class="block font-medium sm:pt-1">

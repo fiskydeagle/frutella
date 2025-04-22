@@ -34,6 +34,7 @@ export default defineEventHandler(async (event) => {
       ],
       attributes: [
         [db.Sequelize.fn("SUM", db.Sequelize.col("orderQty")), "totalOrderQty"],
+        [db.Sequelize.fn("SUM", db.Sequelize.col("qty")), "totalQty"],
         [db.Sequelize.fn("DATE", db.Sequelize.col("Orders.date")), "date"],
         "productId",
       ],
@@ -69,6 +70,7 @@ export default defineEventHandler(async (event) => {
           ...order.dataValues,
           id: null,
           price: null,
+          orderQty: null,
           qty: null,
           supplierId: null,
           splitId: null,

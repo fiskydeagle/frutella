@@ -270,6 +270,7 @@ components:
       name: "Emri"
       image: "Fotografija"
       drop-or-click-upload: "Lësho foton këtu ose kliko per të ngarkuar."
+      base-unit: "Njësi bazë"
       unit-type: "Tipi i njësisë"
       add-product: "Shto Produkt"
       cancel: "Anulo"

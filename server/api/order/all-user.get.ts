@@ -1,5 +1,5 @@
 import db from "@/models/index.js";
-import { OrderStatus, UserRole } from "~/types";
+import { UserRole } from "~/types";
 
 interface Payload {
   userId: number;
@@ -120,7 +120,7 @@ export default defineEventHandler(async (event) => {
           orderQty: +row.orderQty,
           qty: +row.qty,
           price: +row.price,
-          salePrice: +row.salePrice,
+          salePrice: +row.qty > 0 ? +row.salePrice : 0,
           prepareSalePrice: foundPurchase
             ? percentage === 0
               ? foundPurchase.dataValues.averagePrice
