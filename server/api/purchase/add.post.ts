@@ -87,6 +87,7 @@ export default defineEventHandler(async (event) => {
   const rows = upsertPurchases.map((purchase) => ({
     id: purchase.purchaseId || undefined,
     productId: purchase.productId,
+    orderQty: purchase.orderQty,
     qty: purchase.qty,
     price: purchase.price,
     sellingPrice: purchase.sellingPrice,
@@ -109,6 +110,7 @@ export default defineEventHandler(async (event) => {
 
     return await db.Purchases.bulkCreate(rows, {
       updateOnDuplicate: [
+        "orderQty",
         "qty",
         "price",
         "sellingPrice",

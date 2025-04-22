@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type InferType, object, number, string } from "yup";
-import { type Purchase, type OrderState, type PurchaseState } from "~/types";
+import { type Purchase, type PurchaseState } from "~/types";
 import type { FormSubmitEvent } from "#ui/types";
 import { useSupplier } from "~/composables/useSupplier";
 import { useUtils } from "~/composables/useUtils";
@@ -29,19 +29,38 @@ const schema = computed(() => {
 
   if (props.currentPurchases) {
     for (const purchases of props.currentPurchases) {
+      const orderQtyKey = `orderQty-${purchases.productId}-${purchases.id}-${purchases.splitId}`;
       const qtyKey = `qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`;
       const priceKey = `price-${purchases.productId}-${purchases.id}-${purchases.splitId}`;
       const sellingPriceKey = `sellingPrice-${purchases.productId}-${purchases.id}-${purchases.splitId}`;
       const supplierKey = `supplier-${purchases.productId}-${purchases.id}-${purchases.splitId}`;
 
+      ob[orderQtyKey] = number()
+        .transform((value, originalValue) => {
+          return originalValue === "" ? null : value; //
+        })
+        .nullable()
+        .optional()
+        .moreThan(-1, "Quantity must be greater or equal to 0");
+
       ob[qtyKey] = number()
         .transform((value, originalValue) => {
           return originalValue === "" ? null : value; //
         })
-        .integer("Quantity must be an integer")
         .nullable()
         .optional()
-        .moreThan(-1, "Quantity must be greater or equal to 0");
+        .moreThan(-1, "Quantity must be greater or equal to 0")
+        .test("qty-required", "Required", function (value) {
+          const orderQty = this.parent[orderQtyKey];
+          const hasOrderQty =
+            orderQty !== null && orderQty !== undefined && orderQty !== 0;
+
+          if (hasOrderQty) {
+            return value !== null && value !== undefined && value !== 0;
+          }
+
+          return true;
+        });
 
       ob[priceKey] = number()
         .transform((value, originalValue) =>
@@ -57,7 +76,7 @@ const schema = computed(() => {
         )
         .nullable()
         .moreThan(0, "Selling Price must be greater than 0")
-        .test("supplier-required", "Required", function (value) {
+        .test("selling-price-required", "Required", function (value) {
           const qty = this.parent[qtyKey];
           const price = this.parent[priceKey];
           const hasQty = qty !== null && qty !== undefined && qty !== 0;
@@ -110,6 +129,9 @@ const fillState = () => {
       }
 
       state.value[
+        `orderQty-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+      ] = ref(purchases.orderQty || purchases.totalOrderQty);
+      state.value[
         `qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`
       ] = ref(purchases.qty || purchases.totalOrderQty);
       state.value[
@@ -133,6 +155,7 @@ const addItemsToState = (purchase: Purchase, index: number) => {
     (item) => item.productId === purchase.productId,
   ).length;
   const key = `${purchase.productId}-null-${count}`;
+  state.value[`orderQty-${key}`] = ref("1");
   state.value[`qty-${key}`] = ref("1");
   state.value[`price-${key}`] = ref();
   state.value[`sellingPrice-${key}`] = ref();
@@ -142,6 +165,7 @@ const addItemsToState = (purchase: Purchase, index: number) => {
   const newPurchase = {
     ...purchase,
     id: null,
+    orderQty: null,
     qty: null,
     supplierId: null,
     splitId: count,
@@ -154,6 +178,7 @@ const removeItemsFromState = (purchase: Purchase, index: number) => {
   props.currentPurchases.splice(index, 1);
 
   const key = `${purchase.productId}-null-${purchase.splitId}`;
+  delete state.value[`orderQty-${key}`];
   delete state.value[`qty-${key}`];
   delete state.value[`price-${key}`];
   delete state.value[`sellingPrice-${key}`];
@@ -209,6 +234,9 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
           ? +ids[1]
           : undefined,
         productId: +ids[0],
+        orderQty: state.value[`price-${stateId}`]
+          ? +state.value[`orderQty-${stateId}`] || undefined
+          : undefined,
         qty: state.value[`price-${stateId}`]
           ? +state.value[`qty-${stateId}`] || undefined
           : undefined,
@@ -266,7 +294,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
             v-else
             v-for="(purchases, index) in currentPurchases"
             :key="`purchases-${purchases.productId}-${purchases.id}-${purchases.splitId}`"
-            class="flex max-sm:grid max-sm:grid-cols-2 gap-3 justify-between items-start pt-2 pb-3 max-sm:bg-neutral-100 max-sm:border !border-neutral-200 max-sm:p-3.5 max-sm:rounded-md"
+            class="flex max-sm:grid max-sm:grid-cols-2 gap-3 justify-between pt-2 pb-3 max-sm:bg-neutral-100 max-sm:border !border-neutral-200 max-sm:p-3.5 max-sm:rounded-md"
           >
             <div class="flex shrink-0 items-center gap-2 col-span-2 sm:w-1/5">
               <UPopover mode="hover" class="flex shrink-0">
@@ -302,163 +330,107 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
               </label>
             </div>
 
-            <UFormGroup
-              size="lg"
-              :label="
-                i18n.t('components.product.add.' + purchases.product.unitType)
-              "
-              :name="`qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`"
-              :ui="{
-                container: 'sm:text-center',
-                label: {
-                  wrapper: 'sm:justify-end',
-                  base: 'pl-3 sm:w-28',
-                },
-              }"
-              class="shrink w-full sm:w-1/5 col-span-2"
-            >
-              <div class="flex flex-col items-end max relative group">
-                <UInput
-                  type="number"
-                  :min="0"
-                  v-model="
-                    state[
-                      `qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`
-                    ]
-                  "
-                  class="w-full sm:w-28"
-                />
+            <div class="flex flex-col justify-between gap-2">
+              <UFormGroup
+                size="lg"
+                :label="
+                  i18n.t('components.product.add.' + purchases.product.unitType)
+                "
+                :name="`orderQty-${purchases.productId}-${purchases.id}-${purchases.splitId}`"
+                :ui="{
+                  container: 'sm:text-center',
+                  label: {
+                    wrapper: 'sm:justify-end',
+                    base: 'pl-3 sm:w-28',
+                  },
+                }"
+                class="shrink w-full sm:w-36"
+              >
+                <div class="flex flex-col items-end max relative group">
+                  <UInput
+                    type="number"
+                    :min="0"
+                    :step="0.01"
+                    v-model="
+                      state[
+                        `orderQty-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                      ]
+                    "
+                    class="w-full sm:w-28"
+                    @keyup="
+                      state[
+                        `qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                      ] =
+                        state[
+                          `orderQty-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                        ]
+                    "
+                    @change="
+                      state[
+                        `qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                      ] =
+                        state[
+                          `orderQty-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                        ]
+                    "
+                  />
 
-                <div
-                  class="absolute max-sm:!static z-10 pt-0 max-sm:!pt-1 group-hover:pt-1 opacity-0 group-hover:opacity-100 max-sm:opacity-100 invisible group-hover:visible max-sm:visible top-0 group-hover:top-full max-sm:top-full right-0 transition-all ease-in-out"
-                >
-                  <div class="flex gap-2 p-2 rounded bg-white shadow-md">
-                    <UButton
-                      v-if="!purchases.splitId"
-                      class="justify-center"
-                      size="sm"
-                      type="button"
-                      @click="addItemsToState(purchases, index)"
-                    >
-                      {{ i18n.t("components.purchase.add.split") }}
-                    </UButton>
+                  <div
+                    class="absolute max-sm:!static z-10 pt-0 max-sm:!pt-1 group-hover:pt-1 opacity-0 group-hover:opacity-100 max-sm:opacity-100 invisible group-hover:visible max-sm:visible top-0 group-hover:top-full max-sm:top-full right-0 transition-all ease-in-out"
+                  >
+                    <div class="flex gap-2 p-2 rounded bg-white shadow-md">
+                      <UButton
+                        v-if="!purchases.splitId"
+                        class="justify-center"
+                        size="sm"
+                        type="button"
+                        @click="addItemsToState(purchases, index)"
+                      >
+                        {{ i18n.t("components.purchase.add.split") }}
+                      </UButton>
 
-                    <UButton
-                      v-else
-                      class="justify-center"
-                      size="sm"
-                      type="button"
-                      color="red"
-                      @click="removeItemsFromState(purchases, index)"
-                    >
-                      {{ i18n.t("components.purchase.add.remove") }}
-                    </UButton>
+                      <UButton
+                        v-else
+                        class="justify-center"
+                        size="sm"
+                        type="button"
+                        color="red"
+                        @click="removeItemsFromState(purchases, index)"
+                      >
+                        {{ i18n.t("components.purchase.add.remove") }}
+                      </UButton>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </UFormGroup>
+              </UFormGroup>
 
-            <UFormGroup
-              size="lg"
-              :label="i18n.t('components.purchase.add.price')"
-              :name="`price-${purchases.productId}-${purchases.id}-${purchases.splitId}`"
-              :ui="{
-                container: 'sm:text-center',
-                label: {
-                  wrapper: 'sm:justify-end',
-                  base: 'pl-3 sm:w-28',
-                },
-              }"
-              class="shrink w-full sm:w-1/5"
-            >
-              <div class="flex flex-col items-end max">
-                <UInput
-                  type="number"
-                  :min="0"
-                  :step="0.01"
-                  v-model="
-                    state[
-                      `price-${purchases.productId}-${purchases.id}-${purchases.splitId}`
-                    ]
-                  "
-                  class="w-full sm:w-28"
-                  @keyup="
-                    state[
-                      `sellingPrice-${purchases.productId}-${purchases.id}-${purchases.splitId}`
-                    ] =
+              <UFormGroup
+                size="lg"
+                :label="i18n.t('components.product.add.base-unit')"
+                :name="`qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`"
+                :ui="{
+                  container: 'sm:text-center',
+                  label: {
+                    wrapper: 'sm:justify-end',
+                    base: 'pl-3 sm:w-28',
+                  },
+                }"
+                class="shrink w-full sm:w-36"
+              >
+                <div class="flex flex-col items-end max relative group">
+                  <UInput
+                    type="number"
+                    :min="0"
+                    :step="0.01"
+                    v-model="
                       state[
-                        `price-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                        `qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`
                       ]
-                  "
-                >
-                  <template #trailing>
-                    <span class="text-gray-500 dark:text-gray-400 text-base">
-                      €
-                    </span>
-                  </template>
-                </UInput>
-              </div>
-
-              <template #help>
-                <p
-                  class="text-xs text-orange-500 -mt-1 font-medium text-right pr-3"
-                >
-                  {{ i18n.t("components.purchase.add.total-price") }}:
-                  <span class="inline-block">
-                    {{
-                      (
-                        +(
-                          state[
-                            `qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`
-                          ] || 0
-                        ) *
-                        +(
-                          state[
-                            `price-${purchases.productId}-${purchases.id}-${purchases.splitId}`
-                          ] || 0
-                        )
-                      ).toFixed(2)
-                    }}
-                    €
-                  </span>
-                </p>
-              </template>
-            </UFormGroup>
-
-            <UFormGroup
-              size="lg"
-              :label="i18n.t('components.purchase.add.selling-price')"
-              :name="`sellingPrice-${purchases.productId}-${purchases.id}-${purchases.splitId}`"
-              :ui="{
-                container: 'sm:text-center',
-                label: {
-                  wrapper: 'sm:justify-end',
-                  base: 'pl-3 sm:w-28',
-                },
-              }"
-              class="shrink w-full sm:w-1/5"
-            >
-              <div class="flex flex-col items-end max">
-                <UInput
-                  type="number"
-                  :min="0"
-                  :step="0.01"
-                  v-model="
-                    state[
-                      `sellingPrice-${purchases.productId}-${purchases.id}-${purchases.splitId}`
-                    ]
-                  "
-                  class="w-full sm:w-28"
-                >
-                  <template #trailing>
-                    <span class="text-gray-500 dark:text-gray-400 text-base">
-                      €
-                    </span>
-                  </template>
-                </UInput>
-              </div>
-              <template #help>
-                <p
+                    "
+                    class="w-full sm:w-28"
+                  />
+                </div>
+                <template
                   v-if="
                     findPercentage(
                       +(
@@ -473,31 +445,169 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
                       ),
                     )
                   "
-                  class="text-xs text-orange-500 -mt-1 font-medium text-right pr-3"
+                  #help
                 >
-                  {{ i18n.t("components.purchase.add.percentage") }}:
-                  <span class="inline-block">
-                    {{
-                      (
-                        findPercentage(
+                  <p
+                    class="text-xs text-orange-500 -mt-1 font-medium text-right pr-3 max-sm:-mb-5"
+                  >
+                    &nbsp;
+                  </p>
+                </template>
+              </UFormGroup>
+            </div>
+
+            <div class="flex flex-col justify-between gap-2">
+              <UFormGroup
+                size="lg"
+                :label="i18n.t('components.purchase.add.price')"
+                :name="`price-${purchases.productId}-${purchases.id}-${purchases.splitId}`"
+                :ui="{
+                  container: 'sm:text-center',
+                  label: {
+                    wrapper: 'sm:justify-end',
+                    base: 'pl-3 sm:w-28',
+                  },
+                }"
+                class="shrink w-full sm:w-36"
+              >
+                <div class="flex flex-col items-end max">
+                  <UInput
+                    type="number"
+                    :min="0"
+                    :step="0.01"
+                    v-model="
+                      state[
+                        `price-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                      ]
+                    "
+                    class="w-full sm:w-28"
+                    @keyup="
+                      state[
+                        `sellingPrice-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                      ] =
+                        state[
+                          `price-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                        ]
+                    "
+                    @change="
+                      state[
+                        `sellingPrice-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                      ] =
+                        state[
+                          `price-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                        ]
+                    "
+                  >
+                    <template #trailing>
+                      <span class="text-gray-500 dark:text-gray-400 text-base">
+                        €
+                      </span>
+                    </template>
+                  </UInput>
+                </div>
+
+                <template #help>
+                  <p
+                    class="text-xs text-orange-500 -mt-1 font-medium text-right pr-3 max-sm:-mb-5"
+                  >
+                    {{ i18n.t("components.purchase.add.total-price") }}:
+                    <span class="inline-block">
+                      {{
+                        (
+                          +(
+                            state[
+                              `qty-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                            ] || 0
+                          ) *
                           +(
                             state[
                               `price-${purchases.productId}-${purchases.id}-${purchases.splitId}`
                             ] || 0
-                          ),
-                          +(
-                            state[
-                              `sellingPrice-${purchases.productId}-${purchases.id}-${purchases.splitId}`
-                            ] || 0
-                          ),
-                        ) - 100
-                      ).toFixed(2)
-                    }}
-                    %
-                  </span>
-                </p>
-              </template>
-            </UFormGroup>
+                          )
+                        ).toFixed(2)
+                      }}
+                      €
+                    </span>
+                  </p>
+                </template>
+              </UFormGroup>
+
+              <UFormGroup
+                size="lg"
+                :label="i18n.t('components.purchase.add.selling-price')"
+                :name="`sellingPrice-${purchases.productId}-${purchases.id}-${purchases.splitId}`"
+                :ui="{
+                  container: 'sm:text-center',
+                  label: {
+                    wrapper: 'sm:justify-end',
+                    base: 'pl-3 sm:w-28',
+                  },
+                }"
+                class="shrink w-full sm:w-36"
+              >
+                <div class="flex flex-col items-end max">
+                  <UInput
+                    type="number"
+                    :min="0"
+                    :step="0.01"
+                    v-model="
+                      state[
+                        `sellingPrice-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                      ]
+                    "
+                    class="w-full sm:w-28"
+                  >
+                    <template #trailing>
+                      <span class="text-gray-500 dark:text-gray-400 text-base">
+                        €
+                      </span>
+                    </template>
+                  </UInput>
+                </div>
+                <template
+                  v-if="
+                    findPercentage(
+                      +(
+                        state[
+                          `price-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                        ] || 0
+                      ),
+                      +(
+                        state[
+                          `sellingPrice-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                        ] || 0
+                      ),
+                    )
+                  "
+                  #help
+                >
+                  <p
+                    class="text-xs text-orange-500 -mt-1 font-medium text-right pr-3 max-sm:-mb-5"
+                  >
+                    {{ i18n.t("components.purchase.add.percentage") }}:
+                    <span class="inline-block">
+                      {{
+                        (
+                          findPercentage(
+                            +(
+                              state[
+                                `price-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                              ] || 0
+                            ),
+                            +(
+                              state[
+                                `sellingPrice-${purchases.productId}-${purchases.id}-${purchases.splitId}`
+                              ] || 0
+                            ),
+                          ) - 100
+                        ).toFixed(2)
+                      }}
+                      %
+                    </span>
+                  </p>
+                </template>
+              </UFormGroup>
+            </div>
 
             <UFormGroup
               size="lg"
@@ -510,7 +620,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
                   base: 'pl-3 w-full',
                 },
               }"
-              class="shrink w-full sm:w-1/4 col-span-2"
+              class="shrink w-full sm:w-1/4 col-span-2 self-center"
             >
               <div class="flex flex-col items-end max">
                 <UInputMenu

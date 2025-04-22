@@ -1,5 +1,5 @@
 import db from "@/models/index.js";
-import { OrderStatus, type Purchase, UserRole } from "~/types";
+import { OrderStatus, UserRole } from "~/types";
 import { format } from "date-fns";
 
 interface Payload {
@@ -47,7 +47,11 @@ export default defineEventHandler(async (event) => {
           [db.Sequelize.Op.or]: [OrderStatus.Done, OrderStatus.Canceled],
         },
       },
-      attributes: [[db.sequelize.literal("SUM(qty)"), "totalQty"], "productId"],
+      attributes: [
+        [db.sequelize.literal("SUM(orderQty)"), "totalOrderQty"],
+        [db.sequelize.literal("SUM(qty)"), "totalQty"],
+        "productId",
+      ],
       group: ["productId"],
     });
 
@@ -58,6 +62,7 @@ export default defineEventHandler(async (event) => {
       },
       attributes: [
         [db.sequelize.literal("SUM(orderQty)"), "orderQty"],
+        [db.sequelize.literal("SUM(qty)"), "qty"],
         "productId",
       ],
       group: ["productId"],
@@ -68,6 +73,7 @@ export default defineEventHandler(async (event) => {
         date: format(date, "yyyy-MM-dd"),
       },
       attributes: [
+        [db.sequelize.literal("SUM(orderQty)"), "totalOrderQty"],
         [db.sequelize.literal("SUM(qty)"), "totalQty"],
         [db.sequelize.literal("SUM(price * qty) / SUM(qty)"), "averagePrice"],
         [
@@ -92,29 +98,52 @@ export default defineEventHandler(async (event) => {
         (order) => order.dataValues.productId === purchase.dataValues.productId,
       );
 
+      let orderPercentage = 0;
       let percentage = 0;
 
       if (foundActiveOrder) {
+        orderPercentage =
+          (100 *
+            (purchase.dataValues.totalOrderQty -
+              +(foundFinishedOrder
+                ? foundFinishedOrder.dataValues.totalOrderQty
+                : 0))) /
+          +foundActiveOrder.dataValues.totalOrderQty /
+          100;
+
         percentage =
           (100 *
             (purchase.dataValues.totalQty -
               +(foundFinishedOrder
                 ? foundFinishedOrder.dataValues.totalQty
                 : 0))) /
-          +foundActiveOrder.dataValues.totalOrderQty /
+          +foundActiveOrder.dataValues.totalQty /
           100;
       }
 
-      const qty = foundOrder ? +foundOrder.dataValues.orderQty : 0;
+      const orderQty = foundOrder ? +foundOrder.dataValues.orderQty : 0;
+      const qty = foundOrder ? +foundOrder.dataValues.qty : 0;
 
       return {
         ...purchase.dataValues,
+        totalOrderQty: +purchase.dataValues.totalOrderQty,
         totalQty: +purchase.dataValues.totalQty,
+        orderQty,
+        maxOrderQty:
+          +purchase.dataValues.totalOrderQty -
+          (foundFinishedOrder
+            ? +foundFinishedOrder.dataValues.totalOrderQty
+            : 0),
         qty,
         maxQty:
           +purchase.dataValues.totalQty -
           (foundFinishedOrder ? +foundFinishedOrder.dataValues.totalQty : 0),
+        orderPercentage,
         percentage,
+        recommendedOrderQty:
+          orderPercentage > 1
+            ? orderQty
+            : Math.ceil(orderQty * orderPercentage),
         recommendedQty: percentage > 1 ? qty : Math.ceil(qty * percentage),
       };
     });

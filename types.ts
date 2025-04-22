@@ -169,6 +169,7 @@ export interface Supplier {
 export interface Purchase {
   id: number | null;
   productId: number;
+  orderQty: number | null;
   qty: number | null;
   totalOrderQty: number;
   price?: number;
@@ -202,6 +203,7 @@ export interface GroupedPurchase {
 
 export interface PurchaseState {
   productId: number;
+  orderQty?: number;
   qty?: number;
   price?: number;
   sellingPrice?: number;
@@ -211,6 +213,7 @@ export interface PurchaseState {
 
 export interface SaleState {
   id: number;
+  orderQty: number;
   qty: number;
   price: number;
   salePrice: number;
@@ -219,11 +222,16 @@ export interface SaleState {
 
 export interface SaleInfo {
   productId: number;
+  totalOrderQty: number;
   totalQty: number;
   averagePrice: number;
   averageSellingPrice: number;
+  orderQty: number;
+  maxOrderQty: number;
   qty: number;
   maxQty: number;
+  orderPercentage: number;
   percentage: number;
+  recommendedOrderQty: number;
   recommendedQty: number;
 }

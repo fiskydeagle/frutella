@@ -19,9 +19,14 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
+      orderQty: {
+        allowNull: false,
+        type: Sequelize.DOUBLE(10, 2),
+        defaultValue: 0,
+      },
       qty: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.DOUBLE(10, 2),
         defaultValue: 0,
       },
       price: {

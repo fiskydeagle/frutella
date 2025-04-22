@@ -31,6 +31,7 @@ export default defineEventHandler(async (event) => {
 
   const rows = body.sales.map((sale) => ({
     id: sale.id,
+    orderQty: sale.orderQty,
     qty: sale.qty,
     comment: sale.comment,
     price: sale.price,
@@ -39,13 +40,13 @@ export default defineEventHandler(async (event) => {
     updatedBy: event.context.user.id,
     userId: 1,
     productId: 1,
-    orderQty: 0,
     date: "2025-01-01",
   }));
 
   try {
     return await db.Orders.bulkCreate(rows, {
       updateOnDuplicate: [
+        "orderQty",
         "qty",
         "comment",
         "price",

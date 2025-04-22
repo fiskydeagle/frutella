@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type Purchase, type User } from "~/types";
+import { type Purchase } from "~/types";
 import { useUtils } from "~/composables/useUtils";
 
 const i18n = useI18n();
@@ -66,7 +66,7 @@ const isOpen = computed({
         <div
           v-for="purchase in currentPurchases"
           :key="'purchase-' + purchase.id"
-          class="flex max-sm:grid max-sm:grid-cols-2 gap-3 justify-between items-start pt-2 pb-3 max-sm:bg-neutral-100 max-sm:border !border-neutral-200 max-sm:p-3.5 max-sm:rounded-md"
+          class="flex max-sm:grid max-sm:grid-cols-2 gap-3 justify-between pt-2 pb-3 max-sm:bg-neutral-100 max-sm:border !border-neutral-200 max-sm:p-3.5 max-sm:rounded-md"
         >
           <div
             class="flex shrink-0 items-center gap-2 col-span-2 w-full sm:w-1/5"
@@ -94,127 +94,170 @@ const isOpen = computed({
             </label>
           </div>
 
-          <UFormGroup
-            size="lg"
-            :label="
-              i18n.t('components.product.add.' + purchase.productUnitType)
-            "
-            :name="`qty-${purchase.productId}-${purchase.id}`"
-            :ui="{
-              container: 'sm:text-center',
-              label: {
-                wrapper: 'sm:justify-end',
-                base: 'pl-3 sm:w-28',
-              },
-            }"
-            class="shrink w-full sm:w-1/5 col-span-2"
-          >
-            <div class="flex flex-col items-end max relative group">
-              <UInput
-                type="number"
-                :min="0"
-                v-model="purchase.qty!"
-                :disabled="true"
-                class="w-full sm:w-28"
-              />
-            </div>
-          </UFormGroup>
+          <div class="flex flex-col justify-between gap-2">
+            <UFormGroup
+              size="lg"
+              :label="
+                i18n.t('components.product.add.' + purchase.productUnitType)
+              "
+              :name="`orderQty-${purchase.productId}-${purchase.id}`"
+              :ui="{
+                container: 'sm:text-center',
+                label: {
+                  wrapper: 'sm:justify-end',
+                  base: 'pl-3 sm:w-28',
+                },
+              }"
+              class="shrink w-full"
+            >
+              <div class="flex flex-col items-end max relative group">
+                <UInput
+                  type="number"
+                  :min="0"
+                  :step="0.01"
+                  v-model="purchase.orderQty!"
+                  :disabled="true"
+                  class="w-full sm:w-28"
+                />
+              </div>
+            </UFormGroup>
 
-          <UFormGroup
-            size="lg"
-            :label="i18n.t('components.purchase.add.price')"
-            :name="`price-${purchase.productId}-${purchase.id}`"
-            :ui="{
-              container: 'sm:text-center',
-              label: {
-                wrapper: 'sm:justify-end',
-                base: 'pl-3 sm:w-28',
-              },
-            }"
-            class="shrink w-full sm:w-1/5"
-          >
-            <div class="flex flex-col items-end max">
-              <UInput
-                type="number"
-                v-model="purchase.price!"
-                :disabled="true"
-                class="w-full sm:w-28"
-              >
-                <template #trailing>
-                  <span class="text-gray-500 dark:text-gray-400 text-base">
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.product.add.base-unit')"
+              :name="`qty-${purchase.productId}-${purchase.id}`"
+              :ui="{
+                container: 'sm:text-center',
+                label: {
+                  wrapper: 'sm:justify-end',
+                  base: 'pl-3 sm:w-28',
+                },
+              }"
+              class="shrink w-full"
+            >
+              <div class="flex flex-col items-end max relative group">
+                <UInput
+                  type="number"
+                  :min="0"
+                  :step="0.01"
+                  v-model="purchase.qty!"
+                  :disabled="true"
+                  class="w-full sm:w-28"
+                />
+              </div>
+              <template #help>
+                <p
+                  class="text-xs text-orange-500 -mt-1 font-medium text-right pr-3 max-sm:-mb-5"
+                >
+                  &nbsp;
+                </p>
+              </template>
+            </UFormGroup>
+          </div>
+
+          <div class="flex flex-col justify-between gap-2">
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.purchase.add.price')"
+              :name="`price-${purchase.productId}-${purchase.id}`"
+              :ui="{
+                container: 'sm:text-center',
+                label: {
+                  wrapper: 'sm:justify-end',
+                  base: 'pl-3 sm:w-28',
+                },
+              }"
+              class="shrink w-full"
+            >
+              <div class="flex flex-col items-end max">
+                <UInput
+                  type="number"
+                  :min="0"
+                  :step="0.01"
+                  v-model="purchase.price!"
+                  :disabled="true"
+                  class="w-full sm:w-28"
+                >
+                  <template #trailing>
+                    <span class="text-gray-500 dark:text-gray-400 text-base">
+                      €
+                    </span>
+                  </template>
+                </UInput>
+              </div>
+
+              <template #help>
+                <p
+                  class="text-xs text-orange-500 -mt-1 font-medium text-right pr-3"
+                >
+                  {{ i18n.t("components.purchase.add.total-price") }}:
+                  <span class="inline-block">
+                    {{
+                      (+(purchase.qty || 0) * +(purchase.price || 0)).toFixed(2)
+                    }}
                     €
                   </span>
-                </template>
-              </UInput>
-            </div>
+                </p>
+              </template>
+            </UFormGroup>
 
-            <template #help>
-              <p
-                class="text-xs text-orange-500 -mt-1 font-medium text-right pr-3"
-              >
-                {{ i18n.t("components.purchase.add.total-price") }}:
-                <span class="inline-block">
-                  {{
-                    (+(purchase.qty || 0) * +(purchase.price || 0)).toFixed(2)
-                  }}
-                  €
-                </span>
-              </p>
-            </template>
-          </UFormGroup>
-
-          <UFormGroup
-            size="lg"
-            :label="i18n.t('components.purchase.add.selling-price')"
-            :name="`sellingPrice-${purchase.productId}-${purchase.id}`"
-            :ui="{
-              container: 'sm:text-center',
-              label: {
-                wrapper: 'sm:justify-end',
-                base: 'pl-3 sm:w-28',
-              },
-            }"
-            class="shrink w-full sm:w-1/5"
-          >
-            <div class="flex flex-col items-end max">
-              <UInput
-                type="number"
-                v-model="purchase.sellingPrice!"
-                :disabled="true"
-                class="w-full sm:w-28"
-              >
-                <template #trailing>
-                  <span class="text-gray-500 dark:text-gray-400 text-base">
-                    €
-                  </span>
-                </template>
-              </UInput>
-            </div>
-            <template #help>
-              <p
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.purchase.add.selling-price')"
+              :name="`sellingPrice-${purchase.productId}-${purchase.id}`"
+              :ui="{
+                container: 'sm:text-center',
+                label: {
+                  wrapper: 'sm:justify-end',
+                  base: 'pl-3 sm:w-28',
+                },
+              }"
+              class="shrink w-full"
+            >
+              <div class="flex flex-col items-end max">
+                <UInput
+                  type="number"
+                  :min="0"
+                  :step="0.01"
+                  v-model="purchase.sellingPrice!"
+                  :disabled="true"
+                  class="w-full sm:w-28"
+                >
+                  <template #trailing>
+                    <span class="text-gray-500 dark:text-gray-400 text-base">
+                      €
+                    </span>
+                  </template>
+                </UInput>
+              </div>
+              <template
                 v-if="
                   findPercentage(
                     purchase.price || 0,
                     purchase.sellingPrice || 0,
                   )
                 "
-                class="text-xs text-orange-500 -mt-1 font-medium text-right pr-3"
+                #help
               >
-                {{ i18n.t("components.purchase.add.percentage") }}:
-                <span class="inline-block">
-                  {{
-                    (
-                      findPercentage(
-                        purchase.price || 0,
-                        purchase.sellingPrice || 0,
-                      ) - 100
-                    ).toFixed(2)
-                  }}
-                  %
-                </span>
-              </p>
-            </template>
-          </UFormGroup>
+                <p
+                  class="text-xs text-orange-500 -mt-1 font-medium text-right pr-3 max-sm:-mb-5"
+                >
+                  {{ i18n.t("components.purchase.add.percentage") }}:
+                  <span class="inline-block">
+                    {{
+                      (
+                        findPercentage(
+                          purchase.price || 0,
+                          purchase.sellingPrice || 0,
+                        ) - 100
+                      ).toFixed(2)
+                    }}
+                    %
+                  </span>
+                </p>
+              </template>
+            </UFormGroup>
+          </div>
 
           <UFormGroup
             size="lg"
@@ -227,7 +270,7 @@ const isOpen = computed({
                 base: 'pl-3 w-full',
               },
             }"
-            class="shrink w-full sm:w-1/4 col-span-2"
+            class="shrink w-full sm:w-1/4 col-span-2 self-center"
           >
             <div class="flex flex-col items-end max">
               <UInput

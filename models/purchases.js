@@ -30,7 +30,8 @@ export default (sequelize, DataTypes) => {
   Purchases.init(
     {
       productId: DataTypes.INTEGER,
-      qty: DataTypes.INTEGER,
+      orderQty: DataTypes.DOUBLE(10, 2),
+      qty: DataTypes.DOUBLE(10, 2),
       price: DataTypes.DOUBLE(10, 2),
       sellingPrice: DataTypes.DOUBLE(10, 2),
       supplierId: DataTypes.INTEGER,

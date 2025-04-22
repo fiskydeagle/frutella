@@ -32,7 +32,6 @@ const schema = computed(() => {
         .transform((value, originalValue) => {
           return originalValue === "" ? null : value; //
         })
-        .integer("Quantity must be an integer")
         .nullable()
         .moreThan(-1, "Quantity must be greater or equal to 0");
     }
@@ -185,6 +184,7 @@ watch(
                 <UInput
                   type="number"
                   :min="0"
+                  :step="0.01"
                   v-model="state[`qty-${product.id}`]"
                   class="w-28"
                 />
