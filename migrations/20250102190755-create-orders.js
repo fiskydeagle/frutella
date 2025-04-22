@@ -36,11 +36,11 @@ module.exports = {
       },
       orderQty: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.DOUBLE(10, 2),
       },
       qty: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.DOUBLE(10, 2),
         defaultValue: 0,
       },
       price: {

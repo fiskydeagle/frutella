@@ -9,7 +9,7 @@ const isLoggedIn = computed(() => {
 });
 </script>
 <template>
-  <div class="py-10 flex max-sm:flex-col">
+  <div class="py-10 flex max-sm:flex-col flex-grow">
     <div v-if="isLoggedIn" class="pl-6 shrink-0">
       <LeftNavigation />
     </div>
@@ -27,5 +27,10 @@ const isLoggedIn = computed(() => {
       </div>
     </div>
     <UNotifications />
+  </div>
+  <div class="px-6">
+    <div class="py-4 container m-auto border-t border-gray-200">
+      <p class="text-center text-gray-500" v-html="i18n.t('layout.footer')"></p>
+    </div>
   </div>
 </template>

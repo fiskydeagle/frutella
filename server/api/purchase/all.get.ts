@@ -1,6 +1,5 @@
 import db from "@/models/index.js";
 import { UserRole } from "~/types";
-import { format } from "date-fns";
 
 export default defineEventHandler(async (event) => {
   if (
@@ -43,6 +42,7 @@ export default defineEventHandler(async (event) => {
             db.Sequelize.literal(`
           CONCAT(
             '{"id":"', Purchases.id, 
+            '","orderQty":"', Purchases.orderQty, 
             '","qty":"', Purchases.qty, 
             '","price":"', Purchases.price, 
             '","sellingPrice":"', COALESCE(Purchases.sellingPrice, 0), 
@@ -78,6 +78,7 @@ export default defineEventHandler(async (event) => {
         (row: any) => ({
           ...row,
           id: +row.id,
+          orderQty: +row.orderQty,
           qty: +row.qty,
           price: +row.price,
           sellingPrice: +row.sellingPrice,

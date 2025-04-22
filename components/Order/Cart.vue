@@ -70,7 +70,10 @@ const isOpen = computed({
           :key="'order-' + order.id"
           class="flex max-sm:grid max-sm:grid-cols-2 gap-3 justify-between items-start pt-2 pb-3 max-sm:bg-neutral-100 max-sm:border !border-neutral-200 max-sm:p-3.5 max-sm:rounded-md"
         >
-          <div class="flex shrink-0 items-center gap-2 w-full sm:w-1/4">
+          <div
+            class="flex shrink-0 items-center gap-2 w-full sm:w-1/4"
+            :class="order.status !== OrderStatus.Processing ? 'col-span-2' : ''"
+          >
             <UPopover mode="hover" class="flex shrink-0">
               <div class="bg-white mt-1 border border-gray-300 rounded p-1">
                 <img
@@ -95,108 +98,117 @@ const isOpen = computed({
             >
           </div>
 
-          <UFormGroup
-            size="lg"
-            :label="i18n.t('components.product.add.' + order.productUnitType)"
-            :name="`qty-${order.id}`"
-            :ui="{
-              container: 'sm:text-center',
-              label: {
-                wrapper: 'sm:justify-end',
-                base: 'pl-3 sm:w-28',
-              },
-            }"
-            class="shrink w-full sm:w-1/5"
-          >
-            <div class="flex flex-col items-end max">
-              <UInput
-                type="number"
-                :min="0"
-                :disabled="true"
-                :model-value="
-                  order.status !== OrderStatus.Processing
-                    ? order.qty
-                    : order.orderQty
-                "
-                class="w-full sm:w-28"
-              />
-            </div>
-          </UFormGroup>
+          <template v-if="order.status !== OrderStatus.Processing">
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.product.add.' + order.productUnitType)"
+              :name="`orderQty-${order.id}`"
+              :ui="{
+                container: 'sm:text-center',
+                label: {
+                  wrapper: 'sm:justify-end',
+                  base: 'pl-3 sm:w-28',
+                },
+              }"
+              class="shrink w-full sm:w-1/5"
+            >
+              <div class="flex flex-col items-end max">
+                <UInput
+                  type="number"
+                  :min="0"
+                  :step="0.01"
+                  :disabled="true"
+                  :model-value="order.orderQty"
+                  class="w-full sm:w-28"
+                />
+              </div>
+            </UFormGroup>
 
-          <UFormGroup
-            v-if="order.status !== OrderStatus.Processing"
-            size="lg"
-            :label="i18n.t('components.order.cart.price')"
-            :name="`price-${order.id}`"
-            :ui="{
-              label: {
-                wrapper: 'sm:justify-center',
-                base: 'px-3 whitespace-nowrap',
-              },
-            }"
-            class="shrink"
-          >
-            <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
-              {{ (order.salePrice || 0).toFixed(2) }} €
-            </p>
-          </UFormGroup>
-          <UFormGroup
-            v-else-if="order.prepareSalePrice"
-            size="lg"
-            :label="i18n.t('components.order.cart.price')"
-            :name="`price-${order.id}`"
-            :ui="{
-              label: {
-                wrapper: 'sm:justify-center',
-                base: 'px-3 whitespace-nowrap',
-              },
-            }"
-            class="shrink"
-          >
-            <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
-              {{ (order.prepareSalePrice || 0).toFixed(2) }} €
-            </p>
-          </UFormGroup>
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.product.add.base-unit')"
+              :name="`qty-${order.id}`"
+              :ui="{
+                container: 'sm:text-center',
+                label: {
+                  wrapper: 'sm:justify-end',
+                  base: 'pl-3 sm:w-28',
+                },
+              }"
+              class="shrink w-full sm:w-1/5"
+            >
+              <div class="flex flex-col items-end max">
+                <UInput
+                  type="number"
+                  :min="0"
+                  :step="0.01"
+                  :disabled="true"
+                  :model-value="order.qty"
+                  class="w-full sm:w-28"
+                />
+              </div>
+            </UFormGroup>
 
-          <UFormGroup
-            v-if="order.status !== OrderStatus.Processing"
-            size="lg"
-            :label="i18n.t('components.order.cart.total-price')"
-            :name="`price-${order.id}`"
-            :ui="{
-              label: {
-                wrapper: 'sm:justify-center',
-                base: 'px-3 whitespace-nowrap',
-              },
-            }"
-            class="shrink"
-          >
-            <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
-              {{ (+(order.salePrice || 0) * +(order.qty || 0)).toFixed(2) }} €
-            </p>
-          </UFormGroup>
-          <UFormGroup
-            v-else-if="order.prepareSalePrice"
-            size="lg"
-            :label="i18n.t('components.order.cart.total-price')"
-            :name="`price-${order.id}`"
-            :ui="{
-              label: {
-                wrapper: 'sm:justify-center',
-                base: 'px-3 whitespace-nowrap',
-              },
-            }"
-            class="shrink"
-          >
-            <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
-              {{
-                (
-                  +(order.prepareSalePrice || 0) * +(order.orderQty || 0)
-                ).toFixed(2)
-              }}
-              €
-            </p>
-          </UFormGroup>
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.order.cart.price')"
+              :name="`price-${order.id}`"
+              :ui="{
+                label: {
+                  wrapper: 'sm:justify-center',
+                  base: 'px-3 whitespace-nowrap',
+                },
+              }"
+              class="shrink"
+            >
+              <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
+                {{ (order.salePrice || 0).toFixed(2) }} €
+              </p>
+            </UFormGroup>
+
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.order.cart.total-price')"
+              :name="`price-${order.id}`"
+              :ui="{
+                label: {
+                  wrapper: 'sm:justify-center',
+                  base: 'px-3 whitespace-nowrap',
+                },
+              }"
+              class="shrink"
+            >
+              <p class="max-sm:px-3 sm:text-center text-xl font-medium sm:pt-1">
+                {{ (+(order.salePrice || 0) * +(order.qty || 0)).toFixed(2) }} €
+              </p>
+            </UFormGroup>
+          </template>
+          <template v-else>
+            <UFormGroup
+              size="lg"
+              :label="i18n.t('components.product.add.' + order.productUnitType)"
+              :name="`qty-${order.id}`"
+              :ui="{
+                container: 'sm:text-center',
+                label: {
+                  wrapper: 'sm:justify-end',
+                  base: 'pl-3 sm:w-28',
+                },
+              }"
+              class="shrink w-full sm:w-1/5"
+            >
+              <div class="flex flex-col items-end max">
+                <UInput
+                  type="number"
+                  :min="0"
+                  :step="0.01"
+                  :disabled="true"
+                  :model-value="order.orderQty"
+                  class="w-full sm:w-28"
+                />
+              </div>
+            </UFormGroup>
+          </template>
         </div>
 
         <div

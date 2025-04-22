@@ -4,6 +4,7 @@ export default defineAppConfig({
       position: "top-0 bottom-auto",
     },
     input: {
+      base: "!bg-white dark:!bg-gray-900",
       size: {
         "2xs": "text-xs",
         xs: "text-xs",
